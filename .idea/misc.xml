@@ -4,9 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1155" />
+        <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/activity_character_creation.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/activity_characters_list.xml" value="0.18" />
         <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/activity_dmactivity.xml" value="0.22" />
         <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/activity_player.xml" value="0.17074275362318841" />
+        <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/list_row_items.xml" value="0.17074275362318841" />
       </map>
     </option>
   </component>

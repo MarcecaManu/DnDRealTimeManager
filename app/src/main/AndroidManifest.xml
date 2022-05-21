@@ -10,13 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DDRealTimeManager">
         <activity
-            android:name=".DMActivity"
+            android:name=".shared.CharacterCreationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".shared.CharactersListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".dm.DMActivity"
             android:exported="false"
             android:theme="@style/HiddenTitletheme" />
         <activity
-            android:name=".PlayerActivity"
+            android:name=".player.PlayerActivity"
             android:exported="false"
-            android:theme="@style/HiddenTitletheme"/>
+            android:theme="@style/HiddenTitletheme" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
