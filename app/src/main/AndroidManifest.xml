@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DDRealTimeManager">
         <activity
+            android:name=".shared.CharacterVisualizationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".player.PlayerGameActivity"
+            android:exported="false" />
+        <activity
             android:name=".shared.CharacterCreationActivity"
             android:exported="false" />
         <activity

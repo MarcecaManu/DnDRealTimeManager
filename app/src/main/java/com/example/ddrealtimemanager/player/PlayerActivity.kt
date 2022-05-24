@@ -16,6 +16,10 @@ class PlayerActivity : AppCompatActivity() {
             startActivity(Intent(this, CharactersListActivity::class.java))
         }
 
+        btnJoin.setOnClickListener {
+            startActivity(Intent(this, PlayerGameActivity::class.java))
+        }
+
 
     }
 }

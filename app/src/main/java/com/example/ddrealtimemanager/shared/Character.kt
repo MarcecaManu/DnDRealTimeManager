@@ -4,9 +4,10 @@ package com.example.ddrealtimemanager.shared
    or during character creation. */
 
 data class Character (
+    var id: Int,
     var name: String,
     var race: String,
-    var desc: String,
-    var clas: String
-        ){
+    var clas: String,
+    var desc: String
+    ){
 }

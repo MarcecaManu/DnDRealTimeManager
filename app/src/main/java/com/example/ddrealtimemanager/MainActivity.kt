@@ -16,6 +16,8 @@ class MainActivity : AppCompatActivity() {
 
         val database = DBHelper(this)
 
+        database.resetDatabase()
+
         btnDM.setOnClickListener {
             startActivity(Intent(this, DMActivity::class.java))
         }
