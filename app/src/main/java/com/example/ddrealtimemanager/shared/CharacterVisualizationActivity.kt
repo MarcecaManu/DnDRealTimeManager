@@ -51,7 +51,7 @@ class CharacterVisualizationActivity : AppCompatActivity() {
                 if(success){
                     Toast.makeText(this, "The character was deleted successfully", Toast.LENGTH_SHORT).show()
                 }else{
-                    Toast.makeText(this, "ERROR: The character was not deleted successfully", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "ERROR: The character could not be deleted", Toast.LENGTH_SHORT).show()
                 }
                 Thread.sleep(1000)
                 finish()

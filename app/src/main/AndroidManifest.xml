@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DDRealTimeManager">
         <activity
+            android:name=".dm.NewGameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".dm.DMGameActivity"
+            android:exported="false" />
+        <activity
             android:name=".shared.CharacterVisualizationActivity"
             android:exported="false" />
         <activity

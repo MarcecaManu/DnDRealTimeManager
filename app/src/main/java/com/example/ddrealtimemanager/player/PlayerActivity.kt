@@ -12,11 +12,11 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
-        btnChar.setOnClickListener {
+        btnContinue.setOnClickListener {
             startActivity(Intent(this, CharactersListActivity::class.java))
         }
 
-        btnJoin.setOnClickListener {
+        btnNewGame.setOnClickListener {
             startActivity(Intent(this, PlayerGameActivity::class.java))
         }
 

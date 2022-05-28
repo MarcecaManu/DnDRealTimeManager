@@ -4,70 +4,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".dm.NewGameActivity">
 
-    <Button
-        android:id="@+id/btnSaveChar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnGameCreationBack"
-        app:layout_constraintTop_toBottomOf="@+id/etDescrChar" />
 
     <EditText
-        android:id="@+id/etNameChar"
+        android:id="@+id/etGameCreationName"
         android:layout_width="338dp"
         android:layout_height="73dp"
         android:ems="10"
         android:hint="Name"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/etRaceChar"
+        app:layout_constraintBottom_toTopOf="@+id/etGameCreationDescr"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/etRaceChar"
-        android:layout_width="338dp"
-        android:layout_height="73dp"
-        android:ems="10"
-        android:hint="Race"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/etClassChar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etNameChar" />
+
 
     <EditText
-        android:id="@+id/etClassChar"
-        android:layout_width="338dp"
-        android:layout_height="73dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Class"
-        app:layout_constraintBottom_toTopOf="@+id/etDescrChar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etRaceChar" />
-
-    <EditText
-        android:id="@+id/etDescrChar"
+        android:id="@+id/etGameCreationDescr"
         android:layout_width="338dp"
         android:layout_height="73dp"
         android:ems="10"
         android:hint="Description"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/btnSaveChar"
+        app:layout_constraintBottom_toTopOf="@+id/etGameCreationPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etRaceChar" />
+        app:layout_constraintTop_toBottomOf="@+id/etGameCreationName" />
+
+
+    <EditText
+        android:id="@+id/etGameCreationPassword"
+        android:layout_width="338dp"
+        android:layout_height="73dp"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/btnGameCreationStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etGameCreationDescr" />
+
+    <Button
+        android:id="@+id/btnGameCreationStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start game"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnGameCreationBack"
+        app:layout_constraintTop_toBottomOf="@+id/etGameCreationPassword" />
+
 
     <Button
         android:id="@+id/btnGameCreationBack"
@@ -75,11 +67,9 @@
         android:layout_height="wrap_content"
         android:text="back"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnSaveChar"
+        app:layout_constraintEnd_toStartOf="@+id/btnGameCreationStart"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etDescrChar" />
-
-
+        app:layout_constraintTop_toBottomOf="@+id/etGameCreationPassword" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

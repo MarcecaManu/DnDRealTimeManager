@@ -10,7 +10,17 @@ import android.database.sqlite.SQLiteOpenHelper
 
 class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", null, 1) {
 
-    private val TABLENAME: String  = "Character_Data"
+    private val CHAR_TABLE: String = "Character_Data"
+    private val GAME_TABLE: String = "Game_Data"
+
+    val MAX_LENGTH_CHAR_NAME = 200
+    val MAX_LENGTH_CHAR_RACE = 200
+    val MAX_LENGTH_CHAR_CLASS = 200
+    val MAX_LENGTH_CHAR_DESCRIPTION = 2000
+
+    val MAX_LENGTH_GAME_NAME = 300
+    val MAX_LENGTH_GAME_DESCRIPTION = 2000
+    val MAX_LENGTH_GAME_PASSWORD = 30
 
     /*Character Data - Table description
     *
@@ -24,24 +34,40 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
 
 
     override fun onCreate(db: SQLiteDatabase?) {
-        db?.execSQL("CREATE TABLE ${TABLENAME} (" +
+
+        db?.execSQL("DROP TABLE IF EXISTS " + CHAR_TABLE)
+        db?.execSQL("DROP TABLE IF EXISTS " + GAME_TABLE)
+
+        //Characters' table
+        db?.execSQL("CREATE TABLE ${CHAR_TABLE} (" +
                 "CharID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "Name VARCHAR(200) NOT NULL," +
-                "Race VARCHAR(100)," +
-                "Class VARCHAR(100)," +
-                "Description VARCHAR(1000)" +
+                "Name VARCHAR($MAX_LENGTH_CHAR_NAME) NOT NULL," +
+                "Race VARCHAR($MAX_LENGTH_CHAR_RACE)," +
+                "Class VARCHAR($MAX_LENGTH_CHAR_CLASS)," +
+                "Description VARCHAR($MAX_LENGTH_CHAR_DESCRIPTION)" +
                 ")")
+
+        //Games' table
+        db?.execSQL("CREATE TABLE ${GAME_TABLE} (" +
+                "GameID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "GameName VARCHAR($MAX_LENGTH_GAME_NAME) NOT NULL," +
+                "GameDescription VARCHAR($MAX_LENGTH_GAME_DESCRIPTION)," +
+                "GamePassword VARCHAR($MAX_LENGTH_GAME_PASSWORD)" +
+                ")")
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        db?.execSQL("DROP TABLE IF EXISTS " + TABLENAME)
+        db?.execSQL("DROP TABLE IF EXISTS " + CHAR_TABLE)
+        db?.execSQL("DROP TABLE IF EXISTS " + GAME_TABLE)
         onCreate(db)
 
     }
 
     fun resetDatabase(){                        //Resets the character's table
         val db = this.writableDatabase
-        db?.execSQL("DROP TABLE IF EXISTS $TABLENAME")
+        db?.execSQL("DROP TABLE IF EXISTS " + CHAR_TABLE)
+        db?.execSQL("DROP TABLE IF EXISTS " + GAME_TABLE)
         onCreate(db)
     }
 
@@ -50,14 +76,14 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
     * TO DO:
         - Update attributes as character creation is developed
      */
-    fun writeData(name: String, race: String, clas: String, description: String){
+    fun writeNewCharacter(name: String, race: String, clas: String, description: String){
         val contentValues = ContentValues()
         val db = this.writableDatabase
         contentValues.put("Name", name)
         contentValues.put("Race", race)
         contentValues.put("Class", clas)
         contentValues.put("Description", description)
-        db?.insert(TABLENAME, null, contentValues)
+        db?.insert(CHAR_TABLE, null, contentValues)
 
     }
 
@@ -72,7 +98,7 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         var charactersList: ArrayList<Character> = ArrayList()
 
         val db = this.readableDatabase
-        val query = "select CharID, * from $TABLENAME"
+        val query = "select CharID, * from $CHAR_TABLE"
         val cursor = db.rawQuery(query, null)
 
         val idIndex = cursor.getColumnIndex("CharID")
@@ -94,6 +120,7 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
                 charactersList.add(character)
 
             } while (cursor.moveToNext())
+            cursor.close()
         }
 
         return charactersList
@@ -102,7 +129,7 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
     fun getSpecificCharacter(charId: Int): Character {
         val db = this.readableDatabase
         val query = "select * " +
-                "FROM $TABLENAME " +
+                "FROM $CHAR_TABLE " +
                 "WHERE CharID = $charId"
         val cursor = db.rawQuery(query, null)
 
@@ -120,13 +147,14 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
             character.clas = cursor.getString(classIndex)
             character.desc = cursor.getString(descIndex)
         }
+        cursor.close()
 
         return character
     }
 
     fun deleteCharacter(charId: Int): Boolean{
         val db = this.writableDatabase
-        return db.delete(TABLENAME, "CharID = $charId", null) > 0
+        return db.delete(CHAR_TABLE, "CharID = $charId", null) > 0
     }
 
     fun editCharacter(charId: Int, name: String, race: String, clas: String, description: String){
@@ -138,10 +166,25 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         values.put("Class", clas)
         values.put("Description", description)
 
-        db.update(TABLENAME, values, "charID = $charId", null)
+        db.update(CHAR_TABLE, values, "charID = $charId", null)
     }
 
 
+    fun writeNewGame(){
+        TODO()
+    }
+
+    fun getGame(){
+        TODO()
+    }
+
+    fun deleteGame(){
+        TODO()
+    }
+
+    fun editGame(){
+        TODO()
+    }
 
 
 }

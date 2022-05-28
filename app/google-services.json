@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "762456944448",
+    "project_id": "dnd-real-time-manager",
+    "storage_bucket": "dnd-real-time-manager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:762456944448:android:1ac30c9ff45b61e5cb94a5",
+        "android_client_info": {
+          "package_name": "com.example.ddrealtimemanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "762456944448-sg3o7obj1fdg75js93v65gsamecqvhvn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBg23S9aSUN076enEaDRnCh9Ev_9mY3oaY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "762456944448-sg3o7obj1fdg75js93v65gsamecqvhvn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
