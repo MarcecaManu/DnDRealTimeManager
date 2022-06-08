@@ -35,7 +35,7 @@ class CharacterCreationActivity : AppCompatActivity() {
             }
         }
 
-        btnGameCreationBack.setOnClickListener {
+        btnCharBack.setOnClickListener {
             finish()
         }
     }

@@ -14,13 +14,26 @@
         android:ems="10"
         android:hint="Name"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/etGameCreationDescr"
+        app:layout_constraintBottom_toTopOf="@+id/etGameCreationSubtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
+
+    <EditText
+        android:id="@+id/etGameCreationSubtitle"
+        android:layout_width="338dp"
+        android:layout_height="73dp"
+        android:ems="10"
+        android:hint="Subtitle"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/etGameCreationDescr"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etGameCreationName" />
 
     <EditText
         android:id="@+id/etGameCreationDescr"
@@ -33,7 +46,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etGameCreationName" />
+        app:layout_constraintTop_toBottomOf="@+id/etGameCreationSubtitle" />
 
 
     <EditText

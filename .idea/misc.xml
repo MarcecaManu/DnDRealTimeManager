@@ -9,10 +9,13 @@
         <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/activity_characters_list.xml" value="0.14" />
         <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/activity_dmactivity.xml" value="0.22" />
         <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/activity_dmgame.xml" value="0.17" />
+        <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/activity_game_list.xml" value="0.17" />
+        <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/activity_game_visualization.xml" value="0.1082427536231884" />
         <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/activity_new_game.xml" value="0.21" />
         <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/activity_player.xml" value="0.17074275362318841" />
         <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/activity_player_game.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/layout_game_card_item.xml" value="0.1082427536231884" />
         <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/list_row_items.xml" value="0.17074275362318841" />
       </map>
     </option>

@@ -12,7 +12,7 @@ class DMGameActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dmgame)
 
         btnContinue.setOnClickListener {
-
+            startActivity(Intent(this, GameListActivity::class.java))
         }
 
         btnNewGame.setOnClickListener {

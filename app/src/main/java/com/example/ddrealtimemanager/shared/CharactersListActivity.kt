@@ -58,6 +58,7 @@ class CharactersListActivity : AppCompatActivity() {
         //charactersList is an arraylist which loads all the characters in the database and
         //stores them in a Character objects list.
         val charactersList = database.getStoredCharacters()
+        database.close()
 
         charactersList.sortBy { item -> item.name.uppercase() }
 
@@ -72,7 +73,7 @@ class CharactersListActivity : AppCompatActivity() {
 
         for(character in charactersList){
             val item = HashMap<String, Any>()
-            item["name"] = character.name + " - id: " + character.id
+            item["name"] = character.name //+ " - id: " + character.id
 
             if(character.race != "" && character.clas != "") {
                 item["race_class"] = character.clas + " " + character.race

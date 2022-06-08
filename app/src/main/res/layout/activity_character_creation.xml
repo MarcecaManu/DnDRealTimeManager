@@ -14,7 +14,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnGameCreationBack"
+        app:layout_constraintStart_toEndOf="@+id/btnCharBack"
         app:layout_constraintTop_toBottomOf="@+id/etDescrChar" />
 
     <EditText
@@ -70,7 +70,7 @@
         app:layout_constraintTop_toBottomOf="@+id/etRaceChar" />
 
     <Button
-        android:id="@+id/btnGameCreationBack"
+        android:id="@+id/btnCharBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="back"
