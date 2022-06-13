@@ -1,10 +1,14 @@
 package com.example.ddrealtimemanager.dm
 
+import android.database.sqlite.SQLiteConstraintException
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.example.ddrealtimemanager.R
 import com.example.ddrealtimemanager.shared.DBHelper
+import com.example.ddrealtimemanager.shared.FireBaseHelper
+import com.example.ddrealtimemanager.shared.Game
 import com.example.ddrealtimemanager.shared.Utils
 import kotlinx.android.synthetic.main.activity_new_game.*
 import kotlinx.android.synthetic.main.activity_new_game.btnGameCreationBack
@@ -69,19 +73,35 @@ class NewGameActivity : AppCompatActivity() {
         ////
         if (err.isBlank()) {     //err indicates the field where too many characters were found
 
-            if (gameId == -1) {  //Invalid gameId -> this is a new character
+            val firebase = FireBaseHelper()
+
+
+            if (gameId == -1) {  //Invalid gameId -> this is a new game
                 database.writeNewGame(
                     gameName.toString(),
                     gameSubtitle.toString(),
                     gameDescription.toString(),
                     gamePassword.toString(),
+                    "",
                     ""
                 )
                 Toast.makeText(this, "New game was saved successfully!", Toast.LENGTH_SHORT)
                     .show()
+
+
+                val retrievedGameId = database.getLastId()
+
+                val game = database.getGame(retrievedGameId)
+
+                val firebaseId = firebase.fbCreateNewGame(game)
+
+                database.setFirebaseId(retrievedGameId, firebaseId)
+
+                //TODO START GAME
+
                 finish()
 
-            } else {  //valid gameId -> the character is being edited
+            } else {  //valid gameId -> the game is being edited
 
                 database.editGame(
                     gameId,
@@ -93,6 +113,10 @@ class NewGameActivity : AppCompatActivity() {
                 )
                 Toast.makeText(this, "The game was modified successfully!", Toast.LENGTH_SHORT)
                     .show()
+
+                val game = database.getGame(gameId)
+                firebase.fbUpdateGame(game.firebaseId, game)
+
                 finish()
 
             }

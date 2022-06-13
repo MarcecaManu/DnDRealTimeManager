@@ -45,7 +45,7 @@ class GameListAdapter(private val context: Context, private var gameList: List<G
             .into(newView!!.game_image)
 
         newView.tv_game_title?.text = game.name
-        newView.tv_game_subtitle?.text = game.subtitle
+        newView.tv_game_subtitle?.text = game.subtitle + game.firebaseId
 
         return newView
     }

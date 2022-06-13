@@ -9,7 +9,8 @@ data class Game (
     var subtitle: String,
     var description: String,
     var password: String,
-    var image: String
+    var image: String,
+    var firebaseId: String
     ){
 
 }

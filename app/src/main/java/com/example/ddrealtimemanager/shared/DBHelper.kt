@@ -3,9 +3,11 @@ package com.example.ddrealtimemanager.shared
 import android.content.ClipDescription
 import android.content.ContentValues
 import android.content.Context
+import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import java.lang.Exception
 
 /* This class is used for communication between application and SQLite database. */
 
@@ -27,6 +29,7 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
     private val GAME_DESCRIPTION = "GameDescription"
     private val GAME_PASSWORD = "GamePassword"
     private val GAME_IMAGE = "GameImage"
+    private val GAME_FIREBASE_ID = "FirebaseId"
 
 
     val MAX_LENGTH_CHAR_NAME = 200
@@ -39,6 +42,7 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
     val MAX_LENGTH_GAME_DESCRIPTION = 2000
     val MAX_LENGTH_GAME_PASSWORD = 30
     val MAX_LENGTH_GAME_IMAGE = 3000
+    val MAX_LENGTH_GAME_FIREBASE_ID = 1000
 
     /*Character Data - Table description
     *
@@ -81,7 +85,8 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
                 "$GAME_SUBTITLE VARCHAR($MAX_LENGTH_GAME_SUBTITLE)," +
                 "$GAME_DESCRIPTION VARCHAR($MAX_LENGTH_GAME_DESCRIPTION)," +
                 "$GAME_PASSWORD VARCHAR($MAX_LENGTH_GAME_PASSWORD)," +
-                "$GAME_IMAGE VARCHAR($MAX_LENGTH_GAME_IMAGE)" +
+                "$GAME_IMAGE VARCHAR($MAX_LENGTH_GAME_IMAGE)," +
+                "$GAME_FIREBASE_ID VARCHAR($MAX_LENGTH_GAME_FIREBASE_ID)" +
                 ")")
 
     }
@@ -157,6 +162,10 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         return charactersList
     }
 
+
+
+    //Returns the Character object associated with the given charId
+
     fun getSpecificCharacter(charId: Int): Character {
         val db = this.readableDatabase
         val query = "select * " +
@@ -184,12 +193,15 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         return character
     }
 
+    //Deletes the character identified by the given charId from the database
     fun deleteCharacter(charId: Int): Boolean{
         val db = this.writableDatabase
         val result = db.delete(CHAR_TABLE, "$CHAR_ID = $charId", null) > 0
         db.close()
         return result
     }
+
+    //Edits the character specified by the charId
 
     fun editCharacter(charId: Int, name: String, race: String, clas: String, description: String){
         val db = this.writableDatabase
@@ -204,8 +216,9 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         db.close()
     }
 
+    //Stores a new game in the database
 
-    fun writeNewGame(gameName: String, gameSubtitle: String, gameDescription: String, gamePassword: String, gameImage: String){
+    fun writeNewGame(gameName: String, gameSubtitle: String, gameDescription: String, gamePassword: String, gameImage: String, gameFirebaseId: String){
         val contentValues = ContentValues()
         val db = this.writableDatabase
 
@@ -214,11 +227,45 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         contentValues.put(GAME_DESCRIPTION, gameDescription)
         contentValues.put(GAME_PASSWORD, gamePassword)
         contentValues.put(GAME_IMAGE, gameImage)
+        contentValues.put(GAME_FIREBASE_ID, gameFirebaseId)
 
         db?.insert(GAME_TABLE, null, contentValues)
         db.close()
     }
 
+    //Returns the row_id of the last inserted game. This function is used in
+    //the game creation phase, so that the firebase id can be bound with
+    //the game object.
+    fun getLastId(): Int{
+        val db = this.readableDatabase
+        val query = "SELECT $GAME_ID from $GAME_TABLE order by $GAME_ID"
+        var id: Int = -1
+
+        val cursor = db.rawQuery(query, null)
+        val index = cursor.getColumnIndex(GAME_ID)
+
+        if (cursor.moveToLast()) {
+            id = cursor.getInt(index)
+        }
+
+        cursor.close()
+        db.close()
+
+        return id
+    }
+
+    //Sets the firebase id associated with the game
+    fun setFirebaseId(gameId: Int, fbGameId: String){
+        val contentValues = ContentValues()
+        val db = this.writableDatabase
+
+        contentValues.put(GAME_FIREBASE_ID, fbGameId)
+
+        db.update(GAME_TABLE, contentValues, "$GAME_ID = $gameId", null)
+        db.close()
+    }
+
+    //Returns an ArrayList of all the games stored in the database.
     fun getStoredGames(): ArrayList<Game>{
         var gamesList: ArrayList<Game> = ArrayList()
 
@@ -232,10 +279,11 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         val descrIndex = cursor.getColumnIndex(GAME_DESCRIPTION)
         val passIndex = cursor.getColumnIndex(GAME_PASSWORD)
         val imageIndex = cursor.getColumnIndex(GAME_IMAGE)
+        val firebaseIdIndex = cursor.getColumnIndex(GAME_FIREBASE_ID)
 
         if(cursor.moveToFirst()) {
             do {
-                val game = Game(0, "", "", "", "", "")
+                val game = Game(0, "", "", "", "", "", "")
 
                 game.id = cursor.getInt(idIndex)
                 game.name = cursor.getString(nameIndex)
@@ -243,6 +291,7 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
                 game.description = cursor.getString(descrIndex)
                 game.password = cursor.getString(passIndex)
                 game.image = cursor.getString(imageIndex)
+                game.firebaseId = cursor.getString(firebaseIdIndex)
 
                 gamesList.add(game)
 
@@ -254,6 +303,7 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         return gamesList
     }
 
+    //Returns the game specified by the given gameId.
     fun getGame(gameId: Int): Game{
         val db = this.readableDatabase
         val query = "select * " +
@@ -266,8 +316,10 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         val gameDescrIndex = cursor.getColumnIndex(GAME_DESCRIPTION)
         val gamePassIndex = cursor.getColumnIndex(GAME_PASSWORD)
         val gameImageIndex = cursor.getColumnIndex(GAME_IMAGE)
+        val gameFirebaseIdIndex = cursor.getColumnIndex(GAME_FIREBASE_ID)
 
-        val game = Game(gameId, "", "", "", "", "")
+
+        val game = Game(gameId, "", "", "", "", "", "")
 
         if (cursor.moveToFirst()) {
 
@@ -276,6 +328,7 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
             game.description = cursor.getString(gameDescrIndex)
             game.password = cursor.getString(gamePassIndex)
             game.image = cursor.getString(gameImageIndex)
+            game.firebaseId = cursor.getString(gameFirebaseIdIndex)
         }
         cursor.close()
         db.close()
@@ -283,13 +336,18 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         return game
     }
 
+    //Deletes the game specified by the gameId.
     fun deleteGame(gameId: Int): Boolean{
         val db = this.writableDatabase
         val result = db.delete(GAME_TABLE, "$GAME_ID = $gameId", null) > 0
+
+        //TODO DELETE GAME FROM FIREBASE
+
         db.close()
         return result
     }
 
+    //Edits the game specified by the gameId.
     fun editGame(gameId: Int, gameName: String, gameSubtitle: String, gameDescription: String, gamePassword: String, gameImage: String){
         val db = this.writableDatabase
         val values = ContentValues()
