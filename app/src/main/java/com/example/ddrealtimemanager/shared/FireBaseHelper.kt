@@ -21,8 +21,6 @@ class FireBaseHelper {
         newGameRef.setValue(game)
 
         val fbGameId = newGameRef.key
-        //TODO associate key with game in database using the gameid
-        Log.i("Firebase ID", "Firebase ID is $fbGameId")
 
         return fbGameId!!
 
@@ -36,8 +34,6 @@ class FireBaseHelper {
     fun fbResumeGame(id: String){
         TODO()
     }
-
-
 
 
 

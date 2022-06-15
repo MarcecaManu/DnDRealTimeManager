@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.ddrealtimemanager.R
+import com.example.ddrealtimemanager.dm.real_time.DMRealTimeGameActivity
 import com.example.ddrealtimemanager.shared.CharacterCreationActivity
 import com.example.ddrealtimemanager.shared.DBHelper
 import kotlinx.android.synthetic.main.activity_character_visualization.*
@@ -35,7 +36,10 @@ class GameVisualizationActivity : AppCompatActivity() {
 
 
         btn_game_visualization_start.setOnClickListener {
-            //TODO Start game
+            val intent = Intent(this, DMRealTimeGameActivity::class.java)
+            intent.putExtra("newGame", false)
+            intent.putExtra("fbGameId", game.firebaseId)
+            startActivity(intent)
         }
 
 
