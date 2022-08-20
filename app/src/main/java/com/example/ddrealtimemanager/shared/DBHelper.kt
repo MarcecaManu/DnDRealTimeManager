@@ -22,6 +22,7 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
     private val CHAR_RACE = "Race"
     private val CHAR_CLASS = "Class"
     private val CHAR_DESCRIPTION = "Description"
+    private val CHAR_IMAGE = "Image"
 
     private val GAME_ID = "GameID"
     private val GAME_NAME = "GameName"
@@ -36,6 +37,7 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
     val MAX_LENGTH_CHAR_RACE = 200
     val MAX_LENGTH_CHAR_CLASS = 200
     val MAX_LENGTH_CHAR_DESCRIPTION = 2000
+    val MAX_LENGTH_CHAR_IMAGE = 10000
 
     val MAX_LENGTH_GAME_NAME = 200
     val MAX_LENGTH_GAME_SUBTITLE = 300
@@ -75,7 +77,8 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
                 "$CHAR_NAME VARCHAR($MAX_LENGTH_CHAR_NAME) NOT NULL," +
                 "$CHAR_RACE VARCHAR($MAX_LENGTH_CHAR_RACE)," +
                 "$CHAR_CLASS VARCHAR($MAX_LENGTH_CHAR_CLASS)," +
-                "$CHAR_DESCRIPTION VARCHAR($MAX_LENGTH_CHAR_DESCRIPTION)" +
+                "$CHAR_DESCRIPTION VARCHAR($MAX_LENGTH_CHAR_DESCRIPTION)," +
+                "$CHAR_IMAGE VARCHAR($MAX_LENGTH_CHAR_IMAGE)" +
                 ")")
 
         //Games' table
@@ -110,13 +113,14 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
     * TO DO:
         - Update attributes as character creation is developed
      */
-    fun writeNewCharacter(name: String, race: String, clas: String, description: String){
+    fun writeNewCharacter(character: Character){
         val contentValues = ContentValues()
         val db = this.writableDatabase
-        contentValues.put(CHAR_NAME, name)
-        contentValues.put(CHAR_RACE, race)
-        contentValues.put(CHAR_CLASS, clas)
-        contentValues.put(CHAR_DESCRIPTION, description)
+        contentValues.put(CHAR_NAME, character.name)
+        contentValues.put(CHAR_RACE, character.race)
+        contentValues.put(CHAR_CLASS, character.clas)
+        contentValues.put(CHAR_DESCRIPTION, character.desc)
+        contentValues.put(CHAR_IMAGE, character.image)
         db?.insert(CHAR_TABLE, null, contentValues)
         db.close()
 
@@ -141,16 +145,18 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         val raceIndex = cursor.getColumnIndex(CHAR_RACE)
         val classIndex = cursor.getColumnIndex(CHAR_CLASS)
         val descIndex = cursor.getColumnIndex(CHAR_DESCRIPTION)
+        val imageIndex = cursor.getColumnIndex(CHAR_IMAGE)
 
         if(cursor.moveToFirst()) {
             do {
-                val character = Character(0, "", "", "", "")
+                val character = Character(0, "", "", "", "", "")
 
                 character.id = cursor.getInt(idIndex)
                 character.name = cursor.getString(nameIndex)
                 character.race = cursor.getString(raceIndex)
                 character.clas = cursor.getString(classIndex)
                 character.desc = cursor.getString(descIndex)
+                character.image = cursor.getString(imageIndex)
 
                 charactersList.add(character)
 
@@ -177,8 +183,9 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         val raceIndex = cursor.getColumnIndex(CHAR_RACE)
         val classIndex = cursor.getColumnIndex(CHAR_CLASS)
         val descIndex = cursor.getColumnIndex(CHAR_DESCRIPTION)
+        val imageIndex = cursor.getColumnIndex(CHAR_IMAGE)
 
-        val character = Character(charId, "", "", "", "")
+        val character = Character(charId, "", "", "", "", "")
 
         if (cursor.moveToFirst()) {
 
@@ -186,6 +193,7 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
             character.race = cursor.getString(raceIndex)
             character.clas = cursor.getString(classIndex)
             character.desc = cursor.getString(descIndex)
+            character.image = cursor.getString(imageIndex)
         }
         cursor.close()
         db.close()
@@ -203,16 +211,17 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
 
     //Edits the character specified by the charId
 
-    fun editCharacter(charId: Int, name: String, race: String, clas: String, description: String){
+    fun editCharacter(character: Character){
         val db = this.writableDatabase
 
         val values = ContentValues()
-        values.put(CHAR_NAME, name)
-        values.put(CHAR_RACE, race)
-        values.put(CHAR_CLASS, clas)
-        values.put(CHAR_DESCRIPTION, description)
+        values.put(CHAR_NAME, character.name)
+        values.put(CHAR_RACE, character.race)
+        values.put(CHAR_CLASS, character.clas)
+        values.put(CHAR_DESCRIPTION, character.desc)
+        values.put(CHAR_IMAGE, character.image)
 
-        db.update(CHAR_TABLE, values, "$CHAR_ID = $charId", null)
+        db.update(CHAR_TABLE, values, "$CHAR_ID = ${character.id}", null)
         db.close()
     }
 

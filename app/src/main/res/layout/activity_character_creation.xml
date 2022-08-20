@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btnSaveChar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnCharBack"
-        app:layout_constraintTop_toBottomOf="@+id/etDescrChar" />
 
     <EditText
         android:id="@+id/etNameChar"
@@ -63,11 +53,24 @@
         android:ems="10"
         android:hint="Description"
         android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/etImgChar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etClassChar" />
+
+    <EditText
+        android:id="@+id/etImgChar"
+        android:layout_width="338dp"
+        android:layout_height="73dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Image"
         app:layout_constraintBottom_toTopOf="@+id/btnSaveChar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etRaceChar" />
+        app:layout_constraintTop_toBottomOf="@+id/etDescrChar" />
 
     <Button
         android:id="@+id/btnCharBack"
@@ -78,7 +81,18 @@
         app:layout_constraintEnd_toStartOf="@+id/btnSaveChar"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etDescrChar" />
+        app:layout_constraintTop_toBottomOf="@+id/etImgChar" />
+
+    <Button
+        android:id="@+id/btnSaveChar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnCharBack"
+        app:layout_constraintTop_toBottomOf="@+id/etImgChar" />
 
 
 

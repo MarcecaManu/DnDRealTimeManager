@@ -47,7 +47,7 @@ class CharacterCreationActivity : AppCompatActivity() {
     *  checks if the character is being edited or not based on the presence of a valid
     * character id (so the character already exists), or an invalid one (charId = -1, a new character)
     * */
-
+    
     fun saveCharacter(charId: Int){
         var err: String = ""
 
@@ -69,28 +69,22 @@ class CharacterCreationActivity : AppCompatActivity() {
         polishString(etDescrChar.text.toString(), database.MAX_LENGTH_CHAR_DESCRIPTION)
         if(descr == false) err = "Description"
 
+        val image = Utils().polishString(etImgChar.text.toString(), database.MAX_LENGTH_CHAR_DESCRIPTION)
+
         ////
-        if(err.isBlank()) {     //err indicates the field where too many characters were found
+        if(err.isBlank()) {     //err indicates the field where too many characteres were found
+
+            val char: Character = Character(charId, name.toString(), race.toString(), clas.toString(), descr.toString(), image.toString())
 
             if(charId == -1) {  //Invalid id -> this is a new character
-                database.writeNewCharacter(
-                    name.toString(),
-                    race.toString(),
-                    clas.toString(),
-                    descr.toString()
-                )
+                database.writeNewCharacter(char)
                 Toast.makeText(this, "New character was saved successfully!", Toast.LENGTH_SHORT)
                     .show()
                 finish()
 
             }else{  //valid charId -> the character is being edited
 
-                database.editCharacter(charId,
-                    name.toString(),
-                    race.toString(),
-                    clas.toString(),
-                    descr.toString()
-                )
+                database.editCharacter(char)
                 Toast.makeText(this, "The character was modified successfully!", Toast.LENGTH_SHORT)
                     .show()
                 finish()

@@ -12,7 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DDRealTimeManager">
         <activity
-            android:name=".PlayerRealTimeGameActivity"
+            android:name=".shared.CharactersCardListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".player.real_time.PlayerRealTimeGameActivity"
             android:exported="false" />
         <activity
             android:name=".dm.real_time.DMRealTimeGameActivity"
@@ -31,9 +34,6 @@
             android:exported="false" />
         <activity
             android:name=".shared.CharacterVisualizationActivity"
-            android:exported="false" />
-        <activity
-            android:name=".player.PlayerGameActivity"
             android:exported="false" />
         <activity
             android:name=".shared.CharacterCreationActivity"

@@ -27,6 +27,8 @@ class CharacterVisualizationActivity : AppCompatActivity() {
             tvDescr.text = character.desc
        // }
 
+        //TODO Implement image visualization
+
         fabEdit.setOnClickListener{
             val intent = Intent(this, CharacterCreationActivity::class.java)
 

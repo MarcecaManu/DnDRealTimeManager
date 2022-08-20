@@ -8,6 +8,7 @@ data class Character (
     var name: String,
     var race: String,
     var clas: String,
-    var desc: String
+    var desc: String,
+    var image: String
     ){
 }
