@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.ddrealtimemanager.R
+import com.example.ddrealtimemanager.player.real_time.PlayerRealTimeGameActivity
 import com.example.ddrealtimemanager.shared.CharactersListActivity
 import kotlinx.android.synthetic.main.activity_player.*
 
@@ -12,12 +13,12 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
-        btnContinue.setOnClickListener {
+        btn_player_characters.setOnClickListener {
             startActivity(Intent(this, CharactersListActivity::class.java))
         }
 
-        btnNewGame.setOnClickListener {
-            startActivity(Intent(this, PlayerGameActivity::class.java))
+        btn_player_join.setOnClickListener {
+            startActivity(Intent(this, PlayerRealTimeGameActivity::class.java))
         }
 
 

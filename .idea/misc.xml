@@ -17,10 +17,30 @@
         <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/activity_player_game.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/layout_game_card_item.xml" value="0.1082427536231884" />
         <entry key="..\:/Users/Manu/AndroidStudioProjects/DDRealTimeManager/app/src/main/res/layout/list_row_items.xml" value="0.17074275362318841" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/drawable/custom_healthbar.xml" value="0.173" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/drawable/healthbar.xml" value="0.173" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/drawable/ic_launcher_background.xml" value="0.173" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_character_creation.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_character_visualization.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_characters_list.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_dmactivity.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_dmgame.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_dmreal_time_game.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_game_list.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_game_visualization.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_new_game.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_player.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_player_game.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_player_real_time_game.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/healthbar.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/layout_game_card_item.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/layout_rt_player_card_item.xml" value="0.365625" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/list_row_items.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

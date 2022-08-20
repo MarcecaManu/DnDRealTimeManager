@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".player.PlayerGameActivity">
+    tools:context=".player.real_time.PlayerRealTimeGameActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

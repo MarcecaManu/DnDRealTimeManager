@@ -9,11 +9,7 @@ import kotlinx.android.synthetic.main.activity_characters_list.*
 
 /* This activity shows all the characters created by the user. It first checks the local
 * database for the stored characters, and then prints them in a listview.
-*
-* TO DO:
-* When a listview element is pressed, the app must display all the character's information, and
-* also to buttons: edit and delete character.
-* (fragments should be fine) */
+*/
 
 class CharactersListActivity : AppCompatActivity() {
 

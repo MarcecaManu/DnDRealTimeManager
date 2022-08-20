@@ -32,6 +32,7 @@ class NewGameActivity : AppCompatActivity() {
             etGameCreationSubtitle.setText(extras.getString("gameSubtitle"))
             etGameCreationDescr.setText(extras.getString("gameDescription"))
             etGameCreationPassword.setText(extras.getString("gamePassword"))
+
             btnGameCreationStart.setText("Save changes")
         }
 
@@ -158,9 +159,9 @@ class NewGameActivity : AppCompatActivity() {
         intent.putExtra("newGame", true)
         intent.putExtra("fbGameId", firebaseId)
 
-        //TODO IMPEDIRE L'ACCESSO ALL'ACTIVITY! (Back)
-
         startActivity(intent)
+
+        finish()
     }
 
 }

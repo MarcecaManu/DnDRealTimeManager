@@ -7,23 +7,23 @@
     tools:context=".dm.DMActivity">
 
     <Button
-        android:id="@+id/btnNewGame"
+        android:id="@+id/btn_dm_startgame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start game"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnContinue"
+        app:layout_constraintStart_toEndOf="@+id/btn_dm_characters"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnContinue"
+        android:id="@+id/btn_dm_characters"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Characters"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnNewGame"
+        app:layout_constraintEnd_toStartOf="@+id/btn_dm_startgame"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

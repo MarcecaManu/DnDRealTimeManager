@@ -6,6 +6,8 @@ import android.widget.Toast
 import com.example.ddrealtimemanager.R
 import kotlinx.android.synthetic.main.activity_character_creation.*
 
+/* This activity contains the character creation process.*/
+
 class CharacterCreationActivity : AppCompatActivity() {
 
     var charId: Int = -1
@@ -40,6 +42,11 @@ class CharacterCreationActivity : AppCompatActivity() {
         }
     }
 
+
+    /* This function saves or updates the character in the database. The application
+    *  checks if the character is being edited or not based on the presence of a valid
+    * character id (so the character already exists), or an invalid one (charId = -1, a new character)
+    * */
 
     fun saveCharacter(charId: Int){
         var err: String = ""
