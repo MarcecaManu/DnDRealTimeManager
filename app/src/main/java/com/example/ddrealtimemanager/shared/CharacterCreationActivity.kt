@@ -47,7 +47,7 @@ class CharacterCreationActivity : AppCompatActivity() {
     *  checks if the character is being edited or not based on the presence of a valid
     * character id (so the character already exists), or an invalid one (charId = -1, a new character)
     * */
-    
+
     fun saveCharacter(charId: Int){
         var err: String = ""
 

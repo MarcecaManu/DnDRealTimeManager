@@ -65,7 +65,7 @@
         android:layout_height="73dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:hint="Image"
+        android:hint="Image URL"
         app:layout_constraintBottom_toTopOf="@+id/btnSaveChar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

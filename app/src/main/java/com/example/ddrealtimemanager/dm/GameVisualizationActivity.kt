@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.ddrealtimemanager.R
 import com.example.ddrealtimemanager.dm.real_time.DMRealTimeGameActivity
 import com.example.ddrealtimemanager.shared.CharacterCreationActivity
@@ -13,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_character_visualization.*
 import kotlinx.android.synthetic.main.activity_character_visualization.fabDelete
 import kotlinx.android.synthetic.main.activity_character_visualization.fabEdit
 import kotlinx.android.synthetic.main.activity_game_visualization.*
+import kotlinx.android.synthetic.main.layout_game_card_item.view.*
 
 class GameVisualizationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,11 +30,18 @@ class GameVisualizationActivity : AppCompatActivity() {
 
         val game = db.getGame(gameId)
 
-        //TODO implement image management
-
         tv_game_visualization_title.text = game.name
         tv_game_visualization_subtitle.text = game.subtitle
         tv_game_visualization_description.text = game.description
+
+        val requestOptions = RequestOptions()
+            .placeholder(R.drawable.fantasy_standard_bg)
+            .error(R.drawable.fantasy_standard_bg)
+
+        Glide.with(this)
+            .applyDefaultRequestOptions(requestOptions)
+            .load(game.image)
+            .into(game_visualization_image)
         // }
 
 
@@ -52,7 +62,6 @@ class GameVisualizationActivity : AppCompatActivity() {
             intent.putExtra("gameName", game.name)
             intent.putExtra("gameSubtitle", game.subtitle)
             intent.putExtra("gameDescription", game.description)
-            intent.putExtra("gamePassword", game.password)
             intent.putExtra("gameImage", game.image)
 
             startActivity(intent)

@@ -8,7 +8,6 @@ data class Game (
     var name: String,
     var subtitle: String,
     var description: String,
-    var password: String,
     var image: String,
     var firebaseId: String
     ){

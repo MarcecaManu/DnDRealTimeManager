@@ -36,8 +36,8 @@ class GameListAdapter(private val context: Context, private var gameList: List<G
 
         val game = gameList[position]
         val requestOptions = RequestOptions()
-            .placeholder(R.drawable.ic_launcher_background)
-            .error(R.drawable.ic_launcher_background)
+            .placeholder(R.drawable.fantasy_standard_bg)
+            .error(R.drawable.fantasy_standard_bg)
 
         Glide.with(context)
             .applyDefaultRequestOptions(requestOptions)

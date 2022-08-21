@@ -28,7 +28,6 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
     private val GAME_NAME = "GameName"
     private val GAME_SUBTITLE = "GameSubtitle"
     private val GAME_DESCRIPTION = "GameDescription"
-    private val GAME_PASSWORD = "GamePassword"
     private val GAME_IMAGE = "GameImage"
     private val GAME_FIREBASE_ID = "FirebaseId"
 
@@ -42,7 +41,6 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
     val MAX_LENGTH_GAME_NAME = 200
     val MAX_LENGTH_GAME_SUBTITLE = 300
     val MAX_LENGTH_GAME_DESCRIPTION = 2000
-    val MAX_LENGTH_GAME_PASSWORD = 30
     val MAX_LENGTH_GAME_IMAGE = 3000
     val MAX_LENGTH_GAME_FIREBASE_ID = 1000
 
@@ -87,7 +85,6 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
                 "$GAME_NAME VARCHAR($MAX_LENGTH_GAME_NAME) NOT NULL," +
                 "$GAME_SUBTITLE VARCHAR($MAX_LENGTH_GAME_SUBTITLE)," +
                 "$GAME_DESCRIPTION VARCHAR($MAX_LENGTH_GAME_DESCRIPTION)," +
-                "$GAME_PASSWORD VARCHAR($MAX_LENGTH_GAME_PASSWORD)," +
                 "$GAME_IMAGE VARCHAR($MAX_LENGTH_GAME_IMAGE)," +
                 "$GAME_FIREBASE_ID VARCHAR($MAX_LENGTH_GAME_FIREBASE_ID)" +
                 ")")
@@ -227,20 +224,113 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
 
     //Stores a new game in the database
 
-    fun writeNewGame(gameName: String, gameSubtitle: String, gameDescription: String, gamePassword: String, gameImage: String, gameFirebaseId: String){
+    fun writeNewGame(game: Game){
         val contentValues = ContentValues()
         val db = this.writableDatabase
 
-        contentValues.put(GAME_NAME, gameName)
-        contentValues.put(GAME_SUBTITLE, gameSubtitle)
-        contentValues.put(GAME_DESCRIPTION, gameDescription)
-        contentValues.put(GAME_PASSWORD, gamePassword)
-        contentValues.put(GAME_IMAGE, gameImage)
-        contentValues.put(GAME_FIREBASE_ID, gameFirebaseId)
+        contentValues.put(GAME_NAME, game.name)
+        contentValues.put(GAME_SUBTITLE, game.subtitle)
+        contentValues.put(GAME_DESCRIPTION, game.description)
+        contentValues.put(GAME_IMAGE, game.image)
+        contentValues.put(GAME_FIREBASE_ID, game.firebaseId)
 
         db?.insert(GAME_TABLE, null, contentValues)
         db.close()
     }
+
+
+    //Returns an ArrayList of all the games stored in the database.
+    fun getStoredGames(): ArrayList<Game>{
+        var gamesList: ArrayList<Game> = ArrayList()
+
+        val db = this.readableDatabase
+        val query = "select $GAME_ID, * from $GAME_TABLE"
+        val cursor = db.rawQuery(query, null)
+
+        val idIndex = cursor.getColumnIndex(GAME_ID)
+        val nameIndex = cursor.getColumnIndex(GAME_NAME)
+        val subtitleIndex = cursor.getColumnIndex(GAME_SUBTITLE)
+        val descrIndex = cursor.getColumnIndex(GAME_DESCRIPTION)
+        val imageIndex = cursor.getColumnIndex(GAME_IMAGE)
+        val firebaseIdIndex = cursor.getColumnIndex(GAME_FIREBASE_ID)
+
+        if(cursor.moveToFirst()) {
+            do {
+                val game = Game(0, "", "", "", "", "")
+
+                game.id = cursor.getInt(idIndex)
+                game.name = cursor.getString(nameIndex)
+                game.subtitle = cursor.getString(subtitleIndex)
+                game.description = cursor.getString(descrIndex)
+                game.image = cursor.getString(imageIndex)
+                game.firebaseId = cursor.getString(firebaseIdIndex)
+
+                gamesList.add(game)
+
+            } while (cursor.moveToNext())
+            cursor.close()
+        }
+        db.close()
+
+        return gamesList
+    }
+
+    //Returns the game specified by the given gameId.
+    fun getGame(gameId: Int): Game{
+        val db = this.readableDatabase
+        val query = "select * " +
+                "FROM $GAME_TABLE " +
+                "WHERE $GAME_ID = $gameId"
+        val cursor = db.rawQuery(query, null)
+
+        val gameNameIndex = cursor.getColumnIndex(GAME_NAME)
+        val gameSubtIndex = cursor.getColumnIndex(GAME_SUBTITLE)
+        val gameDescrIndex = cursor.getColumnIndex(GAME_DESCRIPTION)
+        val gameImageIndex = cursor.getColumnIndex(GAME_IMAGE)
+        val gameFirebaseIdIndex = cursor.getColumnIndex(GAME_FIREBASE_ID)
+
+
+        val game = Game(gameId, "", "", "", "", "")
+
+        if (cursor.moveToFirst()) {
+
+            game.name = cursor.getString(gameNameIndex)
+            game.subtitle = cursor.getString(gameSubtIndex)
+            game.description = cursor.getString(gameDescrIndex)
+            game.image = cursor.getString(gameImageIndex)
+            game.firebaseId = cursor.getString(gameFirebaseIdIndex)
+        }
+        cursor.close()
+        db.close()
+
+        return game
+    }
+
+    //Deletes the game specified by the gameId.
+    fun deleteGame(gameId: Int): Boolean{
+        val db = this.writableDatabase
+        val result = db.delete(GAME_TABLE, "$GAME_ID = $gameId", null) > 0
+
+        //TODO DELETE GAME FROM FIREBASE
+
+        db.close()
+        return result
+    }
+
+    //Edits the game specified by the gameId.
+    fun editGame(game: Game){
+        val db = this.writableDatabase
+        val values = ContentValues()
+
+        values.put(GAME_NAME, game.name)
+        values.put(GAME_SUBTITLE, game.subtitle)
+        values.put(GAME_DESCRIPTION, game.description)
+        values.put(GAME_IMAGE, game.image)
+
+        db.update(GAME_TABLE, values, "$GAME_ID = ${game.id}", null)
+        db.close()
+    }
+
 
     //Returns the row_id of the last inserted game. This function is used in
     //the game creation phase, so that the firebase id can be bound with
@@ -271,103 +361,6 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         contentValues.put(GAME_FIREBASE_ID, fbGameId)
 
         db.update(GAME_TABLE, contentValues, "$GAME_ID = $gameId", null)
-        db.close()
-    }
-
-    //Returns an ArrayList of all the games stored in the database.
-    fun getStoredGames(): ArrayList<Game>{
-        var gamesList: ArrayList<Game> = ArrayList()
-
-        val db = this.readableDatabase
-        val query = "select $GAME_ID, * from $GAME_TABLE"
-        val cursor = db.rawQuery(query, null)
-
-        val idIndex = cursor.getColumnIndex(GAME_ID)
-        val nameIndex = cursor.getColumnIndex(GAME_NAME)
-        val subtitleIndex = cursor.getColumnIndex(GAME_SUBTITLE)
-        val descrIndex = cursor.getColumnIndex(GAME_DESCRIPTION)
-        val passIndex = cursor.getColumnIndex(GAME_PASSWORD)
-        val imageIndex = cursor.getColumnIndex(GAME_IMAGE)
-        val firebaseIdIndex = cursor.getColumnIndex(GAME_FIREBASE_ID)
-
-        if(cursor.moveToFirst()) {
-            do {
-                val game = Game(0, "", "", "", "", "", "")
-
-                game.id = cursor.getInt(idIndex)
-                game.name = cursor.getString(nameIndex)
-                game.subtitle = cursor.getString(subtitleIndex)
-                game.description = cursor.getString(descrIndex)
-                game.password = cursor.getString(passIndex)
-                game.image = cursor.getString(imageIndex)
-                game.firebaseId = cursor.getString(firebaseIdIndex)
-
-                gamesList.add(game)
-
-            } while (cursor.moveToNext())
-            cursor.close()
-        }
-        db.close()
-
-        return gamesList
-    }
-
-    //Returns the game specified by the given gameId.
-    fun getGame(gameId: Int): Game{
-        val db = this.readableDatabase
-        val query = "select * " +
-                "FROM $GAME_TABLE " +
-                "WHERE $GAME_ID = $gameId"
-        val cursor = db.rawQuery(query, null)
-
-        val gameNameIndex = cursor.getColumnIndex(GAME_NAME)
-        val gameSubtIndex = cursor.getColumnIndex(GAME_SUBTITLE)
-        val gameDescrIndex = cursor.getColumnIndex(GAME_DESCRIPTION)
-        val gamePassIndex = cursor.getColumnIndex(GAME_PASSWORD)
-        val gameImageIndex = cursor.getColumnIndex(GAME_IMAGE)
-        val gameFirebaseIdIndex = cursor.getColumnIndex(GAME_FIREBASE_ID)
-
-
-        val game = Game(gameId, "", "", "", "", "", "")
-
-        if (cursor.moveToFirst()) {
-
-            game.name = cursor.getString(gameNameIndex)
-            game.subtitle = cursor.getString(gameSubtIndex)
-            game.description = cursor.getString(gameDescrIndex)
-            game.password = cursor.getString(gamePassIndex)
-            game.image = cursor.getString(gameImageIndex)
-            game.firebaseId = cursor.getString(gameFirebaseIdIndex)
-        }
-        cursor.close()
-        db.close()
-
-        return game
-    }
-
-    //Deletes the game specified by the gameId.
-    fun deleteGame(gameId: Int): Boolean{
-        val db = this.writableDatabase
-        val result = db.delete(GAME_TABLE, "$GAME_ID = $gameId", null) > 0
-
-        //TODO DELETE GAME FROM FIREBASE
-
-        db.close()
-        return result
-    }
-
-    //Edits the game specified by the gameId.
-    fun editGame(gameId: Int, gameName: String, gameSubtitle: String, gameDescription: String, gamePassword: String, gameImage: String){
-        val db = this.writableDatabase
-        val values = ContentValues()
-
-        values.put(GAME_NAME, gameName)
-        values.put(GAME_SUBTITLE, gameSubtitle)
-        values.put(GAME_DESCRIPTION, gameDescription)
-        values.put(GAME_PASSWORD, gamePassword)
-        values.put(GAME_IMAGE, gameImage)
-
-        db.update(GAME_TABLE, values, "$GAME_ID = $gameId", null)
         db.close()
     }
 

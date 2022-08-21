@@ -42,7 +42,7 @@
         android:ems="10"
         android:hint="Description"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/etGameCreationPassword"
+        app:layout_constraintBottom_toTopOf="@+id/etGameCreationImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,11 +50,11 @@
 
 
     <EditText
-        android:id="@+id/etGameCreationPassword"
+        android:id="@+id/etGameCreationImage"
         android:layout_width="338dp"
         android:layout_height="73dp"
         android:ems="10"
-        android:hint="Password"
+        android:hint="Image URL"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/btnGameCreationStart"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,7 +71,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnGameCreationBack"
-        app:layout_constraintTop_toBottomOf="@+id/etGameCreationPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/etGameCreationImage" />
 
 
     <Button
@@ -83,6 +83,6 @@
         app:layout_constraintEnd_toStartOf="@+id/btnGameCreationStart"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etGameCreationPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/etGameCreationImage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
