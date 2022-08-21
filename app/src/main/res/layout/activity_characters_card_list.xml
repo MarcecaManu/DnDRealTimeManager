@@ -13,7 +13,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:divider="@android:color/transparent"
+        android:clickable="false"
+        android:listSelector="@android:color/transparent"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/card_characters_list_fab"
