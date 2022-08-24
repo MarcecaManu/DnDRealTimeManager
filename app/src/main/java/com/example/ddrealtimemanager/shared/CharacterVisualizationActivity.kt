@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.ddrealtimemanager.R
 import kotlinx.android.synthetic.main.activity_character_visualization.*
+import kotlinx.android.synthetic.main.layout_character_item.view.*
 
 class CharacterVisualizationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,7 +19,7 @@ class CharacterVisualizationActivity : AppCompatActivity() {
         val db = DBHelper(this)
 
         val extras = intent.extras
-        //if(extras != null){
+
             val charId = extras!!.getInt("charId")
 
             val character = db.getSpecificCharacter(charId)
@@ -25,9 +28,17 @@ class CharacterVisualizationActivity : AppCompatActivity() {
             tvRace.text = character.race
             tvClass.text = character.clas
             tvDescr.text = character.desc
-       // }
 
-        //TODO Implement image visualization
+
+        val requestOptions = RequestOptions()
+            .placeholder(R.drawable.propic_standard)
+            .error(R.drawable.propic_standard)
+
+        Glide.with(this)
+            .applyDefaultRequestOptions(requestOptions)
+            .load(character.image)
+            .into(tv_chara_image)
+
 
         fabEdit.setOnClickListener{
             val intent = Intent(this, CharacterCreationActivity::class.java)
@@ -37,6 +48,7 @@ class CharacterVisualizationActivity : AppCompatActivity() {
             intent.putExtra("race", character.race)
             intent.putExtra("class", character.clas)
             intent.putExtra("description", character.desc)
+            intent.putExtra("image", character.image)
 
             startActivity(intent)
             finish()

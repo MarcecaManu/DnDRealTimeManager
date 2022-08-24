@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="5dp"
+        android:gravity="start|top"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/rt_charvis_btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back" />
+
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/rt_charvis_iv_charImage"
+        android:layout_width="251dp"
+        android:layout_height="204dp"
+        app:layout_constraintBottom_toTopOf="@+id/rt_charvis_pb_healthbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/propic_standard" />
+
+
+    <RelativeLayout
+        android:id="@+id/rt_charvis_pb_healthbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/rt_charvis_iv_charImage"
+        app:layout_constraintBottom_toTopOf="@+id/rt_charvis_tv_name">
+
+
+        <ProgressBar
+            android:id="@+id/rt_charvis_pb_healthbar_item"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="24dp"
+
+            android:layout_height="24dp"
+
+
+            android:progressDrawable="@drawable/custom_healthbar"
+
+            />
+
+
+        <TextView
+            android:id="@+id/rt_charvis_hp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignLeft="@id/rt_charvis_pb_healthbar_item"
+            android:layout_alignTop="@id/rt_charvis_pb_healthbar_item"
+            android:layout_alignRight="@id/rt_charvis_pb_healthbar_item"
+            android:layout_alignBottom="@id/rt_charvis_pb_healthbar_item"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:background="#00000000"
+            android:gravity="center"
+            android:text="- / -"
+            android:textColor="@color/white"
+            android:textColorHighlight="@color/black" />
+
+
+    </RelativeLayout>
+
+
+
+    <TextView
+        android:id="@+id/rt_charvis_tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+        app:layout_constraintBottom_toTopOf="@+id/rt_charvis_tv_race"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rt_charvis_pb_healthbar" />
+
+    <TextView
+        android:id="@+id/rt_charvis_tv_race"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Race"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+        app:layout_constraintBottom_toTopOf="@+id/rt_charvis_tv_class"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rt_charvis_tv_name" />
+
+    <TextView
+        android:id="@+id/rt_charvis_tv_class"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Class"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+        app:layout_constraintBottom_toTopOf="@+id/rt_charvis_tv_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rt_charvis_tv_race" />
+
+    <TextView
+        android:id="@+id/rt_charvis_tv_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rt_charvis_tv_class" />
+</androidx.constraintlayout.widget.ConstraintLayout>

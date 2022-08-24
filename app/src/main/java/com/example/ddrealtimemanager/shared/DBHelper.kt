@@ -32,9 +32,9 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
     private val GAME_FIREBASE_ID = "FirebaseId"
 
 
-    val MAX_LENGTH_CHAR_NAME = 200
-    val MAX_LENGTH_CHAR_RACE = 200
-    val MAX_LENGTH_CHAR_CLASS = 200
+    val MAX_LENGTH_CHAR_NAME = 15
+    val MAX_LENGTH_CHAR_RACE = 15
+    val MAX_LENGTH_CHAR_CLASS = 15
     val MAX_LENGTH_CHAR_DESCRIPTION = 2000
     val MAX_LENGTH_CHAR_IMAGE = 10000
 

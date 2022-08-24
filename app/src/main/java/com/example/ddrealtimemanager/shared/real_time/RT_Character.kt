@@ -1,14 +1,18 @@
 package com.example.ddrealtimemanager.shared.real_time
 
 data class RT_Character(
-    var firebaseId: Int,
+    var firebaseId: String?,
     var name: String,
     var race: String,
     var clas: String,
-    var desc: String,
+    var description: String,
+    var image: String,
 
-    var hp: Int,
+    var maxHp: Int,
+    var currentHp: Int,
+
     var initiative: Int,
-    var ac: Int
+    var ac: Int,
+    var level: Int
 ){
 }
