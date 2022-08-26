@@ -43,7 +43,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/rt_charvis_iv_charImage"
-        app:layout_constraintBottom_toTopOf="@+id/rt_charvis_tv_name">
+        app:layout_constraintBottom_toTopOf="@+id/rt_charvis_tv_name"
+        tools:ignore="MissingConstraints">
 
 
         <ProgressBar

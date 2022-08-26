@@ -47,7 +47,11 @@ class RT_CharacterVisualizationfragment(selectedCharacter: RT_Character) : Fragm
         savedInstanceState: Bundle?
     ): View? {
 
-        return inflater.inflate(R.layout.rt_character_visualization_fragment, container, false)
+        val view: View = inflater.inflate(R.layout.rt_character_visualization_fragment, container, false)
+
+
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,9 +73,19 @@ class RT_CharacterVisualizationfragment(selectedCharacter: RT_Character) : Fragm
 
         rt_charvis_hp.text = "${character.currentHp} / ${character.maxHp}"
 
+        val percentageHP = (character.currentHp.toFloat() / character.maxHp.toFloat() * 100.0f).toInt()
+
+        rt_charvis_pb_healthbar_item.progress = percentageHP
+
         rt_charvis_btn_back.setOnClickListener{
             listener?.onBackButtonSelected()
         }
+
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        this.listener = null
     }
 
 }

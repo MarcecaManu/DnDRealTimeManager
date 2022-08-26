@@ -10,70 +10,73 @@ import com.google.firebase.database.ValueEventListener
 import java.util.*
 import kotlin.collections.ArrayList
 
-class FireBaseHelper {
+ class FireBaseHelper {
+     companion object {
 
-    val BASE_DIR = "dnd_realtime"
-    val GAMES_DIR = "games"
-    val PLAYERS_DIR = "players"
+         val BASE_DIR = "dnd_realtime"
+         val GAMES_DIR = "games"
+         val PLAYERS_DIR = "players"
 
-    val firebase = FirebaseDatabase.getInstance("https://dnd-real-time-manager-default-rtdb.europe-west1.firebasedatabase.app/")
+         val firebase =
+             FirebaseDatabase.getInstance("https://dnd-real-time-manager-default-rtdb.europe-west1.firebasedatabase.app/")
 
-    //DM SECTION
+         //DM SECTION
 
-    val ref = firebase.getReference(BASE_DIR)
-    val gamesRef = ref.child(GAMES_DIR)
+         val ref = firebase.getReference(BASE_DIR)
+         val gamesRef = ref.child(GAMES_DIR)
 
-    fun fbCreateNewGame(game: Game): String{
-        val newGameRef = gamesRef.push()
-        newGameRef.setValue(game)
+         fun fbCreateNewGame(game: Game): String {
+             val newGameRef = gamesRef.push()
+             newGameRef.setValue(game)
 
-        val fbGameId = newGameRef.key
+             val fbGameId = newGameRef.key
 
-        return fbGameId!!
+             return fbGameId!!
 
-    }
+         }
 
-    fun fbUpdateGame(fbGameId: String, game: Game){
-        val gameRef = gamesRef.child(fbGameId)
-        gameRef.setValue(game)
-    }
+         fun fbUpdateGame(fbGameId: String, game: Game) {
+             val gameRef = gamesRef.child(fbGameId)
+             gameRef.setValue(game)
+         }
 
-    fun fbResumeGame(id: String){
-        TODO()
-    }
-
-
-    fun fbPushCharacter(character: RT_Character, fbGameId: String): String{
-
-        val currentGameRef = gamesRef.child(fbGameId)
-        val playersDirRef = currentGameRef.child(PLAYERS_DIR)
-
-        val characterRef = playersDirRef.push()
-        character.firebaseId = characterRef.key
-        characterRef.setValue(character)
-
-        val fbCharId = characterRef.key
-
-        return fbCharId!!
-
-    }
+         fun fbResumeGame(id: String) {
+             TODO()
+         }
 
 
-    fun test(str: String){
-        val myRef = firebase.getReference("prova1")
-        myRef.setValue(str)
+         fun fbPushCharacter(character: RT_Character, fbGameId: String): String {
 
-        myRef.addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val value = snapshot.getValue(String::class.java)
-                Log.d(TAG, "Value is $value")
+             val currentGameRef = gamesRef.child(fbGameId)
+             val playersDirRef = currentGameRef.child(PLAYERS_DIR)
 
-            }
+             val characterRef = playersDirRef.push()
+             character.firebaseId = characterRef.key
+             characterRef.setValue(character)
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.w(TAG, "Failed to read", error.toException())
-            }
-        })
-    }
+             val fbCharId = characterRef.key
+
+             return fbCharId!!
+
+         }
+
+
+         fun test(str: String) {
+             val myRef = firebase.getReference("prova1")
+             myRef.setValue(str)
+
+             myRef.addValueEventListener(object : ValueEventListener {
+                 override fun onDataChange(snapshot: DataSnapshot) {
+                     val value = snapshot.getValue(String::class.java)
+                     Log.d(TAG, "Value is $value")
+
+                 }
+
+                 override fun onCancelled(error: DatabaseError) {
+                     Log.w(TAG, "Failed to read", error.toException())
+                 }
+             })
+         }
+     }
 
 }

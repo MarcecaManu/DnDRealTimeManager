@@ -19,7 +19,7 @@ class NewGameActivity : AppCompatActivity() {
 
     var gameId: Int = -1
     val database = DBHelper(this)
-    val firebase = FireBaseHelper()
+    //val firebase = FireBaseHelper()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,7 +104,7 @@ class NewGameActivity : AppCompatActivity() {
                     .show()
 
                 val game = database.getGame(gameId)
-                firebase.fbUpdateGame(game.firebaseId, game)
+                FireBaseHelper.fbUpdateGame(game.firebaseId, game)
 
                 return true
 
@@ -145,7 +145,7 @@ class NewGameActivity : AppCompatActivity() {
         val game = database.getGame(retrievedGameId)
 
         //Create the game and store the game id in firebaseId
-        val firebaseId = firebase.fbCreateNewGame(game)
+        val firebaseId = FireBaseHelper.fbCreateNewGame(game)
 
         //Associate the game created in firebase with the game stored in the database
         database.setFirebaseId(retrievedGameId, firebaseId)
