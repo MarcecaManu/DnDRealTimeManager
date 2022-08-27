@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -18,25 +19,37 @@ import java.lang.ClassCastException
 
 class RT_CharacterVisualizationfragment(selectedCharacter: RT_Character) : Fragment() {
 
+
     private val character = selectedCharacter
 
-    private var listener: OnBackButtonClickListener? = null
-
-    private var dm = DMRealTimeGameActivity()
-
+    private var backListener: OnBackButtonClickListener? = null
+    private var deleteListener: OnDeleteButtonClickListener? = null
+    private var editListener: OnEditButtonClikListener? = null
 
     interface OnBackButtonClickListener{
         fun onBackButtonSelected()
     }
 
+    interface OnDeleteButtonClickListener{
+        fun onDeleteButtonSelected(fbCharId: String)
+    }
+
+    interface OnEditButtonClikListener{
+        fun onEditButtonSelected()
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if(context is Activity){
-            listener = context as OnBackButtonClickListener
+            backListener = context as OnBackButtonClickListener
+            deleteListener = context as OnDeleteButtonClickListener
+            editListener = context as OnEditButtonClikListener
         }else {
             throw ClassCastException(context.toString()
                     + "must implement "
-                    + "RT_CharacterVisualizationfragment.OnBackButtonClickListener")
+                    + "RT_CharacterVisualizationfragment.OnBackButtonClickListener, "
+                    + "RT_CharacterVisualizationfragment.OnDeleteButtonClickListener and "
+                    + "RT_CharacterVisualizationfragment.OnEditButtonClickListener")
         }
     }
 
@@ -57,11 +70,6 @@ class RT_CharacterVisualizationfragment(selectedCharacter: RT_Character) : Fragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rt_charvis_tv_name.text = character.name
-        rt_charvis_tv_race.text = character.race
-        rt_charvis_tv_class.text = character.clas
-        rt_charvis_tv_description.text = character.description
-
         val requestOptions = RequestOptions()
             .placeholder(R.drawable.propic_standard)
             .error(R.drawable.propic_standard)
@@ -77,15 +85,36 @@ class RT_CharacterVisualizationfragment(selectedCharacter: RT_Character) : Fragm
 
         rt_charvis_pb_healthbar_item.progress = percentageHP
 
+        rt_charvis_tv_name.text = character.name
+        rt_charvis_tv_race.text = character.race
+        rt_charvis_tv_class.text = character.clas
+        rt_charvis_tv_ac.text = "AC: " + character.ac.toString()
+        rt_charvis_tv_level.text = "Level " + character.level.toString()
+        rt_charvis_tv_initiative.text = "Init: " + character.initiative.toString()
+        rt_charvis_tv_description.text = character.description
+
+
         rt_charvis_btn_back.setOnClickListener{
-            listener?.onBackButtonSelected()
+            backListener?.onBackButtonSelected()
         }
+
+
+        rt_charvis_fab_delete.setOnClickListener{
+            deleteListener?.onDeleteButtonSelected(character.firebaseId!!)
+        }
+
+        rt_charvis_fab_edit.setOnClickListener{
+            editListener?.onEditButtonSelected()
+        }
+
 
     }
 
     override fun onDetach() {
         super.onDetach()
-        this.listener = null
+        this.backListener = null
+        this.deleteListener = null
+        this.editListener = null
     }
 
 }

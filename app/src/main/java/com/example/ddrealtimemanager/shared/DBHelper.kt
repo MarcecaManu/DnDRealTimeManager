@@ -329,6 +329,9 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
 
         db.update(GAME_TABLE, values, "$GAME_ID = ${game.id}", null)
         db.close()
+
+        //TODO EDIT GAME IN FIREBASE
+
     }
 
 

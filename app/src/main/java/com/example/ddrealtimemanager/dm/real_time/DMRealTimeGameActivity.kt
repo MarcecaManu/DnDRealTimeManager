@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -16,30 +18,30 @@ import com.google.firebase.database.ktx.getValue
 import kotlinx.android.synthetic.main.activity_characters_card_list.*
 import kotlinx.android.synthetic.main.activity_dmreal_time_game.*
 import java.lang.Exception
+import kotlin.math.log
 
 class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListFragment.OnActiveCharacterSelectedListener,
-        RT_CharacterVisualizationfragment.OnBackButtonClickListener{
+        RT_CharacterVisualizationfragment.OnBackButtonClickListener,
+        RT_CharacterVisualizationfragment.OnDeleteButtonClickListener,
+        RT_CharacterVisualizationfragment.OnEditButtonClikListener{
 
     lateinit var fbGameId: String
 
-    //val fb = FireBaseHelper()
 
-
-    //val firebase = FirebaseDatabase.getInstance("https://dnd-real-time-manager-default-rtdb.europe-west1.firebasedatabase.app/")
     lateinit var gameRef: DatabaseReference
     lateinit var playersRef: DatabaseReference
 
 
     private val ACTIVE_CHARACTERS_LIST = 1
     private val CHARACTER_VISUALIZATION = 2
+    private val STORED_CHARACTERS_LIST = 3
     //TODO ADD FRAGMENTS IDs
     var currentFragment: Int = ACTIVE_CHARACTERS_LIST
 
 
-    private lateinit var charAdapter: RT_CharactersCardListAdapter
 
 
-    private val activeListFragment = RT_ActiveCharactersCardListFragment()
+    private var activeListFragment = RT_ActiveCharactersCardListFragment()
     private val storedListFragment = RT_StoredCharactersCardListFragment()
     private val characterCreationFragment = RT_CharacterCreationFragment()
     //private val characterVisualizationFragment = RT_CharacterVisualizationfragment(null)
@@ -66,11 +68,39 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
 
 
+    ///////////////////////
+    override fun onRestart() {
+        super.onRestart()
+        activeListFragment = RT_ActiveCharactersCardListFragment()
+        Log.v("LIFEOFACTIVITY", "OnRestart")
+    }
 
-    //private var activeCharactersListFragment: RT_ActiveCharactersCardListFragment? = null
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.v("LIFEOFACTIVITY", "OnDestroy")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.v("LIFEOFACTIVITY", "OnResume")
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        Log.v("LIFEOFACTIVITY", "OnStop")
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        Log.v("LIFEOFACTIVITY", "OnStart")
+    }
+///////////////////
+
+
 
     override fun onActiveCharItemSelected(fbCharId: String) {
-        //if(activeListFragment != null && activeListFragment!!.isInLayout){
 
             //get selected character
             val character: RT_Character = getSpecificFbCharacter(fbCharId)!!
@@ -79,8 +109,8 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         val transaction = supportFragmentManager.beginTransaction()
             .replace(R.id.rt_dm_fragment_container, RT_CharacterVisualizationfragment(character))
             .commit()
+        currentFragment = CHARACTER_VISUALIZATION
 
-        //}
     }
 
 
@@ -119,6 +149,8 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
                 /*If the active characters listview is not shown, this line leads to an exception!*/
                 if(currentFragment == ACTIVE_CHARACTERS_LIST) {
+
+
                     activeListFragment.refreshList()
                 }
 
@@ -131,7 +163,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         })
         ////
 
-
+        activeListFragment = RT_ActiveCharactersCardListFragment()
         val transaction = supportFragmentManager.beginTransaction()
             .replace(R.id.rt_dm_fragment_container, activeListFragment)
             .commit()
@@ -164,41 +196,55 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
     }
 
-    //fun refreshList(){
-        //val adapter = RT_CharactersCardListAdapter(this, DMRealTimeGameActivity.getFbCharacters()!!)
-   // }
-
 
     override fun onBackPressed() {
         //TODO
+
         //Ask if you want the quit the game
-            //No --> END
-            //YES -->
-                //Terminate connection
-                //Exit
-                //END
+        val adb = AlertDialog.Builder(this@DMRealTimeGameActivity)
+        adb.setTitle("Quit the game?")
+        adb.setMessage("Are you sure you want to quit the game?")
+        adb.setNegativeButton("Cancel", null)
+        adb.setPositiveButton("I am!"){ dialog, which ->
+
+            currentFragment = 0
+            finish()
+        }
+        adb.show()
+        true
+
     }
 
+
+
     override fun onBackButtonSelected() {
+        activeListFragment = RT_ActiveCharactersCardListFragment()
         val transaction = supportFragmentManager.beginTransaction()
             .replace(R.id.rt_dm_fragment_container, activeListFragment)
             .commit()
 
-        //activeListFragment.refreshList()
+        currentFragment = ACTIVE_CHARACTERS_LIST
+
     }
 
-    /* private fun getCharactersList(characters: Map<String,Any>) : ArrayList<RT_Character>{
+    override fun onDeleteButtonSelected(fbCharId: String) {
+        val adb = AlertDialog.Builder(this@DMRealTimeGameActivity)
+        adb.setTitle("Remove character from the game?")
+        adb.setMessage("This will not remove it from local storage.")
+        adb.setNegativeButton("Cancel", null)
+        adb.setPositiveButton("Yes!"){ dialog, which ->
 
-         var charactersList: ArrayList<RT_Character>
+            FireBaseHelper.fbRemoveCharacterFromGame(fbCharId, fbGameId)
+            onBackButtonSelected()
+        }
+        adb.show()
+        true
+    }
 
-         for(Map.Entry<String, Object> entry : users.entrySet())
-
-     }*/
-
-
-
-
-
+    override fun onEditButtonSelected() {
+        TODO("Not yet implemented")
+        //Show character creation phase
+    }
 
 
 }

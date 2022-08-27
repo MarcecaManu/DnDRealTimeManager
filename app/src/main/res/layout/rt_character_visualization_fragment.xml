@@ -20,9 +20,34 @@
             android:id="@+id/rt_charvis_btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Back" />
+            android:text="back" />
 
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end|bottom"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/rt_charvis_fab_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:contentDescription="Edit"
+            android:src="@drawable/ic_edit" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/rt_charvis_fab_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:contentDescription="Delete"
+            android:src="@drawable/ic_delete" />
     </LinearLayout>
 
 
@@ -42,8 +67,8 @@
         android:id="@+id/rt_charvis_pb_healthbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/rt_charvis_iv_charImage"
         app:layout_constraintBottom_toTopOf="@+id/rt_charvis_tv_name"
+        app:layout_constraintTop_toBottomOf="@+id/rt_charvis_iv_charImage"
         tools:ignore="MissingConstraints">
 
 
@@ -51,9 +76,9 @@
             android:id="@+id/rt_charvis_pb_healthbar_item"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_marginHorizontal="24dp"
-
             android:layout_height="24dp"
+
+            android:layout_marginHorizontal="24dp"
 
 
             android:progressDrawable="@drawable/custom_healthbar"
@@ -83,7 +108,6 @@
     </RelativeLayout>
 
 
-
     <TextView
         android:id="@+id/rt_charvis_tv_name"
         android:layout_width="wrap_content"
@@ -91,10 +115,23 @@
         android:text="Name"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
         app:layout_constraintBottom_toTopOf="@+id/rt_charvis_tv_race"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rt_charvis_tv_ac"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rt_charvis_pb_healthbar" />
+
+    <TextView
+        android:id="@+id/rt_charvis_tv_ac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AC"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+        app:layout_constraintBottom_toTopOf="@+id/rt_charvis_tv_race"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/rt_charvis_tv_name"
+        app:layout_constraintTop_toBottomOf="@id/rt_charvis_pb_healthbar"
+        app:layout_constraintVertical_bias="0.494" />
 
     <TextView
         android:id="@+id/rt_charvis_tv_race"
@@ -102,8 +139,9 @@
         android:layout_height="wrap_content"
         android:text="Race"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-        app:layout_constraintBottom_toTopOf="@+id/rt_charvis_tv_class"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/rt_charvis_tv_level"
+
+        app:layout_constraintEnd_toStartOf="@+id/rt_charvis_tv_class"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rt_charvis_tv_name" />
@@ -114,11 +152,37 @@
         android:layout_height="wrap_content"
         android:text="Class"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-        app:layout_constraintBottom_toTopOf="@+id/rt_charvis_tv_description"
+        app:layout_constraintBottom_toTopOf="@+id/rt_charvis_tv_level"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/rt_charvis_tv_race"
+        app:layout_constraintTop_toBottomOf="@+id/rt_charvis_tv_name"
+        />
+
+    <TextView
+        android:id="@+id/rt_charvis_tv_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Level"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rt_charvis_tv_race" />
+        app:layout_constraintBottom_toTopOf="@+id/rt_charvis_tv_description"
+        app:layout_constraintEnd_toStartOf="@+id/rt_charvis_tv_initiative"
+        app:layout_constraintTop_toBottomOf="@+id/rt_charvis_tv_race"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/rt_charvis_tv_initiative"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Initiative"
+        app:layout_constraintBottom_toTopOf="@+id/rt_charvis_tv_description"
+        app:layout_constraintTop_toBottomOf="@+id/rt_charvis_tv_race"
+        app:layout_constraintVertical_bias="0.511"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rt_charvis_tv_level"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/rt_charvis_tv_description"
@@ -129,5 +193,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rt_charvis_tv_class" />
+        app:layout_constraintTop_toBottomOf="@+id/rt_charvis_tv_level" />
 </androidx.constraintlayout.widget.ConstraintLayout>

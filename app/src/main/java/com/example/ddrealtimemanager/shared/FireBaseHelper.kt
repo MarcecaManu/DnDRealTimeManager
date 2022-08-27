@@ -40,8 +40,10 @@ import kotlin.collections.ArrayList
              gameRef.setValue(game)
          }
 
-         fun fbResumeGame(id: String) {
-             TODO()
+
+
+         fun fbDeleteGame(fbGameId: String) {
+            gamesRef.child(fbGameId).removeValue()
          }
 
 
@@ -58,6 +60,11 @@ import kotlin.collections.ArrayList
 
              return fbCharId!!
 
+         }
+
+         fun fbRemoveCharacterFromGame(fbCharId: String, fbGameId: String){
+             val playerRef = gamesRef.child(fbGameId).child(PLAYERS_DIR).child(fbCharId)
+             playerRef.removeValue()
          }
 
 

@@ -11,6 +11,7 @@ import com.example.ddrealtimemanager.R
 import com.example.ddrealtimemanager.dm.real_time.DMRealTimeGameActivity
 import com.example.ddrealtimemanager.shared.CharacterCreationActivity
 import com.example.ddrealtimemanager.shared.DBHelper
+import com.example.ddrealtimemanager.shared.FireBaseHelper
 import kotlinx.android.synthetic.main.activity_character_visualization.*
 import kotlinx.android.synthetic.main.activity_character_visualization.fabDelete
 import kotlinx.android.synthetic.main.activity_character_visualization.fabEdit
@@ -56,7 +57,6 @@ class GameVisualizationActivity : AppCompatActivity() {
         fab_game_visualization_edit.setOnClickListener{
             val intent = Intent(this, NewGameActivity::class.java)
 
-            //TODO implement image management
 
             intent.putExtra("gameId", game.id)
             intent.putExtra("gameName", game.name)
@@ -77,6 +77,9 @@ class GameVisualizationActivity : AppCompatActivity() {
             adb.setPositiveButton("I am!"){ dialog, which ->
                 val success = db.deleteGame(gameId)
                 if(success){
+
+                    FireBaseHelper.fbDeleteGame(game.firebaseId)
+
                     Toast.makeText(this, "The game was deleted successfully", Toast.LENGTH_SHORT).show()
                 }else{
                     Toast.makeText(this, "ERROR: The game could not be deleted", Toast.LENGTH_SHORT).show()
