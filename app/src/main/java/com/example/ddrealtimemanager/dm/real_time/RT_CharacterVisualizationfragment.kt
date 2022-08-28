@@ -35,7 +35,7 @@ class RT_CharacterVisualizationfragment(selectedCharacter: RT_Character) : Fragm
     }
 
     interface OnEditButtonClikListener{
-        fun onEditButtonSelected()
+        fun onEditButtonSelected(character: RT_Character)
     }
 
     override fun onAttach(context: Context) {
@@ -104,7 +104,7 @@ class RT_CharacterVisualizationfragment(selectedCharacter: RT_Character) : Fragm
         }
 
         rt_charvis_fab_edit.setOnClickListener{
-            editListener?.onEditButtonSelected()
+            editListener?.onEditButtonSelected(character)
         }
 
 

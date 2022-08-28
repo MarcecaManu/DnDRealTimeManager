@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.ddrealtimemanager.R
+import com.example.ddrealtimemanager.shared.Character
+import com.example.ddrealtimemanager.shared.DBHelper
 import com.example.ddrealtimemanager.shared.FireBaseHelper
 import com.example.ddrealtimemanager.shared.real_time.RT_Character
 import com.google.firebase.database.*
@@ -23,7 +25,9 @@ import kotlin.math.log
 class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListFragment.OnActiveCharacterSelectedListener,
         RT_CharacterVisualizationfragment.OnBackButtonClickListener,
         RT_CharacterVisualizationfragment.OnDeleteButtonClickListener,
-        RT_CharacterVisualizationfragment.OnEditButtonClikListener{
+        RT_CharacterVisualizationfragment.OnEditButtonClikListener,
+        RT_StoredCharactersCardListFragment.OnStoredCharacterSelectedListener,
+        RT_CharacterCreationFragment.OnCharacterCreationClick{
 
     lateinit var fbGameId: String
 
@@ -35,6 +39,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
     private val ACTIVE_CHARACTERS_LIST = 1
     private val CHARACTER_VISUALIZATION = 2
     private val STORED_CHARACTERS_LIST = 3
+    private val CHARACTER_CREATION = 4
     //TODO ADD FRAGMENTS IDs
     var currentFragment: Int = ACTIVE_CHARACTERS_LIST
 
@@ -42,9 +47,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
 
     private var activeListFragment = RT_ActiveCharactersCardListFragment()
-    private val storedListFragment = RT_StoredCharactersCardListFragment()
-    private val characterCreationFragment = RT_CharacterCreationFragment()
-    //private val characterVisualizationFragment = RT_CharacterVisualizationfragment(null)
+    private var storedListFragment = RT_StoredCharactersCardListFragment()
 
     companion object{
 
@@ -106,10 +109,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
             val character: RT_Character = getSpecificFbCharacter(fbCharId)!!
 
             //Change fragment and show selected character
-        val transaction = supportFragmentManager.beginTransaction()
-            .replace(R.id.rt_dm_fragment_container, RT_CharacterVisualizationfragment(character))
-            .commit()
-        currentFragment = CHARACTER_VISUALIZATION
+        putCharVisualizationFragment(character)
 
     }
 
@@ -132,6 +132,8 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
             throw Exception("No extras?")
         }
 
+
+        putActiveListFragment()
 
         playersRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -161,36 +163,12 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
                 Log.w("firebase", "Failed to read value.", error.toException())
             }
         })
-        ////
 
-        activeListFragment = RT_ActiveCharactersCardListFragment()
-        val transaction = supportFragmentManager.beginTransaction()
-            .replace(R.id.rt_dm_fragment_container, activeListFragment)
-            .commit()
 
-        currentFragment = ACTIVE_CHARACTERS_LIST
+
 
         rt_fab_dm_add_character.setOnClickListener{
-
-            //TODO
-            //Show stored characters list
-
-            //Once a character is selected, let the user set RT_Character missing attributes (starting from a Character type)
-            //var selectedCharacter : RT_Character
-
-
-            //Once confirmed, push the character in the players folder of the current game
-            //fb.fbPushCharacter(selectedCharacter)
-
-            /////simplified test
-            var addCharacter = RT_Character("" ,"Name", "race", "class", "Dramatic description",
-                "https://i.imgur.com/rNilHgV_d.webp?maxwidth=640&shape=thumb&fidelity=medium", 30, 25, 4, 18, 18)
-            FireBaseHelper.fbPushCharacter(addCharacter, fbGameId!!)
-
-            var addCharacter2 = RT_Character("", "Mandarino", "race", "class", "Description", "", 50, 2, 2, 20, 2)
-            FireBaseHelper.fbPushCharacter(addCharacter2, fbGameId!!)
-
-        /////
+            putStoredListFragment()
 
         }
 
@@ -198,7 +176,6 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
 
     override fun onBackPressed() {
-        //TODO
 
         //Ask if you want the quit the game
         val adb = AlertDialog.Builder(this@DMRealTimeGameActivity)
@@ -215,16 +192,42 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
     }
 
-
-
-    override fun onBackButtonSelected() {
+    fun putActiveListFragment(){
         activeListFragment = RT_ActiveCharactersCardListFragment()
         val transaction = supportFragmentManager.beginTransaction()
             .replace(R.id.rt_dm_fragment_container, activeListFragment)
             .commit()
 
         currentFragment = ACTIVE_CHARACTERS_LIST
+    }
 
+    fun putStoredListFragment(){
+        storedListFragment = RT_StoredCharactersCardListFragment()
+        val transaction = supportFragmentManager.beginTransaction()
+            .replace(R.id.rt_dm_fragment_container, storedListFragment)
+            .commit()
+
+        currentFragment = STORED_CHARACTERS_LIST
+    }
+
+    fun putCharCreationFragment(character: RT_Character, previousFragment: Int){
+        val characterCreationFragment = RT_CharacterCreationFragment(character,previousFragment)
+        val transaction = supportFragmentManager.beginTransaction()
+            .replace(R.id.rt_dm_fragment_container, characterCreationFragment)
+            .commit()
+
+        currentFragment = CHARACTER_CREATION
+    }
+
+    fun putCharVisualizationFragment(character: RT_Character){
+        val transaction = supportFragmentManager.beginTransaction()
+            .replace(R.id.rt_dm_fragment_container, RT_CharacterVisualizationfragment(character))
+            .commit()
+        currentFragment = CHARACTER_VISUALIZATION
+    }
+
+    override fun onBackButtonSelected() {
+        putActiveListFragment()
     }
 
     override fun onDeleteButtonSelected(fbCharId: String) {
@@ -241,9 +244,42 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         true
     }
 
-    override fun onEditButtonSelected() {
-        TODO("Not yet implemented")
+    override fun onEditButtonSelected(character: RT_Character) {
         //Show character creation phase
+        putCharCreationFragment(character, CHARACTER_VISUALIZATION)
+
+    }
+
+    override fun onStoredCharItemSelected(character: Character) {
+
+        val rt_character = RT_Character("", character.name, character.race, character.clas, character.desc, character.image)
+        putCharCreationFragment(rt_character, STORED_CHARACTERS_LIST)
+
+    }
+
+    override fun onStoredListBackButtonSelected() {
+        putActiveListFragment()
+    }
+
+    override fun onCharacterCreationAddSelected(character: RT_Character) {
+        //push the new character, or edit it
+        if(character.firebaseId!!.isBlank()){
+            var newCharacter = FireBaseHelper.fbPushCharacter(character, fbGameId)
+        }else{
+            FireBaseHelper.fbUpdatecharacter(character, fbGameId)
+        }
+
+        //Change fragment to active list
+        putActiveListFragment()
+
+
+
+
+    }
+
+    override fun onCharacterCreationBackSelected(previousFragment: Int, character: RT_Character?) {
+        if(previousFragment == STORED_CHARACTERS_LIST){putStoredListFragment()}
+        if(previousFragment == CHARACTER_VISUALIZATION){putCharVisualizationFragment(character!!)}
     }
 
 

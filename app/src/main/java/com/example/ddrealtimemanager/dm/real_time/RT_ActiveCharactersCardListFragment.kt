@@ -2,7 +2,6 @@ package com.example.ddrealtimemanager.dm.real_time
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,11 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import com.example.ddrealtimemanager.R
-import kotlinx.android.synthetic.main.activity_characters_card_list.*
-import kotlinx.android.synthetic.main.rt_stored_characters_list_fragment.*
-import kotlinx.android.synthetic.main.rt_stored_characters_list_fragment.view.*
+import kotlinx.android.synthetic.main.rt_active_characters_list_fragment.*
 import java.lang.ClassCastException
 
 class RT_ActiveCharactersCardListFragment: Fragment(){
@@ -22,8 +18,6 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
 
     private lateinit var currentAdapter: RT_CharactersCardListAdapter
     private var listener: OnActiveCharacterSelectedListener? = null
-
-    //lateinit var myActivity: FragmentActivity
 
 
     override fun onStart() {
@@ -61,7 +55,6 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
         super.onAttach(context)
         if(context is Activity){
             listener = context as OnActiveCharacterSelectedListener
-            //myActivity = context as Activity
         }else {
             throw ClassCastException(context.toString()
                     + "must implement "
@@ -77,8 +70,8 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
         savedInstanceState: Bundle?
     ): View? {
 
-        val view: View = inflater.inflate(R.layout.rt_stored_characters_list_fragment, container, false)
-        val lv: ListView = view.findViewById(R.id.rt_stored_characters_card_listview)
+        val view: View = inflater.inflate(R.layout.rt_active_characters_list_fragment, container, false)
+        val lv: ListView = view.findViewById(R.id.rt_active_characters_card_listview)
 
         currentAdapter = RT_CharactersCardListAdapter(activity as DMRealTimeGameActivity, DMRealTimeGameActivity.getFbCharacters()!!)
 
@@ -107,16 +100,14 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
     override fun onDetach() {
         super.onDetach()
         this.listener = null
-        //myActivity = null
 
     }
 
 
 
     fun refreshList(){
-        //adapter.currentCharactersList = DMRealTimeGameActivity.getFbCharacters()!!
         val newAdapter = RT_CharactersCardListAdapter(activity as DMRealTimeGameActivity, DMRealTimeGameActivity.charactersList!!)
-        rt_stored_characters_card_listview.adapter = newAdapter
+        rt_active_characters_card_listview.adapter = newAdapter
         currentAdapter = newAdapter
     }
 

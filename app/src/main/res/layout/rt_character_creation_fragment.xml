@@ -5,45 +5,105 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/rt_et_playercreation_maxhp"
+    <TextView
+        android:id="@+id/rt_charcre_tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Max HP"
-        tools:layout_editor_absoluteX="100dp"
-        tools:layout_editor_absoluteY="151dp" />
-
-    <EditText
-        android:id="@+id/rt_et_playercreation_level"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
         android:text="Name"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="101dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/rt_charcre_et_level"/>
 
     <EditText
-        android:id="@+id/rt_et_playercreation_armorclass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/rt_charcre_et_level"
+        android:layout_width="338dp"
+        android:layout_height="73dp"
         android:ems="10"
+        android:hint="Level"
         android:inputType="textPersonName"
-        android:text="Name"
-        tools:layout_editor_absoluteX="100dp"
-        tools:layout_editor_absoluteY="239dp" />
+        app:layout_constraintBottom_toTopOf="@+id/rt_charcre_et_armorclass"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/rt_et_playercreaton_initiative"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/rt_charcre_et_armorclass"
+        android:layout_width="338dp"
+        android:layout_height="73dp"
+        android:ems="10"
+        android:hint="Armor class"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/rt_charcre_et_maxhp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rt_charcre_et_level" />
+
+    <EditText
+        android:id="@+id/rt_charcre_et_maxhp"
+        android:layout_width="338dp"
+        android:layout_height="73dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
-        tools:layout_editor_absoluteX="101dp"
-        tools:layout_editor_absoluteY="347dp" />
+        android:hint="Max HP"
+        app:layout_constraintBottom_toTopOf="@+id/rt_charcre_et_initiative"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rt_charcre_et_armorclass" />
+
+    <EditText
+        android:id="@+id/rt_charcre_et_initiative"
+        android:layout_width="338dp"
+        android:layout_height="73dp"
+        android:ems="10"
+        android:hint="Initiative"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/rt_charcre_et_imageurl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rt_charcre_et_maxhp" />
+
+    <EditText
+        android:id="@+id/rt_charcre_et_imageurl"
+        android:layout_width="338dp"
+        android:layout_height="73dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Image URL"
+        app:layout_constraintBottom_toTopOf="@+id/rt_charcre_btn_save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rt_charcre_et_initiative" />
+
+    <Button
+        android:id="@+id/rt_charcre_btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rt_charcre_btn_save"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rt_charcre_et_imageurl" />
+
+    <Button
+        android:id="@+id/rt_charcre_btn_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/rt_charcre_btn_back"
+        app:layout_constraintTop_toBottomOf="@+id/rt_charcre_et_imageurl" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

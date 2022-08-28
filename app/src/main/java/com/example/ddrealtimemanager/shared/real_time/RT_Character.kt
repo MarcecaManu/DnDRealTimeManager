@@ -8,11 +8,11 @@ data class RT_Character(
     var description: String = "",
     var image: String = "",
 
-    var maxHp: Int = -1,
-    var currentHp: Int = -1,
+    var maxHp: Int = -1000,
+    var currentHp: Int = -1000,
 
-    var initiative: Int = -1,
-    var ac: Int = -1,
-    var level: Int = -1
+    var initiative: Int = -1000,
+    var ac: Int = -1000,
+    var level: Int = -1000
 ){
 }
