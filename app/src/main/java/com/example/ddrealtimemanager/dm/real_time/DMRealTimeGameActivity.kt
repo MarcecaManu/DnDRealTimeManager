@@ -46,10 +46,15 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
 
 
+
+
     private var activeListFragment = RT_ActiveCharactersCardListFragment()
     private var storedListFragment = RT_StoredCharactersCardListFragment()
 
     companion object{
+
+        var heal = false
+        var damage = false
 
         var charactersList: ArrayList<RT_Character>? = ArrayList<RT_Character>()
 
@@ -113,7 +118,21 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
     }
 
+    override fun onActiveCharItemMultipleSelection(fbCharIdList: ArrayList<String>, change: Int) {
 
+        fbCharIdList.forEach{
+            val character = getSpecificFbCharacter(it)
+            var newCurrentHp = character!!.currentHp + change
+            if(newCurrentHp > character.maxHp){newCurrentHp = character.maxHp}
+            FireBaseHelper.fbUpdateCharacterHealth(newCurrentHp, it, fbGameId)
+        }
+
+        heal = false
+        damage = false
+        rt_damage.setFadingEdgeLength(0)
+        rt_heal.setFadingEdgeLength(0)
+
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -163,6 +182,45 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
                 Log.w("firebase", "Failed to read value.", error.toException())
             }
         })
+
+
+
+        rt_heal.setOnClickListener{
+            if(currentFragment != ACTIVE_CHARACTERS_LIST){
+                putActiveListFragment()
+            }
+            if(heal == false) {
+                heal = true
+                damage = false
+                rt_damage.setFadingEdgeLength(0)
+                rt_heal.setFadingEdgeLength(10)
+                activeListFragment.healDmgPressed("heal")
+            }
+            else if(heal == true){
+                heal = false
+                damage = false
+                rt_damage.setFadingEdgeLength(0)
+                rt_heal.setFadingEdgeLength(0)
+                activeListFragment.healDmgPressed("cancel")
+            }
+        }
+
+        rt_damage.setOnClickListener{
+            if(damage == false) {
+                heal = false
+                damage = true
+                rt_damage.setFadingEdgeLength(10)
+                rt_heal.setFadingEdgeLength(0)
+                activeListFragment.healDmgPressed("damage")
+            }
+            else if(damage == true){
+                heal = false
+                damage = false
+                rt_damage.setFadingEdgeLength(0)
+                rt_heal.setFadingEdgeLength(0)
+                activeListFragment.healDmgPressed("cancel")
+            }
+        }
 
 
 

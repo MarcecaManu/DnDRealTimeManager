@@ -37,7 +37,9 @@ import kotlin.collections.ArrayList
 
          fun fbUpdateGame(fbGameId: String, game: Game) {
              val gameRef = gamesRef.child(fbGameId)
-             gameRef.setValue(game)
+             gameRef.child("description").setValue(game.description)
+             gameRef.child("image").setValue(game.image)
+             gameRef.child("subtitle").setValue(game.subtitle)
          }
 
 
@@ -68,6 +70,14 @@ import kotlin.collections.ArrayList
 
              val thisPlayerRef = playersDirRef.child(character.firebaseId!!)
              thisPlayerRef.setValue(character)
+         }
+
+         fun fbUpdateCharacterHealth(newCurrentHP: Int, fbCharId: String, fbGameId: String){
+             val currentGameRef = gamesRef.child(fbGameId)
+             val playersDirRef = currentGameRef.child(PLAYERS_DIR)
+
+             val thisPlayerRef = playersDirRef.child(fbCharId)
+             thisPlayerRef.child("currentHp").setValue(newCurrentHP)
          }
 
          fun fbRemoveCharacterFromGame(fbCharId: String, fbGameId: String){

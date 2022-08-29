@@ -2,15 +2,22 @@ package com.example.ddrealtimemanager.dm.real_time
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.drawable.*
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColor
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.ddrealtimemanager.R
+import com.example.ddrealtimemanager.shared.Utils
 import com.example.ddrealtimemanager.shared.real_time.RT_Character
 import kotlinx.android.synthetic.main.layout_rt_player_card_item.view.*
 import kotlinx.android.synthetic.main.rt_character_visualization_fragment.*
@@ -85,6 +92,19 @@ class RT_CharacterVisualizationfragment(selectedCharacter: RT_Character) : Fragm
 
         rt_charvis_pb_healthbar_item.progress = percentageHP
 
+        ////////////COLOR TEST
+        //val healthBarColor = Utils().getProgressColorOnPercentage(percentageHP)
+       // val convertedColor = Color.parseColor(healthBarColor)
+
+
+        //Log.v("DRAWASS", healthBarColor)
+        //val progressbarDrawable: LayerDrawable = rt_charvis_pb_healthbar_item.progressDrawable as LayerDrawable
+        //val progressDrawable: Drawable = progressbarDrawable.getDrawable(1)
+
+        //R.color.dynamic.progressDrawable.setColorFilter(ContextCompat.getColor(requireContext(), R.color.dynamic), PorterDuff.Mode.SRC_IN)
+
+////////////////////////
+
         rt_charvis_tv_name.text = character.name
         rt_charvis_tv_race.text = character.race
         rt_charvis_tv_class.text = character.clas
@@ -92,6 +112,8 @@ class RT_CharacterVisualizationfragment(selectedCharacter: RT_Character) : Fragm
         rt_charvis_tv_level.text = "Level " + character.level.toString()
         rt_charvis_tv_initiative.text = "Init: " + character.initiative.toString()
         rt_charvis_tv_description.text = character.description
+
+
 
 
         rt_charvis_btn_back.setOnClickListener{
