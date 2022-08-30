@@ -138,18 +138,18 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
                     }
                     listener?.onActiveCharItemMultipleSelection(selectedCharactersFBid, change)
 
-                    healDmgPressed("cancel")
+
+                    healDmgPressed("cancel", "none")
                 }
             }
         }
-
 
         return view
 
 
     }
 
-    fun healDmgPressed(next: String){
+    fun healDmgPressed(next: String, previous: String){
 
         if(next == "heal" || next == "damage"){
             //rt_active_characters_card_listview.choiceMode = ListView.CHOICE_MODE_MULTIPLE
@@ -160,22 +160,25 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
             rt_active_characters_btn_dmgheal.visibility = View.VISIBLE
 
             if(next == "heal"){
+                if(previous == "damage"){refreshList()}
                 rt_active_characters_btn_dmgheal.setBackgroundResource(R.drawable.heal)
                 rt_active_characters_et_damage_heal.hint = "Heal points"
-            }else{
+
+            }else if(next == "damage"){
+                if(previous == "heal"){refreshList()}
                 rt_active_characters_btn_dmgheal.setBackgroundResource(R.drawable.damage)
                 rt_active_characters_et_damage_heal.hint = "Damage points"
-
             }
-
         }
-
-        if(next == "cancel"){
+        else if(next == "cancel"){
             rt_active_characters_card_listview.itemsCanFocus = true
             rt_active_characters_et_damage_heal.visibility = View.GONE
             rt_active_characters_btn_dmgheal.visibility = View.GONE
-            container1.setBackgroundColor(Color.WHITE)
+            refreshList()
         }
+
+        selectedCharactersFBid.clear()
+        rt_active_characters_et_damage_heal.text.clear()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

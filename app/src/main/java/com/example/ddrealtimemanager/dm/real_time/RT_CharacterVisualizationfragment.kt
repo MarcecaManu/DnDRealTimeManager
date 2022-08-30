@@ -24,10 +24,10 @@ import kotlinx.android.synthetic.main.rt_character_visualization_fragment.*
 import kotlinx.android.synthetic.main.rt_character_visualization_fragment.view.*
 import java.lang.ClassCastException
 
-class RT_CharacterVisualizationfragment(selectedCharacter: RT_Character) : Fragment() {
+class RT_CharacterVisualizationfragment(selectedCharacterFBid: String) : Fragment() {
 
 
-    private val character = selectedCharacter
+    private val character = DMRealTimeGameActivity.getSpecificFbCharacter(selectedCharacterFBid)
 
     private var backListener: OnBackButtonClickListener? = null
     private var deleteListener: OnDeleteButtonClickListener? = null
@@ -83,12 +83,12 @@ class RT_CharacterVisualizationfragment(selectedCharacter: RT_Character) : Fragm
 
         Glide.with(this)
             .applyDefaultRequestOptions(requestOptions)
-            .load(character.image)
+            .load(character!!.image)
             .into(rt_charvis_iv_charImage)
 
-        rt_charvis_hp.text = "${character.currentHp} / ${character.maxHp}"
+        rt_charvis_hp.text = "${character!!.currentHp} / ${character.maxHp}"
 
-        val percentageHP = (character.currentHp.toFloat() / character.maxHp.toFloat() * 100.0f).toInt()
+        val percentageHP = (character!!.currentHp.toFloat() / character.maxHp.toFloat() * 100.0f).toInt()
 
         rt_charvis_pb_healthbar_item.progress = percentageHP
 

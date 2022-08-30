@@ -8,18 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.URLUtil
-import android.widget.EditText
 import android.widget.Toast
 import androidx.core.text.isDigitsOnly
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.ddrealtimemanager.R
-import com.example.ddrealtimemanager.shared.Character
 import com.example.ddrealtimemanager.shared.real_time.RT_Character
-import kotlinx.android.synthetic.main.activity_character_creation.*
 import kotlinx.android.synthetic.main.rt_character_creation_fragment.*
-import kotlinx.android.synthetic.main.rt_character_visualization_fragment.*
 import java.lang.ClassCastException
 
 class RT_CharacterCreationFragment(character: RT_Character, previousFrag: Int): Fragment(){
@@ -78,7 +72,12 @@ class RT_CharacterCreationFragment(character: RT_Character, previousFrag: Int): 
             rt_charcre_et_initiative.setText(newCharacter.initiative.toString())
         }
 
-        rt_charcre_tv_name.text = newCharacter.name
+        rt_charcre_et_level.transformationMethod = null
+        rt_charcre_et_armorclass.transformationMethod = null
+        rt_charcre_et_maxhp.transformationMethod = null
+        rt_charcre_et_initiative.transformationMethod = null
+
+        rt_charcre_et_name.setText(newCharacter.name)
 
         rt_charcre_et_imageurl.setText(newCharacter.image)
 
@@ -116,6 +115,7 @@ class RT_CharacterCreationFragment(character: RT_Character, previousFrag: Int): 
             }
 
             if(!error){
+                newCharacter.name = rt_charcre_et_name.text.toString()
                 newCharacter.level = level.toInt()
                 newCharacter.ac = armorclass.toInt()
                 newCharacter.maxHp = maxhp.toInt()
@@ -179,6 +179,22 @@ class RT_CharacterCreationFragment(character: RT_Character, previousFrag: Int): 
         }
 
         return result
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        val level = rt_charcre_et_level.text.toString().toInt()
+        val ac = rt_charcre_et_armorclass.text.toString().toInt()
+        val maxHp = rt_charcre_et_maxhp.text.toString().toInt()
+        val initiative = rt_charcre_et_initiative.text.toString().toInt()
+        val image = rt_charcre_et_imageurl.text.toString()
+
+        outState.putInt("level", level)
+        outState.putInt("ac", ac)
+        outState.putInt("maxHp",maxHp)
+        outState.putInt("initiative", initiative)
+        outState.putString("image", image)
     }
 
 }

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/rt_dice_d4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/rt_dice_d8"
+            app:layout_constraintEnd_toStartOf="@+id/rt_dice_d6"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/rt_dice_btn_d4"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+
+                app:srcCompat="@drawable/d4_lowres" />
+
+            <TextView
+                android:id="@+id/rt_dice_tv_d4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rt_dice_btn_d4"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rt_dice_d6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/rt_dice_d10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/rt_dice_d4"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/rt_dice_btn_d6"
+                android:layout_width="115dp"
+                android:layout_height="115dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+
+                app:srcCompat="@drawable/d6_lowres" />
+
+
+            <TextView
+                android:id="@+id/rt_dice_tv_d6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rt_dice_btn_d6"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rt_dice_d8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/rt_dice_d12"
+            app:layout_constraintEnd_toStartOf="@+id/rt_dice_d10"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rt_dice_d4">
+
+            <ImageButton
+                android:id="@+id/rt_dice_btn_d8"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+
+                app:srcCompat="@drawable/d8_lowres" />
+
+
+            <TextView
+                android:id="@+id/rt_dice_tv_d8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rt_dice_btn_d8"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rt_dice_d10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/rt_dice_d20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/rt_dice_d8"
+            app:layout_constraintTop_toBottomOf="@id/rt_dice_d6">
+
+            <ImageButton
+                android:id="@+id/rt_dice_btn_d10"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="12.5dp"
+                android:layout_marginBottom="12.5dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+
+                app:srcCompat="@drawable/d10_lowres" />
+
+
+            <TextView
+                android:id="@+id/rt_dice_tv_d10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rt_dice_btn_d10"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rt_dice_d12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/rt_dice_throw"
+            app:layout_constraintEnd_toStartOf="@+id/rt_dice_d20"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rt_dice_d8">
+
+            <ImageButton
+                android:id="@+id/rt_dice_btn_d12"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+
+
+                app:srcCompat="@drawable/d12_lowres" />
+
+
+            <TextView
+                android:id="@+id/rt_dice_tv_d12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rt_dice_btn_d12"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rt_dice_d20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/rt_dice_throw"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/rt_dice_d12"
+            app:layout_constraintTop_toBottomOf="@id/rt_dice_d10">
+
+            <ImageButton
+                android:id="@+id/rt_dice_btn_d20"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+
+
+                app:srcCompat="@drawable/d20_lowres" />
+
+
+            <TextView
+                android:id="@+id/rt_dice_tv_d20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rt_dice_btn_d20"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+
+
+        <Button
+            android:id="@+id/rt_dice_throw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Throw"
+            app:layout_constraintBottom_toTopOf="@id/rt_dice_result_layout"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rt_dice_d20" />
+
+
+        <LinearLayout
+            android:id="@+id/rt_dice_result_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@id/rt_dice_tv_result_allthrows"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rt_dice_throw">
+
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/dragon" />
+
+            <TextView
+                android:id="@+id/rt_dice_tv_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="8dp"
+                android:text=""
+                android:textColor="@color/purple_500"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:scaleType="fitXY"
+                android:scaleX="-1"
+                android:src="@drawable/dragon" />
+
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/rt_dice_tv_result_allthrows"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rt_dice_result_layout" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</ScrollView>

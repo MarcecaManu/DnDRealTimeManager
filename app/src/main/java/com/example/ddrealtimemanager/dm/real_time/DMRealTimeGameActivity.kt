@@ -1,6 +1,7 @@
 package com.example.ddrealtimemanager.dm.real_time
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 import kotlinx.android.synthetic.main.activity_characters_card_list.*
 import kotlinx.android.synthetic.main.activity_dmreal_time_game.*
+import kotlinx.android.synthetic.main.rt_character_creation_fragment.*
 import java.lang.Exception
 import kotlin.math.log
 
@@ -35,11 +37,11 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
     lateinit var gameRef: DatabaseReference
     lateinit var playersRef: DatabaseReference
 
-
     private val ACTIVE_CHARACTERS_LIST = 1
     private val CHARACTER_VISUALIZATION = 2
     private val STORED_CHARACTERS_LIST = 3
     private val CHARACTER_CREATION = 4
+    private val DICE = 5
     //TODO ADD FRAGMENTS IDs
     var currentFragment: Int = ACTIVE_CHARACTERS_LIST
 
@@ -50,8 +52,18 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
     private var activeListFragment = RT_ActiveCharactersCardListFragment()
     private var storedListFragment = RT_StoredCharactersCardListFragment()
+    private var diceFragment: RT_DiceFragment? = null
+    private var charCreationFragment: RT_CharacterCreationFragment? = null
+
+    private var charVisCharacterFBid: String? = null
+
+    private var charCreationCharacter: RT_Character? = null
+    private var charcreationPrevFragment: Int? = null
 
     companion object{
+
+        val CHAR_VIS_FBID_KEY = "charvis"
+
 
         var heal = false
         var damage = false
@@ -111,7 +123,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
     override fun onActiveCharItemSelected(fbCharId: String) {
 
             //get selected character
-            val character: RT_Character = getSpecificFbCharacter(fbCharId)!!
+        val character: RT_Character = getSpecificFbCharacter(fbCharId)!!
 
             //Change fragment and show selected character
         putCharVisualizationFragment(character)
@@ -185,40 +197,99 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
 
 
+        rt_dice.setOnClickListener{
+            if(currentFragment != DICE){
+
+/*
+                if(currentFragment == CHARACTER_CREATION){
+                    //Store inserted data
+                    charCreationCharacter!!.level = savedInstanceState?.getInt("level")!!
+                    charCreationCharacter!!.ac = savedInstanceState?.getInt("ac")!!
+                    charCreationCharacter!!.maxHp = savedInstanceState?.getInt("maxHp")!!
+                    charCreationCharacter!!.initiative = savedInstanceState?.getInt("initiative")!!
+                    charCreationCharacter!!.image = savedInstanceState?.getString("image")!!
+                }
+                */
+
+                rt_fight.visibility = View.GONE
+                rt_heal.visibility = View.GONE
+                rt_damage.visibility = View.GONE
+                rt_dice.text = "Back"
+
+                putDiceFragment()
+            }
+            else{
+                when(diceFragment!!.previousFragment){
+                    ACTIVE_CHARACTERS_LIST -> {putActiveListFragment()}
+                    STORED_CHARACTERS_LIST -> {putStoredListFragment()}
+                    CHARACTER_VISUALIZATION -> {
+                        val character = getSpecificFbCharacter(charVisCharacterFBid!!)
+                        putCharVisualizationFragment(character!!)
+                    }
+                    CHARACTER_CREATION -> {
+                        putCharCreationFragment(charCreationCharacter!!, charcreationPrevFragment!!)
+                    }
+                }
+
+                rt_fight.visibility = View.VISIBLE
+                rt_heal.visibility = View.VISIBLE
+                rt_damage.visibility = View.VISIBLE
+                rt_dice.text = "Dice"
+
+
+                diceFragment = null
+            }
+
+        }
+
+
+
+
         rt_heal.setOnClickListener{
             if(currentFragment != ACTIVE_CHARACTERS_LIST){
                 putActiveListFragment()
             }
-            if(heal == false) {
+            if(heal == false && damage == true) {
                 heal = true
                 damage = false
                 rt_damage.setFadingEdgeLength(0)
                 rt_heal.setFadingEdgeLength(10)
-                activeListFragment.healDmgPressed("heal")
+                activeListFragment.healDmgPressed("heal", "damage")
+            }else if(heal == false && damage == false){
+                heal = true
+                rt_damage.setFadingEdgeLength(0)
+                rt_heal.setFadingEdgeLength(10)
+                activeListFragment.healDmgPressed("heal", "none")
             }
             else if(heal == true){
                 heal = false
                 damage = false
                 rt_damage.setFadingEdgeLength(0)
                 rt_heal.setFadingEdgeLength(0)
-                activeListFragment.healDmgPressed("cancel")
+                activeListFragment.healDmgPressed("cancel", "none")
             }
         }
 
         rt_damage.setOnClickListener{
-            if(damage == false) {
+            if(damage == false && heal == true) {
                 heal = false
                 damage = true
                 rt_damage.setFadingEdgeLength(10)
                 rt_heal.setFadingEdgeLength(0)
-                activeListFragment.healDmgPressed("damage")
+                activeListFragment.healDmgPressed("damage", "heal")
+            }
+            else if(damage == false && heal == false){
+                damage = true
+                rt_damage.setFadingEdgeLength(10)
+                rt_heal.setFadingEdgeLength(0)
+                activeListFragment.healDmgPressed("damage", "heal")
             }
             else if(damage == true){
                 heal = false
                 damage = false
                 rt_damage.setFadingEdgeLength(0)
                 rt_heal.setFadingEdgeLength(0)
-                activeListFragment.healDmgPressed("cancel")
+                activeListFragment.healDmgPressed("cancel", "none")
             }
         }
 
@@ -231,6 +302,12 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         }
 
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(CHAR_VIS_FBID_KEY, charVisCharacterFBid)
+    }
+
 
 
     override fun onBackPressed() {
@@ -269,20 +346,37 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
     }
 
     fun putCharCreationFragment(character: RT_Character, previousFragment: Int){
-        val characterCreationFragment = RT_CharacterCreationFragment(character,previousFragment)
+        charCreationFragment = RT_CharacterCreationFragment(character,previousFragment)
         val transaction = supportFragmentManager.beginTransaction()
-            .replace(R.id.rt_dm_fragment_container, characterCreationFragment)
+            .replace(R.id.rt_dm_fragment_container, charCreationFragment!!)
             .commit()
+
+        charCreationCharacter = character
+        charcreationPrevFragment = previousFragment
 
         currentFragment = CHARACTER_CREATION
     }
 
     fun putCharVisualizationFragment(character: RT_Character){
+
         val transaction = supportFragmentManager.beginTransaction()
-            .replace(R.id.rt_dm_fragment_container, RT_CharacterVisualizationfragment(character))
+            .replace(R.id.rt_dm_fragment_container, RT_CharacterVisualizationfragment(character.firebaseId!!))
             .commit()
+
+        charVisCharacterFBid = character.firebaseId!!
+
         currentFragment = CHARACTER_VISUALIZATION
     }
+
+
+    fun putDiceFragment(){
+        diceFragment = RT_DiceFragment(currentFragment)
+        val transaction = supportFragmentManager.beginTransaction()
+            .replace(R.id.rt_dm_fragment_container, diceFragment!!)
+            .commit()
+        currentFragment = DICE
+    }
+
 
     override fun onBackButtonSelected() {
         putActiveListFragment()
