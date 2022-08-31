@@ -29,28 +29,24 @@ class RT_CharacterVisualizationfragment(selectedCharacterFBid: String) : Fragmen
 
     private val character = DMRealTimeGameActivity.getSpecificFbCharacter(selectedCharacterFBid)
 
-    private var backListener: OnBackButtonClickListener? = null
-    private var deleteListener: OnDeleteButtonClickListener? = null
-    private var editListener: OnEditButtonClikListener? = null
+    private var backListener: OnCharVisualizationListener? = null
+    private var deleteListener: OnCharVisualizationListener? = null
+    private var editListener: OnCharVisualizationListener? = null
 
-    interface OnBackButtonClickListener{
+    interface OnCharVisualizationListener{
         fun onBackButtonSelected()
-    }
-
-    interface OnDeleteButtonClickListener{
         fun onDeleteButtonSelected(fbCharId: String)
+        fun onEditButtonSelected(character: RT_Character)
+
     }
 
-    interface OnEditButtonClikListener{
-        fun onEditButtonSelected(character: RT_Character)
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if(context is Activity){
-            backListener = context as OnBackButtonClickListener
-            deleteListener = context as OnDeleteButtonClickListener
-            editListener = context as OnEditButtonClikListener
+            backListener = context as OnCharVisualizationListener
+            deleteListener = context as OnCharVisualizationListener
+            editListener = context as OnCharVisualizationListener
         }else {
             throw ClassCastException(context.toString()
                     + "must implement "

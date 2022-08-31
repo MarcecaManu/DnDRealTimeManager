@@ -4,19 +4,16 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.text.method.PasswordTransformationMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import androidx.fragment.app.Fragment
 import com.example.ddrealtimemanager.R
-import com.example.ddrealtimemanager.shared.real_time.RT_Character
+import kotlinx.android.synthetic.main.activity_dmreal_time_game.*
 import kotlinx.android.synthetic.main.layout_rt_player_card_item.*
 import kotlinx.android.synthetic.main.layout_rt_player_card_item.view.*
 import kotlinx.android.synthetic.main.rt_active_characters_list_fragment.*
-import java.lang.ClassCastException
 
 class RT_ActiveCharactersCardListFragment: Fragment(){
 
@@ -27,34 +24,11 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
 
     private var selectedCharactersFBid: ArrayList<String> = ArrayList<String>()
 
+    private var myContext: Context? = null
 
-
-    override fun onStart() {
-        super.onStart()
-
-        Log.v("LIFEOFACTIVITY", "Fragment - OnStart")
+    fun resetSelected(){
+        this.selectedCharactersFBid.clear()
     }
-
-    override fun onResume() {
-        super.onResume()
-
-        Log.v("LIFEOFACTIVITY", "Fragment - OnResume")
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        Log.v("LIFEOFACTIVITY", "Fragment - OnDestroy")
-
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        Log.v("LIFEOFACTIVITY", "Fragment - OnStop")
-    }
-
 
     interface OnActiveCharacterSelectedListener{
         fun onActiveCharItemSelected(fbCharId: String)
@@ -63,8 +37,26 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
 
 
 
-    private fun changeHealth(charactersList: ArrayList<String>, value: Int){
+    private var charactersAreSelected = false
 
+
+    fun checkCharactersAreSelected(): Boolean{
+        return charactersAreSelected
+    }
+
+
+    fun selectFighters(): ArrayList<String>{
+        charactersAreSelected = false
+
+        val fbIdsToSend: ArrayList<String> = ArrayList<String>()
+
+        selectedCharactersFBid.forEach{
+            fbIdsToSend.add(it)
+        }
+
+        selectedCharactersFBid.clear()
+
+        return fbIdsToSend
     }
 
     override fun onAttach(context: Context) {
@@ -101,10 +93,32 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
 
 
             if(!DMRealTimeGameActivity.heal && !DMRealTimeGameActivity.damage) {
-                //Change fragment passing the selected fbId
-                listener?.onActiveCharItemSelected(fbCharId!!)
 
-            }else {
+                if(DMRealTimeGameActivity.fightBtnSelected){
+
+
+                    if(selectedCharactersFBid.contains(fbCharId)){
+                        selectedCharactersFBid.remove(fbCharId)
+                        view.container1.setBackgroundColor(Color.WHITE)
+
+                        if(selectedCharactersFBid.isEmpty()){
+                            charactersAreSelected = false
+                        }
+
+                    }else{
+                        view.container1.setBackgroundColor(resources.getColor(R.color.purple_500))
+
+                        selectedCharactersFBid.add(fbCharId!!)
+
+                        charactersAreSelected = true
+                    }
+
+
+                }else{
+                    //Change fragment passing the selected fbId
+                    listener?.onActiveCharItemSelected(fbCharId!!)
+                }
+            }else{
                 //Heal or Damage has been selected!
 
                 var heal = DMRealTimeGameActivity.heal
@@ -114,6 +128,7 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
                 if(selectedCharactersFBid.contains(fbCharId)){
                     selectedCharactersFBid.remove(fbCharId)
                     view.container1.setBackgroundColor(Color.WHITE)
+
                 }
                 else{
                     if(heal){view.container1.setBackgroundColor(Color.GREEN)}
@@ -121,7 +136,6 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
 
                     selectedCharactersFBid.add(fbCharId!!)
                 }
-
 
 
                 rt_active_characters_btn_dmgheal.setOnClickListener{
@@ -138,6 +152,7 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
                     }
                     listener?.onActiveCharItemMultipleSelection(selectedCharactersFBid, change)
 
+                    rt_active_characters_btn_dmgheal.setOnClickListener(null)
 
                     healDmgPressed("cancel", "none")
                 }
@@ -174,6 +189,10 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
             rt_active_characters_card_listview.itemsCanFocus = true
             rt_active_characters_et_damage_heal.visibility = View.GONE
             rt_active_characters_btn_dmgheal.visibility = View.GONE
+
+            DMRealTimeGameActivity.heal = false
+            DMRealTimeGameActivity.damage = false
+
             refreshList()
         }
 
@@ -189,6 +208,8 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
         rt_active_characters_et_damage_heal.visibility = View.GONE
         rt_active_characters_btn_dmgheal.visibility = View.GONE
 
+        myContext = context
+
         refreshList()
     }
 
@@ -203,10 +224,12 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
 
 
     fun refreshList(){
-        val newAdapter = RT_CharactersCardListAdapter(activity as DMRealTimeGameActivity, DMRealTimeGameActivity.charactersList!!)
+        val newAdapter = RT_CharactersCardListAdapter(myContext as DMRealTimeGameActivity, DMRealTimeGameActivity.charactersList!!)
         rt_active_characters_card_listview.adapter = newAdapter
         currentAdapter = newAdapter
     }
+
+
 
 
 

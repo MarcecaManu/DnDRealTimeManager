@@ -2,13 +2,14 @@ package com.example.ddrealtimemanager.shared
 
 import CharacterListAdapter
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import com.example.ddrealtimemanager.R
-import com.example.ddrealtimemanager.dm.GameListAdapter
-import com.example.ddrealtimemanager.dm.GameVisualizationActivity
 import kotlinx.android.synthetic.main.activity_characters_card_list.*
 import kotlinx.android.synthetic.main.activity_game_list.*
+import kotlinx.android.synthetic.main.layout_character_item.*
+
 
 class CharactersCardListActivity : AppCompatActivity() {
 
@@ -21,10 +22,12 @@ class CharactersCardListActivity : AppCompatActivity() {
         refreshList()
 
         characters_card_list_view.setOnItemClickListener { parent, view, position, id ->
+
             val intent = Intent(this, CharacterVisualizationActivity::class.java)
             val charId = charAdapter.getItem(position).id
             intent.putExtra("charId", charId)
             startActivity(intent)
+
         }
 
         card_characters_list_fab.setOnClickListener{

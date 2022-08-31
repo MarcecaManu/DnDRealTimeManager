@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".shared.CharactersCardListActivity">
 
+
     <ListView
         android:id="@+id/characters_card_list_view"
         android:layout_width="match_parent"
@@ -17,6 +18,7 @@
         android:divider="@android:color/transparent"
         android:clickable="false"
         android:listSelector="@android:color/transparent"/>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/card_characters_list_fab"

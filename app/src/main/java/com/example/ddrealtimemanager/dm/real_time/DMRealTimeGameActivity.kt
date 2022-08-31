@@ -1,5 +1,6 @@
 package com.example.ddrealtimemanager.dm.real_time
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
@@ -25,11 +26,10 @@ import java.lang.Exception
 import kotlin.math.log
 
 class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListFragment.OnActiveCharacterSelectedListener,
-        RT_CharacterVisualizationfragment.OnBackButtonClickListener,
-        RT_CharacterVisualizationfragment.OnDeleteButtonClickListener,
-        RT_CharacterVisualizationfragment.OnEditButtonClikListener,
+        RT_CharacterVisualizationfragment.OnCharVisualizationListener,
         RT_StoredCharactersCardListFragment.OnStoredCharacterSelectedListener,
-        RT_CharacterCreationFragment.OnCharacterCreationClick{
+        RT_CharacterCreationFragment.OnCharacterCreationClick,
+        RT_FightFragment.OnFightingCharacterSelectedListener{
 
     lateinit var fbGameId: String
 
@@ -42,7 +42,8 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
     private val STORED_CHARACTERS_LIST = 3
     private val CHARACTER_CREATION = 4
     private val DICE = 5
-    //TODO ADD FRAGMENTS IDs
+    private val FIGHT = 6
+
     var currentFragment: Int = ACTIVE_CHARACTERS_LIST
 
 
@@ -50,10 +51,11 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
 
 
-    private var activeListFragment = RT_ActiveCharactersCardListFragment()
-    private var storedListFragment = RT_StoredCharactersCardListFragment()
+    private var activeListFragment: RT_ActiveCharactersCardListFragment? = null
+    private var storedListFragment: RT_StoredCharactersCardListFragment? = null
     private var diceFragment: RT_DiceFragment? = null
     private var charCreationFragment: RT_CharacterCreationFragment? = null
+    private var fightFragment: RT_FightFragment? = null
 
     private var charVisCharacterFBid: String? = null
 
@@ -67,6 +69,10 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
         var heal = false
         var damage = false
+
+        var fightBtnSelected = false
+        var fight = false
+
 
         var charactersList: ArrayList<RT_Character>? = ArrayList<RT_Character>()
 
@@ -86,37 +92,6 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
     }
 
-
-
-    ///////////////////////
-    override fun onRestart() {
-        super.onRestart()
-        activeListFragment = RT_ActiveCharactersCardListFragment()
-        Log.v("LIFEOFACTIVITY", "OnRestart")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.v("LIFEOFACTIVITY", "OnDestroy")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.v("LIFEOFACTIVITY", "OnResume")
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        Log.v("LIFEOFACTIVITY", "OnStop")
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        Log.v("LIFEOFACTIVITY", "OnStart")
-    }
-///////////////////
 
 
 
@@ -141,10 +116,17 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
         heal = false
         damage = false
-        rt_damage.setFadingEdgeLength(0)
-        rt_heal.setFadingEdgeLength(0)
+
+        rt_fight.visibility = View.VISIBLE
+        rt_dice.visibility = View.VISIBLE
+        rt_heal.setBackgroundColor(resources.getColor(R.color.purple_500))
+        rt_damage.setBackgroundColor(resources.getColor(R.color.purple_500))
+
+
 
     }
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -163,8 +145,9 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
             throw Exception("No extras?")
         }
 
-
+        rt_fight_back.visibility = View.GONE
         putActiveListFragment()
+
 
         playersRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -183,8 +166,8 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
                 /*If the active characters listview is not shown, this line leads to an exception!*/
                 if(currentFragment == ACTIVE_CHARACTERS_LIST) {
 
-
-                    activeListFragment.refreshList()
+                    putActiveListFragment()
+                    //activeListFragment!!.refreshList()
                 }
 
 
@@ -214,6 +197,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
                 rt_fight.visibility = View.GONE
                 rt_heal.visibility = View.GONE
                 rt_damage.visibility = View.GONE
+                rt_fab_dm_add_character.visibility = View. GONE
                 rt_dice.text = "Back"
 
                 putDiceFragment()
@@ -234,6 +218,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
                 rt_fight.visibility = View.VISIBLE
                 rt_heal.visibility = View.VISIBLE
                 rt_damage.visibility = View.VISIBLE
+                rt_fab_dm_add_character.visibility = View.VISIBLE
                 rt_dice.text = "Dice"
 
 
@@ -244,52 +229,207 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
 
 
+        rt_fight.setOnClickListener{
+            //Popup prompting to select the characters
+            if(!fightBtnSelected) {
+                Toast.makeText(this, "Select the fighters!", Toast.LENGTH_SHORT).show()
+                if(currentFragment != ACTIVE_CHARACTERS_LIST){
+                    putActiveListFragment()
+                }
+
+                fightBtnSelected = true
+
+
+                rt_heal.visibility = View.GONE
+                rt_damage.visibility = View.GONE
+                rt_fab_dm_add_character.visibility = View. GONE
+                rt_dice.visibility = View.GONE
+
+                rt_fight_back.visibility = View.VISIBLE
+
+                rt_fight.setBackgroundColor(Color.RED)
+                rt_fight.text = "Select the fighters!"
+
+                rt_fight_back.setOnClickListener{
+                    //Cancel
+                    fightBtnSelected = false
+                    //Restore everything
+                    rt_heal.visibility = View.VISIBLE
+                    rt_damage.visibility = View.VISIBLE
+                    rt_fab_dm_add_character.visibility = View. VISIBLE
+                    rt_dice.visibility = View.VISIBLE
+                    rt_fight_back.visibility = View.GONE
+
+                    rt_fight.setBackgroundColor(resources.getColor(R.color.purple_500))
+                    rt_fight.text = "Fight"
+
+                    activeListFragment!!.resetSelected()
+                    activeListFragment!!.refreshList()
+                }
+
+            }
+            else if(fightBtnSelected){
+
+
+                if(activeListFragment!!.checkCharactersAreSelected()){
+
+                    var ready = false
+
+                    val adb = AlertDialog.Builder(this@DMRealTimeGameActivity)
+                    adb.setTitle("Start the fight?")
+                    adb.setMessage("Did you select all the participant characters?")
+                    adb.setNegativeButton("Wait, go back!", null)
+                    adb.setPositiveButton("All ready!"){ dialog, which ->
+
+                        //Restore everything
+                        activeListFragment!!.refreshList()
+
+                        rt_heal.visibility = View.VISIBLE
+                        rt_damage.visibility = View.VISIBLE
+                        rt_fab_dm_add_character.visibility = View. VISIBLE
+                        rt_dice.visibility = View.VISIBLE
+                        rt_fight_back.visibility = View.GONE
+
+                        rt_fight.setBackgroundColor(Color.RED)
+                        rt_fight.text = "End fight"
+
+                        fightBtnSelected = false
+                        fight = true
+                        val fighters = activeListFragment!!.selectFighters()
+
+                        fighters.forEach{
+                            val chara = getSpecificFbCharacter(it)
+                            Log.v("FIGHTCHECK", chara!!.name + " - " + chara!!.firebaseId)
+                        }
+                        putFightFragment(fighters)
+
+                    }
+                    adb.show()
+                    true
+
+                    //ALL READY!
+                    if(!ready) {
+                        //TODO
+
+                    }
+                }else{
+                    Toast.makeText(this, "You have to select at least a character!", Toast.LENGTH_SHORT).show()
+                }
+
+            }
+            //when at least a character is selected:
+                //text changes in "start fight"
+
+                //by pressing "start fight", start = true
+                //to the fight fragment!
+        }
+
+
+
+
+
 
         rt_heal.setOnClickListener{
-            if(currentFragment != ACTIVE_CHARACTERS_LIST){
-                putActiveListFragment()
-            }
+
+
+
             if(heal == false && damage == true) {
                 heal = true
                 damage = false
-                rt_damage.setFadingEdgeLength(0)
-                rt_heal.setFadingEdgeLength(10)
-                activeListFragment.healDmgPressed("heal", "damage")
+                rt_damage.setBackgroundColor(resources.getColor(R.color.purple_500))
+                rt_heal.setBackgroundColor(resources.getColor(R.color.green_heal))
+
+                rt_fight.visibility = View.GONE
+                rt_dice.visibility = View.GONE
+                rt_fab_dm_add_character.visibility = View.GONE
+
+                if(currentFragment == ACTIVE_CHARACTERS_LIST) {
+                    activeListFragment!!.healDmgPressed("heal", "damage")
+                }else if(currentFragment == FIGHT){
+                    fightFragment!!.healDmgPressed("heal", "damage")
+                }
+
             }else if(heal == false && damage == false){
                 heal = true
-                rt_damage.setFadingEdgeLength(0)
-                rt_heal.setFadingEdgeLength(10)
-                activeListFragment.healDmgPressed("heal", "none")
+                rt_damage.setBackgroundColor(resources.getColor(R.color.purple_500))
+                rt_heal.setBackgroundColor(resources.getColor(R.color.green_heal))
+
+                rt_fight.visibility = View.GONE
+                rt_dice.visibility = View.GONE
+                rt_fab_dm_add_character.visibility = View.GONE
+
+                if(currentFragment == ACTIVE_CHARACTERS_LIST) {
+                    activeListFragment!!.healDmgPressed("heal", "none")
+                }else if(currentFragment == FIGHT){
+                    fightFragment!!.healDmgPressed("heal", "none")
+                }
             }
             else if(heal == true){
                 heal = false
                 damage = false
-                rt_damage.setFadingEdgeLength(0)
-                rt_heal.setFadingEdgeLength(0)
-                activeListFragment.healDmgPressed("cancel", "none")
+                rt_damage.setBackgroundColor(resources.getColor(R.color.purple_500))
+                rt_heal.setBackgroundColor(resources.getColor(R.color.purple_500))
+
+                rt_fight.visibility = View.VISIBLE
+                rt_dice.visibility = View.VISIBLE
+                rt_fab_dm_add_character.visibility = View.VISIBLE
+
+                if(currentFragment == ACTIVE_CHARACTERS_LIST) {
+                    activeListFragment!!.healDmgPressed("cancel", "none")
+                }else if(currentFragment == FIGHT){
+                    fightFragment!!.healDmgPressed("cancel", "none")
+                }
             }
         }
 
         rt_damage.setOnClickListener{
+
             if(damage == false && heal == true) {
                 heal = false
                 damage = true
-                rt_damage.setFadingEdgeLength(10)
-                rt_heal.setFadingEdgeLength(0)
-                activeListFragment.healDmgPressed("damage", "heal")
+                rt_damage.setBackgroundColor(resources.getColor(R.color.red_damage))
+                rt_heal.setBackgroundColor(resources.getColor(R.color.purple_500))
+
+                rt_fight.visibility = View.GONE
+                rt_dice.visibility = View.GONE
+                rt_fab_dm_add_character.visibility = View.GONE
+
+                if(currentFragment == ACTIVE_CHARACTERS_LIST) {
+                    activeListFragment!!.healDmgPressed("damage", "heal")
+                }else if(currentFragment == FIGHT){
+                    fightFragment!!.healDmgPressed("damage", "heal")
+                }
             }
             else if(damage == false && heal == false){
                 damage = true
-                rt_damage.setFadingEdgeLength(10)
-                rt_heal.setFadingEdgeLength(0)
-                activeListFragment.healDmgPressed("damage", "heal")
+                rt_damage.setBackgroundColor(resources.getColor(R.color.red_damage))
+                rt_heal.setBackgroundColor(resources.getColor(R.color.purple_500))
+
+                rt_fight.visibility = View.GONE
+                rt_dice.visibility = View.GONE
+                rt_fab_dm_add_character.visibility = View.GONE
+
+                if(currentFragment == ACTIVE_CHARACTERS_LIST) {
+                    activeListFragment!!.healDmgPressed("damage", "none")
+                }else if(currentFragment == FIGHT){
+                    fightFragment!!.healDmgPressed("damage", "none")
+                }
             }
             else if(damage == true){
                 heal = false
                 damage = false
-                rt_damage.setFadingEdgeLength(0)
-                rt_heal.setFadingEdgeLength(0)
-                activeListFragment.healDmgPressed("cancel", "none")
+                rt_damage.setBackgroundColor(resources.getColor(R.color.purple_500))
+                rt_heal.setBackgroundColor(resources.getColor(R.color.purple_500))
+
+                rt_fight.visibility = View.VISIBLE
+                rt_dice.visibility = View.VISIBLE
+                rt_fab_dm_add_character.visibility = View.VISIBLE
+
+                if(currentFragment == ACTIVE_CHARACTERS_LIST) {
+                    activeListFragment!!.healDmgPressed("cancel", "none")
+                }else if(currentFragment == FIGHT){
+                    fightFragment!!.healDmgPressed("cancel", "none")
+                }
             }
         }
 
@@ -303,14 +443,12 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(CHAR_VIS_FBID_KEY, charVisCharacterFBid)
-    }
-
 
 
     override fun onBackPressed() {
+
+        //TODO IF FIGHT IS GOING ON, TERMINATE IT!
+
 
         //Ask if you want the quit the game
         val adb = AlertDialog.Builder(this@DMRealTimeGameActivity)
@@ -328,24 +466,44 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
     }
 
     fun putActiveListFragment(){
+        rt_heal.visibility = View.VISIBLE
+        rt_damage.visibility = View.VISIBLE
+        rt_fab_dm_add_character.visibility = View.VISIBLE
+        rt_fight.visibility = View.VISIBLE
+
+
+
         activeListFragment = RT_ActiveCharactersCardListFragment()
         val transaction = supportFragmentManager.beginTransaction()
-            .replace(R.id.rt_dm_fragment_container, activeListFragment)
+            .replace(R.id.rt_dm_fragment_container, activeListFragment!!)
             .commit()
 
         currentFragment = ACTIVE_CHARACTERS_LIST
     }
 
     fun putStoredListFragment(){
+
+        rt_heal.visibility = View.GONE
+        rt_damage.visibility = View.GONE
+        rt_fab_dm_add_character.visibility = View.GONE
+        rt_fight.visibility = View.GONE
+
+
         storedListFragment = RT_StoredCharactersCardListFragment()
         val transaction = supportFragmentManager.beginTransaction()
-            .replace(R.id.rt_dm_fragment_container, storedListFragment)
+            .replace(R.id.rt_dm_fragment_container, storedListFragment!!)
             .commit()
 
         currentFragment = STORED_CHARACTERS_LIST
     }
 
     fun putCharCreationFragment(character: RT_Character, previousFragment: Int){
+
+        rt_heal.visibility = View.GONE
+        rt_damage.visibility = View.GONE
+        rt_fab_dm_add_character.visibility = View.GONE
+        rt_fight.visibility = View.GONE
+
         charCreationFragment = RT_CharacterCreationFragment(character,previousFragment)
         val transaction = supportFragmentManager.beginTransaction()
             .replace(R.id.rt_dm_fragment_container, charCreationFragment!!)
@@ -358,6 +516,12 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
     }
 
     fun putCharVisualizationFragment(character: RT_Character){
+
+        rt_heal.visibility = View.GONE
+        rt_damage.visibility = View.GONE
+        rt_fab_dm_add_character.visibility = View.GONE
+        rt_fight.visibility = View.GONE
+
 
         val transaction = supportFragmentManager.beginTransaction()
             .replace(R.id.rt_dm_fragment_container, RT_CharacterVisualizationfragment(character.firebaseId!!))
@@ -377,6 +541,20 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         currentFragment = DICE
     }
 
+    fun putFightFragment(fightersFBlist: ArrayList<String>){
+
+        rt_heal.visibility = View.VISIBLE
+        rt_damage.visibility = View.VISIBLE
+        rt_fab_dm_add_character.visibility = View.VISIBLE
+
+
+        fightFragment = RT_FightFragment(fightersFBlist)
+        val transaction = supportFragmentManager.beginTransaction()
+            .replace(R.id.rt_dm_fragment_container, fightFragment!!)
+            .commit()
+        currentFragment = FIGHT
+    }
+
 
     override fun onBackButtonSelected() {
         putActiveListFragment()
@@ -390,7 +568,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         adb.setPositiveButton("Yes!"){ dialog, which ->
 
             FireBaseHelper.fbRemoveCharacterFromGame(fbCharId, fbGameId)
-            onBackButtonSelected()
+            putActiveListFragment()
         }
         adb.show()
         true

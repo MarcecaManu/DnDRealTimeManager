@@ -9,5 +9,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="dynamic">#FFFFFFFF</color>
+    <color name="red_damage">#FFFF0030</color>
+    <color name="green_heal">#FF00FF40</color>
 
 </resources>

@@ -60,6 +60,8 @@ class RT_CharacterCreationFragment(character: RT_Character, previousFrag: Int): 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val new: Boolean
+
         if(newCharacter.level == -1000){
             rt_charcre_et_armorclass.setText("")
             rt_charcre_et_armorclass.setText("")
@@ -181,6 +183,7 @@ class RT_CharacterCreationFragment(character: RT_Character, previousFrag: Int): 
         return result
     }
 
+    /*
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
@@ -196,5 +199,5 @@ class RT_CharacterCreationFragment(character: RT_Character, previousFrag: Int): 
         outState.putInt("initiative", initiative)
         outState.putString("image", image)
     }
-
+*/
 }

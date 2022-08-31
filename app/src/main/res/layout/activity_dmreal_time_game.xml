@@ -30,12 +30,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:text="fight"
+            android:text="Fight"
             app:layout_constraintBottom_toTopOf="@+id/rt_heal"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/rt_fight_back"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rt_dice" />
+
+
+        <Button
+            android:id="@+id/rt_fight_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/rt_damage"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/rt_heal"
+            app:layout_constraintTop_toBottomOf="@+id/rt_fight" />
 
         <Button
             android:id="@+id/rt_heal"
@@ -60,7 +72,6 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/rt_heal"
             app:layout_constraintTop_toBottomOf="@+id/rt_fight" />
-
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
