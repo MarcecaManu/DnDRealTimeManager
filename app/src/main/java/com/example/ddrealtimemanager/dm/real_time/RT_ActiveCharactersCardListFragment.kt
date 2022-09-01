@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_dmreal_time_game.*
 import kotlinx.android.synthetic.main.layout_rt_player_card_item.*
 import kotlinx.android.synthetic.main.layout_rt_player_card_item.view.*
 import kotlinx.android.synthetic.main.rt_active_characters_list_fragment.*
+import kotlinx.android.synthetic.main.rt_fight_fragment.*
 
 class RT_ActiveCharactersCardListFragment: Fragment(){
 
@@ -22,12 +23,14 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
     private var listener: OnActiveCharacterSelectedListener? = null
     private var healDamageListener: OnActiveCharacterSelectedListener? = null
 
-    private var selectedCharactersFBid: ArrayList<String> = ArrayList<String>()
+    companion object {
+        var selectedCharactersFBid: ArrayList<String> = ArrayList<String>()
+    }
 
     private var myContext: Context? = null
 
     fun resetSelected(){
-        this.selectedCharactersFBid.clear()
+        selectedCharactersFBid.clear()
     }
 
     interface OnActiveCharacterSelectedListener{
@@ -99,16 +102,18 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
 
                     if(selectedCharactersFBid.contains(fbCharId)){
                         selectedCharactersFBid.remove(fbCharId)
-                        view.container1.setBackgroundColor(Color.WHITE)
+                        currentAdapter.notifyDataSetChanged()
 
                         if(selectedCharactersFBid.isEmpty()){
                             charactersAreSelected = false
                         }
 
                     }else{
-                        view.container1.setBackgroundColor(resources.getColor(R.color.purple_500))
+                        //view.container1.setBackgroundColor(resources.getColor(R.color.purple_500))
 
                         selectedCharactersFBid.add(fbCharId!!)
+                        currentAdapter.notifyDataSetChanged()
+
 
                         charactersAreSelected = true
                     }
@@ -125,16 +130,21 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
                 var damage = DMRealTimeGameActivity.damage
 
 
+
+
                 if(selectedCharactersFBid.contains(fbCharId)){
                     selectedCharactersFBid.remove(fbCharId)
-                    view.container1.setBackgroundColor(Color.WHITE)
+                    //view.container1.setBackgroundColor(Color.WHITE)
+                    currentAdapter.notifyDataSetChanged()
 
                 }
                 else{
-                    if(heal){view.container1.setBackgroundColor(Color.GREEN)}
-                    if(damage){view.container1.setBackgroundColor(Color.RED)}
+                    //if(heal){view.container1.setBackgroundColor(Color.GREEN)}
+                    //if(damage){view.container1.setBackgroundColor(Color.RED)}
 
                     selectedCharactersFBid.add(fbCharId!!)
+                    currentAdapter.notifyDataSetChanged()
+
                 }
 
 
@@ -224,8 +234,21 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
 
 
     fun refreshList(){
-        val newAdapter = RT_CharactersCardListAdapter(myContext as DMRealTimeGameActivity, DMRealTimeGameActivity.charactersList!!)
+
+        val newAdapter:RT_CharactersCardListAdapter
+
+        if(DMRealTimeGameActivity.fight){
+            newAdapter = RT_CharactersCardListAdapter(myContext as DMRealTimeGameActivity,
+                RT_FightFragment.standbyCharacters!!)
+
+        }else {
+            newAdapter = RT_CharactersCardListAdapter(
+                myContext as DMRealTimeGameActivity,
+                DMRealTimeGameActivity.charactersList!!
+            )
+        }
         rt_active_characters_card_listview.adapter = newAdapter
+
         currentAdapter = newAdapter
     }
 

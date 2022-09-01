@@ -4,11 +4,14 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import android.widget.Toast
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import com.example.ddrealtimemanager.R
 import com.example.ddrealtimemanager.shared.real_time.RT_Character
@@ -16,108 +19,167 @@ import kotlinx.android.synthetic.main.activity_dmreal_time_game.*
 import kotlinx.android.synthetic.main.layout_rt_player_card_item.view.*
 import kotlinx.android.synthetic.main.rt_active_characters_list_fragment.*
 import kotlinx.android.synthetic.main.rt_fight_fragment.*
+import kotlinx.android.synthetic.main.rt_fight_fragment.view.*
 
-class RT_FightFragment(fightersFBlist: ArrayList<String>): Fragment() {
+class RT_FightFragment(fightersFBlist: ArrayList<String>? = null, turn: Int = 1, currentPosition: Int = 0, fightingCharactersList: ArrayList<RT_Character>? = null): Fragment() {
 
     private lateinit var currentAdapter: RT_CharactersCardListAdapter
     private var listener: OnFightingCharacterSelectedListener? = null
     private var healDamageListener: OnFightingCharacterSelectedListener? = null
 
-    private var selectedCharactersFBid: ArrayList<String> = ArrayList<String>()
+    companion object {
+        var selectedCharactersFBid: ArrayList<String> = ArrayList<String>()
+        var standbyCharacters: ArrayList<RT_Character> = DMRealTimeGameActivity.charactersList!!.clone() as ArrayList<RT_Character>
+    }
 
 
     private var fightersFBlist = fightersFBlist
-    private var fightingCharacters: ArrayList<RT_Character> = ArrayList()
+
+    var fightingCharacters = fightingCharactersList
+    var turn = turn
+    var currentPosition = currentPosition
+
+
 
 
     private var myContext: Context? = null
 
 
+
     interface OnFightingCharacterSelectedListener{
-        fun onActiveCharItemSelected(fbCharId: String)
+        fun onFightingCharItemSelected(fbCharId: String)
         fun onActiveCharItemMultipleSelection(fbCharIdList: ArrayList<String>, damage: Int)
     }
 
 
+
+
+
     //This functions works by setting the first element in the middle of the list
 
-    fun orderFightersByInitiativeAndThrow(charactersFBlist: ArrayList<String>) : ArrayList<RT_Character>{
+    init{
 
-        val charactersListWithResults: ArrayList<Pair<String, Int>> = ArrayList()
-
-
-        charactersFBlist.forEach{
-            val character = DMRealTimeGameActivity.getSpecificFbCharacter(it)
-
-            val thisCharactersResult = character!!.initiative + Dice(20).throwDice()
-
-            charactersListWithResults.add(Pair(it, thisCharactersResult))
+        if(fightingCharacters == null){
+            fightingCharacters = ArrayList()
         }
 
-        charactersListWithResults.sortBy { it.second }
-        charactersListWithResults.reverse()
+        if(fightersFBlist != null) {
+            val charactersListWithResults: ArrayList<Pair<String, Int>> = ArrayList()
 
 
+            fightersFBlist.forEach {
+                val character = DMRealTimeGameActivity.getSpecificFbCharacter(it)
 
-        val orderedCharactersList: ArrayList<RT_Character> = ArrayList()
+                val thisCharactersResult = character!!.initiative + Dice(20).throwDice()
 
-        charactersListWithResults.forEach {
+                charactersListWithResults.add(Pair(it, thisCharactersResult))
 
-            val character = DMRealTimeGameActivity.getSpecificFbCharacter(it.first)
-            Log.v("CHARACTERSORDERED", character!!.name + ": " + it.second.toString())
+            }
 
-            orderedCharactersList.add(character!!)
+            charactersListWithResults.sortBy { it.second }
+            charactersListWithResults.reverse()
+
+
+            val orderedCharactersList: ArrayList<RT_Character> = ArrayList()
+
+            charactersListWithResults.forEach {
+
+                val character = DMRealTimeGameActivity.getSpecificFbCharacter(it.first)
+
+                orderedCharactersList.add(character!!)
+            }
+
+            fightingCharacters = orderedCharactersList
+
+
         }
 
-        return orderedCharactersList
+        fightingCharacters!!.forEach {
+            standbyCharacters.remove(it)
+        }
+
+
+
     }
 
 
     //This functions shifts the characters list by 1 "to the right"
     fun previousFighterList(){
-        val size = fightingCharacters.size-1
 
-        var currentChar: RT_Character = fightingCharacters[0]
-        var nextChar: RT_Character
+        if(turn == 1 && currentPosition == 0){
 
-        for(i in 0..size){
+            Toast.makeText(myContext, "This is the start of the fight!", Toast.LENGTH_SHORT).show()
 
-            if(i != size){
-                nextChar = fightingCharacters[i+1]
+        }else {
 
-                fightingCharacters[i+1] = currentChar
+            val size = fightingCharacters!!.size - 1
 
-                currentChar = nextChar
+            var currentChar: RT_Character = fightingCharacters!![0]
+            var nextChar: RT_Character
 
-            }else
-            {
-                fightingCharacters[0] = currentChar
+            for (i in 0..size) {
+
+                if (i != size) {
+                    nextChar = fightingCharacters!![i + 1]
+
+                    fightingCharacters!![i + 1] = currentChar
+
+                    currentChar = nextChar
+
+                } else {
+                    fightingCharacters!![0] = currentChar
+                }
+
+            }
+
+            if(currentPosition == 0){
+                currentPosition = size
+                turn--
+                rt_fight_tv_turn.text = "TURN \n$turn"
+            }else{
+                currentPosition -= 1
             }
 
         }
+
+        Log.v("TURNCHECK", "Back, Turn $turn, position $currentPosition")
+
+
     }
 
     fun nextFighterList(){
-        val size = fightingCharacters.size-1
 
-        var currentChar: RT_Character = fightingCharacters[size]
+        Log.v("TURNCHECK", "Char number: ${fightingCharacters!!.size}")
+
+
+        val size = fightingCharacters!!.size-1
+
+        var currentChar: RT_Character = fightingCharacters!![size]
         var nextChar: RT_Character
 
         for(i in size downTo 0){
 
             if(i != 0){
-                nextChar = fightingCharacters[i-1]
+                nextChar = fightingCharacters!![i-1]
 
-                fightingCharacters[i-1] = currentChar
+                fightingCharacters!![i-1] = currentChar
 
                 currentChar = nextChar
 
             }else
             {
-                fightingCharacters[size] = currentChar
+                fightingCharacters!![size] = currentChar
             }
 
         }
+
+        currentPosition = (currentPosition+1)%fightingCharacters!!.size
+        if(currentPosition == 0){
+            turn++
+            rt_fight_tv_turn.text = "TURN \n$turn"
+        }
+
+        Log.v("TURNCHECK", "Next, Turn $turn, position $currentPosition")
     }
 
 
@@ -144,9 +206,10 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>): Fragment() {
         val view: View = inflater.inflate(R.layout.rt_fight_fragment, container, false)
         val lv: ListView = view.findViewById(R.id.rt_fight_listview_characters)
 
-        fightingCharacters = orderFightersByInitiativeAndThrow(fightersFBlist)
 
-        currentAdapter = RT_CharactersCardListAdapter(activity as DMRealTimeGameActivity, fightingCharacters)
+        //fightingCharacters = orderFightersByInitiativeAndThrow(fightersFBlist)
+
+        currentAdapter = RT_CharactersCardListAdapter(activity as DMRealTimeGameActivity, fightingCharacters!!)
 
 
 
@@ -159,7 +222,7 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>): Fragment() {
 
             if(!DMRealTimeGameActivity.heal && !DMRealTimeGameActivity.damage) {
                 //Change fragment passing the selected fbId
-                listener?.onActiveCharItemSelected(fbCharId!!)
+                listener?.onFightingCharItemSelected(fbCharId!!)
 
             }else {
                 //Heal or Damage has been selected!
@@ -170,13 +233,16 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>): Fragment() {
 
                 if(selectedCharactersFBid.contains(fbCharId)){
                     selectedCharactersFBid.remove(fbCharId)
-                    view.container1.setBackgroundColor(Color.WHITE)
+                    currentAdapter.notifyDataSetChanged()
+
                 }
                 else{
-                    if(heal){view.container1.setBackgroundColor(Color.GREEN)}
-                    if(damage){view.container1.setBackgroundColor(Color.RED)}
+                    //if(heal){view.container1.setBackgroundColor(Color.GREEN)}
+                    //if(damage){view.container1.setBackgroundColor(Color.RED)}
 
                     selectedCharactersFBid.add(fbCharId!!)
+                    currentAdapter.notifyDataSetChanged()
+
                 }
 
 
@@ -220,7 +286,9 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>): Fragment() {
             rt_fight_btn_damageheal.visibility = View.VISIBLE
 
             if(next == "heal"){
-                if(previous == "damage"){refreshList()}
+                if(previous == "damage"){
+                    refreshList()
+                }
                 rt_fight_btn_damageheal.setBackgroundResource(R.drawable.heal)
                 rt_fight_et_damageheal.hint = "Heal points"
 
@@ -249,6 +317,8 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>): Fragment() {
         rt_fight_et_damageheal.visibility = View.GONE
         rt_fight_btn_damageheal.visibility = View.GONE
 
+        rt_fight_tv_turn.text = "TURN \n$turn"
+
 
         rt_fight_btn_nextfighter.setOnClickListener{
             nextFighterList()
@@ -274,15 +344,42 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>): Fragment() {
 
     }
 
+    fun refreshCharacters(){
+        val updatedCharacters = DMRealTimeGameActivity.charactersList
+
+        updatedCharacters!!.forEach { updatedChar ->
+
+            for(i in 0..fightingCharacters!!.size-1){
+                if(fightingCharacters!![i].firebaseId == updatedChar.firebaseId){
+                    fightingCharacters!![i] = updatedChar
+                }
+            }
+
+        }
+
+        //refreshList()
+    }
+
 
 
     fun refreshList(){
-        val newAdapter = RT_CharactersCardListAdapter(myContext as DMRealTimeGameActivity, fightingCharacters)
+
+
+        refreshCharacters()
+        val newAdapter = RT_CharactersCardListAdapter(myContext as DMRealTimeGameActivity, fightingCharacters!!)
+
+
         rt_fight_listview_characters.adapter = newAdapter
 
-        rt_fight_listview_characters.post(Runnable { rt_fight_listview_characters.setSelection(0) })
+        //val first = lv.firstVisiblePosition
+        val firstChar = rt_fight_listview_characters.adapter.getView(0, null, rt_fight_listview_characters)
+
+        firstChar.setBackgroundColor(resources.getColor(R.color.purple_200))
+
+        //rt_fight_listview_characters.post(Runnable { rt_fight_listview_characters.setSelection(0) })
 
         currentAdapter = newAdapter
     }
+
 
 }

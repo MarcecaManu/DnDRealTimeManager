@@ -26,12 +26,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!--
         <Button
             android:id="@+id/rt_stored_characters_list_btn_back"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="back"/>
-
+        -->
 
     </LinearLayout>
 

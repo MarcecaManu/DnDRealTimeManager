@@ -34,7 +34,6 @@ class RT_CharacterVisualizationfragment(selectedCharacterFBid: String) : Fragmen
     private var editListener: OnCharVisualizationListener? = null
 
     interface OnCharVisualizationListener{
-        fun onBackButtonSelected()
         fun onDeleteButtonSelected(fbCharId: String)
         fun onEditButtonSelected(character: RT_Character)
 
@@ -50,9 +49,7 @@ class RT_CharacterVisualizationfragment(selectedCharacterFBid: String) : Fragmen
         }else {
             throw ClassCastException(context.toString()
                     + "must implement "
-                    + "RT_CharacterVisualizationfragment.OnBackButtonClickListener, "
-                    + "RT_CharacterVisualizationfragment.OnDeleteButtonClickListener and "
-                    + "RT_CharacterVisualizationfragment.OnEditButtonClickListener")
+                    + "RT_CharacterVisualizationfragment.OnCharVisualizationListener")
         }
     }
 
@@ -112,9 +109,9 @@ class RT_CharacterVisualizationfragment(selectedCharacterFBid: String) : Fragmen
 
 
 
-        rt_charvis_btn_back.setOnClickListener{
-            backListener?.onBackButtonSelected()
-        }
+        //rt_charvis_btn_back.setOnClickListener{
+        //    backListener?.onBackButtonSelected()
+        //}
 
 
         rt_charvis_fab_delete.setOnClickListener{

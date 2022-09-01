@@ -78,9 +78,9 @@ class RT_StoredCharactersCardListFragment: Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rt_stored_characters_list_btn_back.setOnClickListener{
-            backListener?.onStoredListBackButtonSelected()
-        }
+        //rt_stored_characters_list_btn_back.setOnClickListener{
+        //    backListener?.onStoredListBackButtonSelected()
+        //}
 
         refreshList()
     }
