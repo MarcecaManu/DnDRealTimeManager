@@ -1,4 +1,4 @@
-package com.example.ddrealtimemanager.dm
+package com.example.ddrealtimemanager.shared
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,7 +8,6 @@ import android.widget.BaseAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.ddrealtimemanager.R
-import com.example.ddrealtimemanager.shared.Game
 import kotlinx.android.synthetic.main.layout_game_card_item.view.*
 
 class GameListAdapter(private val context: Context, private var gameList: List<Game>): BaseAdapter() {

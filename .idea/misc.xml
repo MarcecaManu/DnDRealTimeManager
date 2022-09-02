@@ -23,6 +23,7 @@
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/drawable/ic_delete.xml" value="0.173" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/drawable/ic_edit.xml" value="0.173" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/drawable/ic_launcher_background.xml" value="0.173" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_char_creation_for_join.xml" value="0.2598958333333333" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_character_creation.xml" value="0.22" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_character_visualization.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_characters_card_list.xml" value="0.24166666666666667" />
@@ -30,12 +31,14 @@
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_dmactivity.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_dmgame.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_dmreal_time_game.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_game_join.xml" value="0.27239583333333334" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_game_list.xml" value="0.25" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_game_visualization.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_new_game.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_player.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_player_game.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_player_games_list.xml" value="0.2869791666666667" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/activity_player_real_time_game.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/healthbar.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/layout_character_item.xml" value="0.240625" />
@@ -49,6 +52,7 @@
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/rt_fight_fragment.xml" value="0.21979166666666666" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/rt_stored_characters_list_fragment.xml" value="0.275" />
         <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/layout/rt_stored_charaters_list_fragment.xml" value="0.238671875" />
+        <entry key="..\:/Users/Manu/StudioProjects/DnDRealTimeManager/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.173" />
       </map>
     </option>
   </component>

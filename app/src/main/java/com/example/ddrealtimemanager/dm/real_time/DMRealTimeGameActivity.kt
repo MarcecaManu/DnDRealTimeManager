@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.activity_characters_card_list.*
 import kotlinx.android.synthetic.main.activity_dmreal_time_game.*
 import kotlinx.android.synthetic.main.rt_character_creation_fragment.*
 import java.lang.Exception
-import kotlin.math.log
+
 
 class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListFragment.OnActiveCharacterSelectedListener,
         RT_CharacterVisualizationfragment.OnCharVisualizationListener,
@@ -32,7 +32,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         RT_CharacterCreationFragment.OnCharacterCreationClick,
         RT_FightFragment.OnFightingCharacterSelectedListener{
 
-    lateinit var fbGameId: String
+
 
 
     lateinit var gameRef: DatabaseReference
@@ -66,6 +66,8 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
     private var recordFightersFbList: ArrayList<String>? = null
 
     companion object{
+
+        lateinit var fbGameId: String
 
         val CHAR_VIS_FBID_KEY = "charvis"
 
@@ -102,8 +104,6 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
 
     }
-
-
 
 
     override fun onFightingCharItemSelected(fbCharId: String) {
@@ -255,11 +255,11 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
                 }
 
-                rt_fight.visibility = View.VISIBLE
+               /* rt_fight.visibility = View.VISIBLE
                 rt_heal.visibility = View.VISIBLE
                 rt_damage.visibility = View.VISIBLE
                 rt_fab_dm_add_character.visibility = View.VISIBLE
-                rt_fight_back.visibility = View.GONE
+                rt_fight_back.visibility = View.GONE */
                 rt_dice.text = "Dice"
 
 
@@ -365,6 +365,8 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
                                 val fighters = activeListFragment!!.selectFighters()
 
 
+                                FireBaseHelper.fbCreateNewFight(fighters, fbGameId)
+
                                 putFightFragment(fighters)
 
                             }
@@ -384,9 +386,11 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
                             rt_fight.text = "End fight"
 
                             fightBtnSelected = false
-                            fight = true
+                            //fight = true
 
                             val newFighters = activeListFragment!!.selectFighters()
+
+                            FireBaseHelper.fbAddCharactersMidFight(newFighters, fbGameId)
 
                             newFighters?.forEach {
                                 recordFightCharacters!!.add(getSpecificFbCharacter(it)!!)
@@ -422,6 +426,8 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
                     //End fight
                     fight = false
+
+                    FireBaseHelper.fbEndFight(fbGameId)
 
                     //Restore layout
                     /* ? no layout to restore? */
@@ -720,6 +726,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         rt_heal.visibility = View.VISIBLE
         rt_damage.visibility = View.VISIBLE
         rt_fab_dm_add_character.visibility = View.VISIBLE
+        rt_fight.visibility = View.VISIBLE
 
 
         fightFragment = RT_FightFragment(fightersFBlist, turn, position, fightingCharacters)
@@ -729,7 +736,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         currentFragment = FIGHT
     }
 
-    
+
     override fun onDeleteButtonSelected(fbCharId: String) {
         val adb = AlertDialog.Builder(this@DMRealTimeGameActivity)
         adb.setTitle("Remove character from the game?")
@@ -781,6 +788,8 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         if(previousFragment == STORED_CHARACTERS_LIST){putStoredListFragment()}
         if(previousFragment == CHARACTER_VISUALIZATION){putCharVisualizationFragment(character!!)}
     }
+
+
 
 
 }

@@ -3,7 +3,6 @@ package com.example.ddrealtimemanager.dm.real_time
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,11 +66,13 @@ class RT_CharacterCreationFragment(character: RT_Character, previousFrag: Int): 
             rt_charcre_et_armorclass.setText("")
             rt_charcre_et_maxhp.setText("")
             rt_charcre_et_initiative.setText("")
+            rt_charcre_btn_save.setText("Add")
         }else {
             rt_charcre_et_level.setText(newCharacter.level.toString())
             rt_charcre_et_armorclass.setText(newCharacter.ac.toString())
             rt_charcre_et_maxhp.setText(newCharacter.maxHp.toString())
             rt_charcre_et_initiative.setText(newCharacter.initiative.toString())
+            rt_charcre_btn_save.setText("Edit")
         }
 
         rt_charcre_et_level.transformationMethod = null
@@ -94,6 +95,7 @@ class RT_CharacterCreationFragment(character: RT_Character, previousFrag: Int): 
             //DATA CHECK
             var errorList = arrayListOf<String>()
 
+            val name = rt_charcre_et_name.text.toString().trim()
             val level = rt_charcre_et_level.text.toString().trim()
             val armorclass = rt_charcre_et_armorclass.text.toString().trim()
             val maxhp = rt_charcre_et_maxhp.text.toString().trim()
@@ -101,6 +103,7 @@ class RT_CharacterCreationFragment(character: RT_Character, previousFrag: Int): 
             val imageurl = rt_charcre_et_imageurl.text.toString().trim()
 
             //check!
+            errorList.add(checkStatFieldValidity(name, "name"))
             errorList.add(checkStatFieldValidity(level, "level"))
             errorList.add(checkStatFieldValidity(armorclass, "armor class"))
             errorList.add(checkStatFieldValidity(maxhp, "max health points"))
@@ -151,31 +154,34 @@ class RT_CharacterCreationFragment(character: RT_Character, previousFrag: Int): 
 
         //Check if the field contains a number, being it positive or negative, and if it's not an image
         if(!field.isBlank()){
-            if(type == "level") {
-                Log.v("SUBMY", field.isDigitsOnly().toString())
-                Log.v("SUBMY", field[0].toString())
-            }
-        if((field.isDigitsOnly() || (field[0].equals('-') && field.substring(1,field.length).isDigitsOnly()) ) && type != "image") {
-            when (type) {
-                "level" ->
-                    if (field.toInt() < 1 || field.toInt() > 20) {
-                        result = "The level field must be between 1 and 20!"
+
+            if((field.isDigitsOnly() || (field[0].equals('-') && field.substring(1,field.length).isDigitsOnly()) ) && type != "image") {
+                when (type) {
+                    "level" ->
+                        if (field.toInt() < 1 || field.toInt() > 20) {
+                            result = "The level field must be between 1 and 20!"
+                        }
+
+                    "hp" -> if(field.toInt() < 0){
+                        result = "The health points field must be higher than 0!"
                     }
+                }
+            }else{
 
-                "hp" -> if(field.toInt() < 0){
-                    result = "The health points field must be higher than 0!"
+                if(type == "image"){
+                    if(!field.isBlank() && !URLUtil.isValidUrl(field)){
+                        result = "The image URL is invalid!"
+                    }
+                }else if(type == "name") {
+                    if(field.isBlank()){
+                        result = "The $type field must be filled!"
+                    }else if(field.length > 15){
+                        result = "The $type is too long!"
+                    }
+                }else {
+                    result = "The $type field must contain numbers only!"
                 }
             }
-        }else{
-
-            if(type == "image"){
-                if(!field.isBlank() && !URLUtil.isValidUrl(field)){
-                    result = "The image URL is invalid!"
-                }
-            }else {
-                result = "The $type field must contain numbers only!"
-            }
-        }
     }else{
         result = "The $type field must be filled!"
         }

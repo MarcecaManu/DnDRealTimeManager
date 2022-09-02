@@ -6,11 +6,17 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.DDRealTimeManager">
+        <activity
+            android:name=".player.PlayerGamesListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".player.CharCreationForGameActivity"
+            android:exported="false" />
         <activity
             android:name=".shared.CharactersCardListActivity"
             android:exported="false" />
@@ -21,7 +27,7 @@
             android:name=".dm.real_time.DMRealTimeGameActivity"
             android:exported="false" />
         <activity
-            android:name=".dm.GameVisualizationActivity"
+            android:name=".shared.GameVisualizationActivity"
             android:exported="false" />
         <activity
             android:name=".dm.GameListActivity"

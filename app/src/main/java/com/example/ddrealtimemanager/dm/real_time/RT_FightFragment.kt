@@ -4,8 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Parcelable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +12,7 @@ import android.widget.Toast
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import com.example.ddrealtimemanager.R
+import com.example.ddrealtimemanager.shared.FireBaseHelper
 import com.example.ddrealtimemanager.shared.real_time.RT_Character
 import kotlinx.android.synthetic.main.activity_dmreal_time_game.*
 import kotlinx.android.synthetic.main.layout_rt_player_card_item.view.*
@@ -98,7 +97,7 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>? = null, turn: Int = 1,
             standbyCharacters.remove(it)
         }
 
-
+        FireBaseHelper.fbFightSetTurn(null, fightingCharacters!![0].firebaseId!!, DMRealTimeGameActivity.fbGameId)
 
     }
 
@@ -112,10 +111,13 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>? = null, turn: Int = 1,
 
         }else {
 
+            val charPrevTurn = fightingCharacters!![0]
+
             val size = fightingCharacters!!.size - 1
 
             var currentChar: RT_Character = fightingCharacters!![0]
             var nextChar: RT_Character
+
 
             for (i in 0..size) {
 
@@ -140,17 +142,18 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>? = null, turn: Int = 1,
                 currentPosition -= 1
             }
 
-        }
+            FireBaseHelper.fbFightSetTurn(charPrevTurn.firebaseId,
+                fightingCharacters!![0].firebaseId!!, DMRealTimeGameActivity.fbGameId)
 
-        Log.v("TURNCHECK", "Back, Turn $turn, position $currentPosition")
+
+        }
 
 
     }
 
     fun nextFighterList(){
 
-        Log.v("TURNCHECK", "Char number: ${fightingCharacters!!.size}")
-
+        val charPrevTurn = fightingCharacters!![0]
 
         val size = fightingCharacters!!.size-1
 
@@ -179,7 +182,9 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>? = null, turn: Int = 1,
             rt_fight_tv_turn.text = "TURN \n$turn"
         }
 
-        Log.v("TURNCHECK", "Next, Turn $turn, position $currentPosition")
+        FireBaseHelper.fbFightSetTurn(charPrevTurn.firebaseId,
+            fightingCharacters!![0].firebaseId!!, DMRealTimeGameActivity.fbGameId)
+
     }
 
 

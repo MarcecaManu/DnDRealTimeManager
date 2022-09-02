@@ -1,13 +1,12 @@
 package com.example.ddrealtimemanager.shared
 
-import android.content.ClipDescription
+
 import android.content.ContentValues
 import android.content.Context
-import android.database.sqlite.SQLiteConstraintException
+
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
-import java.lang.Exception
+
 
 /* This class is used for communication between application and SQLite database. */
 
@@ -16,6 +15,7 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
 
     private val CHAR_TABLE: String = "Character_Data"
     private val GAME_TABLE: String = "Game_Data"
+    private val ID_TABLE: String = "Ids_Data"
 
     private val CHAR_ID = "CharID"
     private val CHAR_NAME = "Name"
@@ -31,6 +31,10 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
     private val GAME_IMAGE = "GameImage"
     private val GAME_FIREBASE_ID = "FirebaseId"
 
+    private val PLAYER_CHAR_ID = "PlayerCharId"
+    private val PLAYER_FB_ID = "PlayerFbId"
+    private val GAME_FB_ID = "GameFbId"
+
 
     val MAX_LENGTH_CHAR_NAME = 15
     val MAX_LENGTH_CHAR_RACE = 15
@@ -43,6 +47,9 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
     val MAX_LENGTH_GAME_DESCRIPTION = 2000
     val MAX_LENGTH_GAME_IMAGE = 3000
     val MAX_LENGTH_GAME_FIREBASE_ID = 1000
+
+    val MAX_LENGTH_CHAR_ID = 1000
+    val MAX_LENGTH_FB_ID = 30
 
     /*Character Data - Table description
     *
@@ -89,11 +96,17 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
                 "$GAME_FIREBASE_ID VARCHAR($MAX_LENGTH_GAME_FIREBASE_ID)" +
                 ")")
 
+        db?.execSQL("CREATE TABLE $ID_TABLE (" +
+                "$GAME_FB_ID VARCHAR($MAX_LENGTH_FB_ID), " +
+                "$PLAYER_FB_ID VARCHAR($MAX_LENGTH_FB_ID)," +
+                "$PLAYER_CHAR_ID INTEGER($MAX_LENGTH_CHAR_ID))")
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db?.execSQL("DROP TABLE IF EXISTS " + CHAR_TABLE)
         db?.execSQL("DROP TABLE IF EXISTS " + GAME_TABLE)
+        db?.execSQL("DROP TABLE IF EXISTS" + ID_TABLE)
         onCreate(db)
 
     }
@@ -365,6 +378,56 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
 
         db.update(GAME_TABLE, contentValues, "$GAME_ID = $gameId", null)
         db.close()
+    }
+
+    fun playerJoinGame(fbGameId: String, fbCharId: String, charId: Int){
+        val contentValues = ContentValues()
+        val db = this.writableDatabase
+
+        contentValues.put(GAME_FB_ID, fbGameId)
+        contentValues.put(PLAYER_FB_ID, fbCharId)
+        contentValues.put(PLAYER_CHAR_ID, charId)
+
+
+        db.insert(ID_TABLE, null, contentValues)
+
+        db.close()
+    }
+
+
+    /*  This functions returns a list of triples, where the first element is the fbGameId, the second
+     *  element the fbCharId of the player in that game, and the third element is the charId of the
+     *  character related to the fbCharId
+     */
+    fun getPlayerGames(): ArrayList<Triple<String, String, Int>>{
+
+        val gamesList: ArrayList<Triple<String, String, Int>> = ArrayList()
+
+        val db = this.readableDatabase
+        val query = "select $PLAYER_FB_ID, * from $ID_TABLE"
+        val cursor = db.rawQuery(query, null)
+
+        val fbGameIdIndex = cursor.getColumnIndex(GAME_FB_ID)
+        val fbCharIdIndex = cursor.getColumnIndex(PLAYER_FB_ID)
+        val charIdIndex = cursor.getColumnIndex(PLAYER_CHAR_ID)
+
+        if(cursor.moveToFirst()) {
+            do {
+
+                val fbGameId = cursor.getString(fbGameIdIndex)
+                val fbCharId = cursor.getString(fbCharIdIndex)
+                val charId = cursor.getInt(charIdIndex)
+
+                val triple: Triple<String, String, Int> = Triple(fbGameId, fbCharId, charId)
+
+                gamesList.add(triple)
+
+            } while (cursor.moveToNext())
+            cursor.close()
+        }
+        db.close()
+
+        return gamesList
     }
 
 

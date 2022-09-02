@@ -3,7 +3,6 @@ package com.example.ddrealtimemanager.dm.real_time
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Html
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -140,7 +139,6 @@ class RT_DiceFragment(prevFragment: Int): Fragment() {
 
                 diceToThrow.forEach{
                     val throwResult = it.throwDice()
-                    Log.v("THROWTEST", throwResult.toString())
                     var color = "#000000"       //black
 
                     if(throwResult == it.diceType){

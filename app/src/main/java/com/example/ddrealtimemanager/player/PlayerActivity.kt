@@ -19,7 +19,8 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         btn_player_join.setOnClickListener {
-            startActivity(Intent(this, PlayerRealTimeGameActivity::class.java))
+            val intent = Intent(this, PlayerGamesListActivity::class.java)
+            startActivity(intent)
         }
 
 

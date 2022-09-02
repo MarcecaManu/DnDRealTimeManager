@@ -6,11 +6,9 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.*
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColor
 import androidx.fragment.app.Fragment
@@ -90,7 +88,6 @@ class RT_CharacterVisualizationfragment(selectedCharacterFBid: String) : Fragmen
        // val convertedColor = Color.parseColor(healthBarColor)
 
 
-        //Log.v("DRAWASS", healthBarColor)
         //val progressbarDrawable: LayerDrawable = rt_charvis_pb_healthbar_item.progressDrawable as LayerDrawable
         //val progressDrawable: Drawable = progressbarDrawable.getDrawable(1)
 
