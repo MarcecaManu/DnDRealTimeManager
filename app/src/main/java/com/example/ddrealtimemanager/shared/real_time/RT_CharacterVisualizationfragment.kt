@@ -1,33 +1,34 @@
-package com.example.ddrealtimemanager.dm.real_time
+package com.example.ddrealtimemanager.shared.real_time
 
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
-import android.graphics.PorterDuff
-import android.graphics.drawable.*
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.toColor
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.ddrealtimemanager.R
-import com.example.ddrealtimemanager.shared.Utils
-import com.example.ddrealtimemanager.shared.real_time.RT_Character
-import kotlinx.android.synthetic.main.layout_rt_player_card_item.view.*
+import com.example.ddrealtimemanager.dm.real_time.DMRealTimeGameActivity
+import com.example.ddrealtimemanager.player.real_time.PlayerRealTimeGameActivity
 import kotlinx.android.synthetic.main.rt_character_visualization_fragment.*
-import kotlinx.android.synthetic.main.rt_character_visualization_fragment.view.*
-import java.lang.ClassCastException
-
-class RT_CharacterVisualizationfragment(selectedCharacterFBid: String) : Fragment() {
 
 
-    private val character = DMRealTimeGameActivity.getSpecificFbCharacter(selectedCharacterFBid)
+class RT_CharacterVisualizationfragment(selectedCharacterFBid: String, dm: Boolean) : Fragment() {
 
-    private var backListener: OnCharVisualizationListener? = null
+    val isDm = dm
+
+    private val character =
+        if(dm) DMRealTimeGameActivity.getSpecificFbCharacter(selectedCharacterFBid)
+        else PlayerRealTimeGameActivity.updatedCharacter
+
+
     private var deleteListener: OnCharVisualizationListener? = null
     private var editListener: OnCharVisualizationListener? = null
 
@@ -41,7 +42,6 @@ class RT_CharacterVisualizationfragment(selectedCharacterFBid: String) : Fragmen
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if(context is Activity){
-            backListener = context as OnCharVisualizationListener
             deleteListener = context as OnCharVisualizationListener
             editListener = context as OnCharVisualizationListener
         }else {
@@ -67,6 +67,19 @@ class RT_CharacterVisualizationfragment(selectedCharacterFBid: String) : Fragmen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        rt_charvis_fab_delete.visibility = View.GONE
+        rt_charvis_fab_edit.visibility = View.GONE
+
+        if(!isDm && PlayerRealTimeGameActivity.fight){
+            //Fight!
+            setFightForPlayer()
+            if(PlayerRealTimeGameActivity.yourTurn){
+                setTurnLayout()
+            }else{
+                endTurnLayout()
+            }
+        }
 
         val requestOptions = RequestOptions()
             .placeholder(R.drawable.propic_standard)
@@ -110,6 +123,15 @@ class RT_CharacterVisualizationfragment(selectedCharacterFBid: String) : Fragmen
         //    backListener?.onBackButtonSelected()
         //}
 
+        rt_charvis_fab_more.setOnClickListener{
+            if(rt_charvis_fab_delete.visibility == View.GONE){
+                rt_charvis_fab_delete.visibility = View.VISIBLE
+                rt_charvis_fab_edit.visibility = View.VISIBLE
+            }else{
+                rt_charvis_fab_delete.visibility = View.GONE
+                rt_charvis_fab_edit.visibility = View.GONE
+            }
+        }
 
         rt_charvis_fab_delete.setOnClickListener{
             deleteListener?.onDeleteButtonSelected(character.firebaseId!!)
@@ -124,9 +146,42 @@ class RT_CharacterVisualizationfragment(selectedCharacterFBid: String) : Fragmen
 
     override fun onDetach() {
         super.onDetach()
-        this.backListener = null
         this.deleteListener = null
         this.editListener = null
     }
+
+    fun setFightForPlayer(){
+        rt_charvis_iv_charImage.background = resources.getDrawable(R.drawable.imageview_border)
+        rt_charvis_fab_more.visibility = View.GONE
+        rt_charvis_fab_delete.visibility = View.GONE
+        rt_charvis_fab_edit.visibility = View.GONE
+    }
+
+    fun setTurnLayout(){
+        rt_charvis_main_background.setBackgroundColor(Color.parseColor("#BB86FC"))
+
+    }
+
+    fun endTurnLayout(){
+        rt_charvis_main_background.setBackgroundColor(Color.WHITE)
+    }
+
+    fun damageAnimation(){
+
+    }
+
+    fun healAnimation(){
+
+    }
+
+    fun endFightForPlayer(){
+        rt_charvis_main_background.setBackgroundColor(Color.WHITE)
+        rt_charvis_iv_charImage.background = null
+        rt_charvis_fab_more.visibility = View.VISIBLE
+        //rt_charvis_fab_delete.visibility = View.GONE
+        //rt_charvis_fab_edit.visibility = View.GONE
+    }
+
+
 
 }

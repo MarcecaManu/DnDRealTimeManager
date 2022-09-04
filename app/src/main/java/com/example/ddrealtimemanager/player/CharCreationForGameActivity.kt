@@ -1,8 +1,12 @@
 package com.example.ddrealtimemanager.player
 
+import android.app.ProgressDialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.InputType
 import android.webkit.URLUtil
 import android.widget.EditText
@@ -17,6 +21,12 @@ import com.example.ddrealtimemanager.shared.real_time.RT_Character
 import kotlinx.android.synthetic.main.activity_char_creation_for_join.*
 
 class CharCreationForGameActivity() : AppCompatActivity() {
+
+
+    lateinit var tempDialog: ProgressDialog
+    var i = 0
+    lateinit var myCountDownTimer: CountDownTimer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_char_creation_for_join)
@@ -87,6 +97,8 @@ class CharCreationForGameActivity() : AppCompatActivity() {
                     fbGameId = input.text.toString()
                     //fbGameId = "-NA_TWYGanLoOhIBil5J"
 
+                    fbGameId = "-" + fbGameId
+
                     val result: Boolean? = FireBaseHelper.fbCheckGameExists(fbGameId)
 
                     var alreadyIn: Boolean = false
@@ -107,11 +119,34 @@ class CharCreationForGameActivity() : AppCompatActivity() {
                         //push character in the game and get the Id
                         val fbCharId = FireBaseHelper.fbPushCharacter(newRtCharacter, fbGameId)
 
+
                         db.playerJoinGame(fbGameId, fbCharId, charId)
 
                         val intent = Intent(this, PlayerGamesListActivity::class.java)
-                        startActivity(intent)
-                        finish()
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        //startActivity(intent)
+
+                        val tempDialog: ProgressDialog = ProgressDialog(this)
+                        tempDialog.setMessage("Please wait...")
+                        tempDialog.setCancelable(false)
+                        tempDialog.setProgress(i)
+                        tempDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER)
+                        tempDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.GRAY))
+
+                        tempDialog.show()
+                        myCountDownTimer = object: CountDownTimer(2000, 1000){
+                            override fun onTick(millisUntilFinished: Long){
+                                tempDialog.setMessage("Please wait...")
+                            }
+
+                            override fun onFinish(){
+                                tempDialog.dismiss()
+                                startActivity(intent)
+                            }
+                        }.start()
+
+
 
                     }else{
                         Toast.makeText(this, "The game could not be found!", Toast.LENGTH_SHORT).show()

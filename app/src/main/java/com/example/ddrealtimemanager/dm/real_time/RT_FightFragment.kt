@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import com.example.ddrealtimemanager.R
 import com.example.ddrealtimemanager.shared.FireBaseHelper
 import com.example.ddrealtimemanager.shared.real_time.RT_Character
+import com.example.ddrealtimemanager.shared.real_time.Dice
 import kotlinx.android.synthetic.main.activity_dmreal_time_game.*
 import kotlinx.android.synthetic.main.layout_rt_player_card_item.view.*
 import kotlinx.android.synthetic.main.rt_active_characters_list_fragment.*

@@ -203,6 +203,8 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
             DMRealTimeGameActivity.heal = false
             DMRealTimeGameActivity.damage = false
 
+            //rt_fab_dm_add_character.visibility = View.VISIBLE
+
             refreshList()
         }
 

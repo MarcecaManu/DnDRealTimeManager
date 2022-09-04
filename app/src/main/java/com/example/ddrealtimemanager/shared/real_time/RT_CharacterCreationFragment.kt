@@ -1,4 +1,4 @@
-package com.example.ddrealtimemanager.dm.real_time
+package com.example.ddrealtimemanager.shared.real_time
 
 import android.app.Activity
 import android.content.Context
@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.core.text.isDigitsOnly
 import androidx.fragment.app.Fragment
 import com.example.ddrealtimemanager.R
-import com.example.ddrealtimemanager.shared.real_time.RT_Character
 import kotlinx.android.synthetic.main.rt_character_creation_fragment.*
 import java.lang.ClassCastException
 

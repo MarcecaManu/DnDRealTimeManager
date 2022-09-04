@@ -3,6 +3,7 @@ package com.example.ddrealtimemanager.shared
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -39,6 +40,7 @@ class GameVisualizationActivity : AppCompatActivity() {
 
         }else{
             val fbGameId = extras!!.getString("fbGameId")
+            Log.v("CHECKVALUE", fbGameId!!)
 
             val name = extras!!.getString("name")
             val subtitle = extras!!.getString("subtitle")
@@ -79,9 +81,20 @@ class GameVisualizationActivity : AppCompatActivity() {
                     startActivity(intent)
                 }else{
                     //It's a player, join
+
+                    //Get the fbCharId and charId connected to id
+                    Log.v("CHECKVALUEBEFOREERROR", game!!.firebaseId)
+                    val relatedCharIds = db.getPlayerInfoForGame(game!!.firebaseId)
+
+                    val fbCharId = relatedCharIds?.first        //fbCharId
+                    val charId = relatedCharIds?.second         //charId
+
                     val intent = Intent(this, PlayerRealTimeGameActivity::class.java)
                     intent.putExtra("fbGameId", game!!.firebaseId)
+                    intent.putExtra("fbCharId", fbCharId)
+                    intent.putExtra("charId", charId)
                     startActivity(intent)
+                    finish()
                 }
             }
 

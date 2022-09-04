@@ -11,5 +11,6 @@
     <color name="dynamic">#FFFFFFFF</color>
     <color name="red_damage">#FFFF0030</color>
     <color name="green_heal">#FF00FF40</color>
+    <color name="app_red">#FF710000</color>
 
 </resources>

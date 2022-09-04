@@ -6,6 +6,7 @@ import android.content.Context
 
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 
 
 /* This class is used for communication between application and SQLite database. */
@@ -97,8 +98,8 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
                 ")")
 
         db?.execSQL("CREATE TABLE $ID_TABLE (" +
-                "$GAME_FB_ID VARCHAR($MAX_LENGTH_FB_ID), " +
-                "$PLAYER_FB_ID VARCHAR($MAX_LENGTH_FB_ID)," +
+                "$GAME_FB_ID VARCHAR($MAX_LENGTH_FB_ID) PRIMARY KEY, " +
+                "$PLAYER_FB_ID VARCHAR($MAX_LENGTH_FB_ID), " +
                 "$PLAYER_CHAR_ID INTEGER($MAX_LENGTH_CHAR_ID))")
 
     }
@@ -106,7 +107,7 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db?.execSQL("DROP TABLE IF EXISTS " + CHAR_TABLE)
         db?.execSQL("DROP TABLE IF EXISTS " + GAME_TABLE)
-        db?.execSQL("DROP TABLE IF EXISTS" + ID_TABLE)
+        db?.execSQL("DROP TABLE IF EXISTS " + ID_TABLE)
         onCreate(db)
 
     }
@@ -115,6 +116,7 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         val db = this.writableDatabase
         db?.execSQL("DROP TABLE IF EXISTS " + CHAR_TABLE)
         db?.execSQL("DROP TABLE IF EXISTS " + GAME_TABLE)
+        db?.execSQL("DROP TABLE IF EXISTS " + ID_TABLE)
         onCreate(db)
     }
 
@@ -394,6 +396,13 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         db.close()
     }
 
+    fun playerLeaveGame(fbGameId: String){
+        val db = this.writableDatabase
+        val input: Array<String> = Array<String>(1) { fbGameId }
+        db.delete(ID_TABLE, "$GAME_FB_ID =?", input) > 0
+        db.close()
+    }
+
 
     /*  This functions returns a list of triples, where the first element is the fbGameId, the second
      *  element the fbCharId of the player in that game, and the third element is the charId of the
@@ -428,6 +437,40 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         db.close()
 
         return gamesList
+    }
+
+    fun getPlayerInfoForGame(fbGameId: String): Pair<String, Int>?{
+
+        val db = this.readableDatabase
+        val query = "select * " +
+                "FROM $ID_TABLE " +
+                "WHERE $GAME_FB_ID =?"
+
+        val input: Array<String> = Array<String>(1) { fbGameId }
+        Log.v("CHECKVALUE", input[0])
+
+        val cursor = db.rawQuery(query, input)
+
+        val fbCharIdIndex = cursor.getColumnIndex(PLAYER_FB_ID)
+        val charIdIndex = cursor.getColumnIndex(PLAYER_CHAR_ID)
+
+        var pair: Pair<String, Int>? = null
+
+        if(cursor.moveToFirst()) {
+            do {
+
+                val fbCharId = cursor.getString(fbCharIdIndex)
+                val charId = cursor.getInt(charIdIndex)
+
+                pair = Pair(fbCharId, charId)
+
+
+            } while (cursor.moveToNext())
+            cursor.close()
+        }
+        db.close()
+
+        return pair
     }
 
 

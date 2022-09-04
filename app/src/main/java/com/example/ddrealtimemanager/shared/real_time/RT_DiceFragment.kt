@@ -1,4 +1,4 @@
-package com.example.ddrealtimemanager.dm.real_time
+package com.example.ddrealtimemanager.shared.real_time
 
 import android.graphics.Color
 import android.os.Bundle
@@ -14,7 +14,7 @@ import kotlin.random.Random
 
 class RT_DiceFragment(prevFragment: Int): Fragment() {
 
-    val previousFragment = prevFragment
+    var previousFragment = prevFragment
 
     var diceToThrow: ArrayList<Dice> = ArrayList<Dice>()
 

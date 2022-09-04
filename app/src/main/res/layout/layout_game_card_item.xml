@@ -46,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tv_game_subtitle"
+            android:gravity="center"
             android:text="The subtitle of the game"
             android:textSize="15sp"
             android:layout_marginTop="10dp" />

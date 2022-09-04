@@ -155,8 +155,7 @@ class FireBaseHelper {
 
              val gameRef = gamesRef.child(fbGameId)
 
-             ref.child("tick").setValue("Tick")
-
+             tick()
              exists = lastSnapshot?.child(GAMES_DIR)?.child(fbGameId)?.exists()
 
 
@@ -166,6 +165,10 @@ class FireBaseHelper {
             //while(exists == null){}
 
              return exists
+         }
+
+         fun tick(){
+             ref.child("tick").setValue("Tick")
          }
 
 

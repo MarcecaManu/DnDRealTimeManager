@@ -1,28 +1,24 @@
 package com.example.ddrealtimemanager.dm.real_time
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Parcelable
-import android.os.PersistableBundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import com.example.ddrealtimemanager.R
 import com.example.ddrealtimemanager.shared.Character
-import com.example.ddrealtimemanager.shared.DBHelper
 import com.example.ddrealtimemanager.shared.FireBaseHelper
 import com.example.ddrealtimemanager.shared.real_time.RT_Character
+import com.example.ddrealtimemanager.shared.real_time.RT_CharacterCreationFragment
+import com.example.ddrealtimemanager.shared.real_time.RT_CharacterVisualizationfragment
 import com.google.firebase.database.*
-import com.google.firebase.database.ktx.getValue
-import kotlinx.android.synthetic.main.activity_characters_card_list.*
 import kotlinx.android.synthetic.main.activity_dmreal_time_game.*
-import kotlinx.android.synthetic.main.rt_character_creation_fragment.*
+import com.example.ddrealtimemanager.shared.real_time.RT_DiceFragment
 import java.lang.Exception
 
 
@@ -137,6 +133,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
         rt_fight.visibility = View.VISIBLE
         rt_dice.visibility = View.VISIBLE
+        rt_fab_dm_add_character.visibility = View.VISIBLE
         rt_heal.setBackgroundColor(resources.getColor(R.color.purple_500))
         rt_damage.setBackgroundColor(resources.getColor(R.color.purple_500))
 
@@ -158,7 +155,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         if(extras != null) {
             fbGameId = extras.getString("fbGameId")!!
             gameRef = FireBaseHelper.gamesRef.child(fbGameId)
-            playersRef = gameRef.child("players")
+            playersRef = gameRef.child(FireBaseHelper.PLAYERS_DIR)
         }else{
             throw Exception("No extras?")
         }
@@ -205,6 +202,22 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         })
 
 
+        rt_fab_dm_gameid.setOnClickListener{
+            val adb = AlertDialog.Builder(this@DMRealTimeGameActivity)
+            adb.setTitle("Game ID:")
+            adb.setMessage(fbGameId.substring(1, fbGameId.length))
+            adb.setNegativeButton("Back", null)
+            adb.setPositiveButton("Copy to clipboard") { dialog, which ->
+                val clipboard: ClipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip: ClipData = ClipData.newPlainText("Game Id", fbGameId.substring(1, fbGameId.length))
+                clipboard.setPrimaryClip(clip)
+
+            }
+            adb.show()
+            true
+        }
+
+
 
         rt_dice.setOnClickListener{
             if(currentFragment != DICE){
@@ -230,7 +243,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
                 rt_fight.visibility = View.GONE
                 rt_heal.visibility = View.GONE
                 rt_damage.visibility = View.GONE
-                rt_fab_dm_add_character.visibility = View. GONE
+                rt_fab_dm_add_character.visibility = View.GONE
                 rt_fight_back.visibility = View.GONE
                 rt_dice.text = "Back"
 
@@ -509,8 +522,11 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
                 if(currentFragment == ACTIVE_CHARACTERS_LIST) {
                     activeListFragment!!.healDmgPressed("cancel", "none")
+                    rt_fab_dm_add_character.visibility = View.VISIBLE
                 }else if(currentFragment == FIGHT){
                     fightFragment!!.healDmgPressed("cancel", "none")
+                    rt_fab_dm_add_character.visibility = View.VISIBLE
+
                 }
             }
         }
@@ -629,6 +645,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
             rt_damage.visibility = View.VISIBLE
             rt_fab_dm_add_character.visibility = View.VISIBLE
             rt_fight.visibility = View.VISIBLE
+            rt_fight_back.visibility = View.GONE
         }
 
         if(fight){
@@ -640,11 +657,15 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
 
         activeListFragment = RT_ActiveCharactersCardListFragment()
-        val transaction = supportFragmentManager.beginTransaction()
-            .replace(R.id.rt_dm_fragment_container, activeListFragment!!)
-            .commit()
+        if(!supportFragmentManager.isDestroyed) {
+            val transaction = supportFragmentManager.beginTransaction()
+                .replace(R.id.rt_dm_fragment_container, activeListFragment!!)
+                .commit()
 
-        currentFragment = ACTIVE_CHARACTERS_LIST
+            currentFragment = ACTIVE_CHARACTERS_LIST
+        }
+
+
     }
 
     fun putStoredListFragment(){
@@ -702,7 +723,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
             rt_fight.visibility = View.GONE
         }
 
-        charVisFragment = RT_CharacterVisualizationfragment(character.firebaseId!!)
+        charVisFragment = RT_CharacterVisualizationfragment(character.firebaseId!!, true)
         val transaction = supportFragmentManager.beginTransaction()
             .replace(R.id.rt_dm_fragment_container, charVisFragment!!)
             .commit()

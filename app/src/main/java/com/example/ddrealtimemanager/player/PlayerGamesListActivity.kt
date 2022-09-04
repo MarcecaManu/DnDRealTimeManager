@@ -3,8 +3,10 @@ package com.example.ddrealtimemanager.player
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Adapter
 import android.widget.ListView
+import android.widget.Toast
 import com.example.ddrealtimemanager.R
 import com.example.ddrealtimemanager.shared.GameVisualizationActivity
 import com.example.ddrealtimemanager.shared.*
@@ -30,6 +32,8 @@ class PlayerGamesListActivity : AppCompatActivity() {
         val db = DBHelper(this)
         val gamesRef = FireBaseHelper.gamesRef
 
+
+
         refreshList()
 
         val gamesListRaw: ArrayList<Triple<String, String, Int>>
@@ -40,6 +44,11 @@ class PlayerGamesListActivity : AppCompatActivity() {
         gamesRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 gamesList.clear()
+
+
+                var foundCheck = false
+
+
 
                 gamesListRaw.forEach { localGame ->
                     snapshot.children.forEach { cloudGame ->
@@ -52,8 +61,17 @@ class PlayerGamesListActivity : AppCompatActivity() {
 
                             val game = Game(-1, name!!, subtitle!!, description!!, image!!, foundFbId)
                             gamesList.add(game)
+                            foundCheck = true
                         }
                     }
+
+                    if(!foundCheck){
+                        //A stored game has not been found!
+                        Toast.makeText(this@PlayerGamesListActivity,
+                            "A game could not be found! (ID: ${localGame.first})",
+                            Toast.LENGTH_SHORT).show()
+                    }
+                    foundCheck = false
                 }
 
                 refreshList()
@@ -74,6 +92,9 @@ class PlayerGamesListActivity : AppCompatActivity() {
             val intent = Intent(this, GameVisualizationActivity::class.java)
             val fbGame = currentAdapter!!.getItem(position)
             intent.putExtra("fbGameId", fbGame.firebaseId)
+
+            Log.v("CHECKVALUEFB", fbGame.firebaseId)
+
             intent.putExtra("name", fbGame.name)
             intent.putExtra("subtitle", fbGame.subtitle)
             intent.putExtra("description", fbGame.description)
@@ -81,6 +102,7 @@ class PlayerGamesListActivity : AppCompatActivity() {
             intent.putExtra("cloud", true)
 
             startActivity(intent)
+            finish()
 
         }
 
@@ -91,6 +113,19 @@ class PlayerGamesListActivity : AppCompatActivity() {
             intent.putExtra("join", true)
             startActivity(intent)
         }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+
+
 
     }
 

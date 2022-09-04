@@ -45,7 +45,7 @@ class CharacterListAdapter(private val context: Context, private var charactersL
             .into(newView!!.card_iv_player_image)
 
         newView.card_tv_player_name?.text = character.name
-        newView.card_tv_player_description?.text = character.clas + " " + character.race
+        newView.card_tv_player_description?.text = character.race + " " + character.clas
 
         return newView
     }

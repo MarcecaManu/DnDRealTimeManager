@@ -58,6 +58,8 @@ class RT_CharactersCardListAdapter(private val context: Context, private var cha
             newView.container1.setBackgroundColor(Color.LTGRAY)
         }
 
+
+
         if(RT_ActiveCharactersCardListFragment?.selectedCharactersFBid.contains(character.firebaseId) ||
                 RT_FightFragment?.selectedCharactersFBid.contains(character.firebaseId)){
             if(DMRealTimeGameActivity.heal){
@@ -69,18 +71,20 @@ class RT_CharactersCardListAdapter(private val context: Context, private var cha
             else if(DMRealTimeGameActivity.fightBtnSelected){
                 newView.container1.setBackgroundColor(Color.parseColor("#BB86FC"))
             }
-        }else{
+        }else if(DMRealTimeGameActivity.fight && DMRealTimeGameActivity.currentFragment == DMRealTimeGameActivity.FIGHT){
+            if(position == 0){
+                newView.container1.setBackgroundColor(Color.parseColor("#BB86FC"))
+            }
+        }else {
             newView.container1.setBackgroundColor(Color.WHITE)
 
         }
 
 
 
-        if(DMRealTimeGameActivity.fight && DMRealTimeGameActivity.currentFragment == DMRealTimeGameActivity.FIGHT){
-            if(position == 0){
-                newView.container1.setBackgroundColor(Color.parseColor("#BB86FC"))
-            }
-        }
+
+
+
 
 
         return newView
