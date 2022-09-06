@@ -89,7 +89,6 @@ class CharCreationForGameActivity() : AppCompatActivity() {
                 input.inputType = InputType.TYPE_CLASS_TEXT
                 adb.setView(input)
 
-                //adb.setMessage("This will not remove it from local storage.")
 
                 adb.setNegativeButton("Cancel", null)
                 adb.setPositiveButton("Done!"){ dialog, which ->
@@ -125,10 +124,18 @@ class CharCreationForGameActivity() : AppCompatActivity() {
                         val intent = Intent(this, PlayerGamesListActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        //startActivity(intent)
+
+
+                        /*
+                         * Here we have a hardcoded, simple but improvised solution to cover
+                         * the time the application needs to send the info to the realtime
+                         * database.
+                         * I understand that this does not solve the no-internet problem,
+                         * but is instead a, as said before, improvised solution
+                         */
 
                         val tempDialog: ProgressDialog = ProgressDialog(this)
-                        tempDialog.setMessage("Please wait...")
+                        tempDialog.setMessage("Loading character...")
                         tempDialog.setCancelable(false)
                         tempDialog.setProgress(i)
                         tempDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER)
@@ -137,7 +144,7 @@ class CharCreationForGameActivity() : AppCompatActivity() {
                         tempDialog.show()
                         myCountDownTimer = object: CountDownTimer(2000, 1000){
                             override fun onTick(millisUntilFinished: Long){
-                                tempDialog.setMessage("Please wait...")
+                                tempDialog.setMessage("Loading character...")
                             }
 
                             override fun onFinish(){

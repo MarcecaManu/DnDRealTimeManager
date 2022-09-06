@@ -18,7 +18,9 @@
         app:layout_constraintTop_toTopOf="parent"
         android:divider="@android:color/transparent"
         android:clickable="false"
-        android:listSelector="@android:color/transparent"/>
+        android:listSelector="@android:color/transparent"
+
+        android:background="@drawable/scroll"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"

@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".dm.NewGameActivity">
+    tools:context=".dm.NewGameActivity"
+
+    android:background="@drawable/scroll">
 
 
     <EditText
@@ -28,7 +30,7 @@
         android:layout_height="73dp"
         android:ems="10"
         android:hint="Subtitle"
-        android:inputType="textPersonName"
+        android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/etGameCreationDescr"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -41,7 +43,7 @@
         android:layout_height="73dp"
         android:ems="10"
         android:hint="Description"
-        android:inputType="textPersonName"
+        android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/etGameCreationImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -55,7 +57,7 @@
         android:layout_height="73dp"
         android:ems="10"
         android:hint="Image URL"
-        android:inputType="textPersonName"
+        android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/btnGameCreationStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

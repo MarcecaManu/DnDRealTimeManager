@@ -12,7 +12,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.ddrealtimemanager.R
 import com.example.ddrealtimemanager.dm.NewGameActivity
 import com.example.ddrealtimemanager.dm.real_time.DMRealTimeGameActivity
-import com.example.ddrealtimemanager.player.PlayerGamesListActivity
 import com.example.ddrealtimemanager.player.real_time.PlayerRealTimeGameActivity
 import kotlinx.android.synthetic.main.activity_game_visualization.*
 

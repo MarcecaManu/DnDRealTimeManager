@@ -188,21 +188,4 @@ class RT_CharacterCreationFragment(character: RT_Character, previousFrag: Int): 
         return result
     }
 
-    /*
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        val level = rt_charcre_et_level.text.toString().toInt()
-        val ac = rt_charcre_et_armorclass.text.toString().toInt()
-        val maxHp = rt_charcre_et_maxhp.text.toString().toInt()
-        val initiative = rt_charcre_et_initiative.text.toString().toInt()
-        val image = rt_charcre_et_imageurl.text.toString()
-
-        outState.putInt("level", level)
-        outState.putInt("ac", ac)
-        outState.putInt("maxHp",maxHp)
-        outState.putInt("initiative", initiative)
-        outState.putString("image", image)
-    }
-*/
 }

@@ -4,8 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Adapter
-import android.widget.ListView
 import android.widget.Toast
 import com.example.ddrealtimemanager.R
 import com.example.ddrealtimemanager.shared.GameVisualizationActivity
@@ -45,10 +43,7 @@ class PlayerGamesListActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 gamesList.clear()
 
-
                 var foundCheck = false
-
-
 
                 gamesListRaw.forEach { localGame ->
                     snapshot.children.forEach { cloudGame ->
@@ -78,7 +73,7 @@ class PlayerGamesListActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Log.w("firebase", "Failed to read value.", error.toException())
             }
 
         })
@@ -116,18 +111,6 @@ class PlayerGamesListActivity : AppCompatActivity() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-
-
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-
-
-
-    }
 
     fun refreshList(){
         val newAdapter = GameListAdapter(this, gamesList)

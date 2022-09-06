@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import com.example.ddrealtimemanager.R
 import com.example.ddrealtimemanager.shared.Character
 import com.example.ddrealtimemanager.shared.DBHelper
-import kotlinx.android.synthetic.main.activity_characters_card_list.*
 import kotlinx.android.synthetic.main.rt_stored_charaters_list_fragment.*
 import java.lang.ClassCastException
 

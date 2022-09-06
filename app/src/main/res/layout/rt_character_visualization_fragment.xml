@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rt_charvis_main_background"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/scroll">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -129,7 +130,8 @@
         app:layout_constraintEnd_toStartOf="@+id/rt_charvis_tv_ac"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rt_charvis_pb_healthbar" />
+        app:layout_constraintTop_toBottomOf="@id/rt_charvis_pb_healthbar"
+        android:textColor="@color/black"/>
 
     <TextView
         android:id="@+id/rt_charvis_tv_ac"
@@ -142,7 +144,8 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/rt_charvis_tv_name"
         app:layout_constraintTop_toBottomOf="@id/rt_charvis_pb_healthbar"
-        app:layout_constraintVertical_bias="0.494" />
+        app:layout_constraintVertical_bias="0.494"
+        android:textColor="@color/black"/>
 
     <TextView
         android:id="@+id/rt_charvis_tv_race"
@@ -155,7 +158,8 @@
         app:layout_constraintEnd_toStartOf="@+id/rt_charvis_tv_class"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rt_charvis_tv_name" />
+        app:layout_constraintTop_toBottomOf="@+id/rt_charvis_tv_name"
+        android:textColor="@color/black"/>
 
     <TextView
         android:id="@+id/rt_charvis_tv_class"
@@ -169,6 +173,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/rt_charvis_tv_race"
         app:layout_constraintTop_toBottomOf="@+id/rt_charvis_tv_name"
+        android:textColor="@color/black"
         />
 
     <TextView
@@ -180,6 +185,7 @@
         app:layout_constraintBottom_toTopOf="@+id/rt_charvis_tv_description"
         app:layout_constraintEnd_toStartOf="@+id/rt_charvis_tv_initiative"
         app:layout_constraintTop_toBottomOf="@+id/rt_charvis_tv_race"
+        android:textColor="@color/black"
         android:textSize="20sp"/>
 
     <TextView
@@ -193,6 +199,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/rt_charvis_tv_level"
         app:layout_constraintHorizontal_bias="0.5"
+        android:textColor="@color/black"
         android:textSize="20sp"/>
 
     <TextView
@@ -204,5 +211,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rt_charvis_tv_level" />
+        app:layout_constraintTop_toBottomOf="@+id/rt_charvis_tv_level"
+        android:textColor="@color/black"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

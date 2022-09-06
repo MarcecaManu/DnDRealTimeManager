@@ -3,14 +3,10 @@ package com.example.ddrealtimemanager.shared.real_time
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -96,17 +92,6 @@ class RT_CharacterVisualizationfragment(selectedCharacterFBid: String, dm: Boole
 
         rt_charvis_pb_healthbar_item.progress = percentageHP
 
-        ////////////COLOR TEST
-        //val healthBarColor = Utils().getProgressColorOnPercentage(percentageHP)
-       // val convertedColor = Color.parseColor(healthBarColor)
-
-
-        //val progressbarDrawable: LayerDrawable = rt_charvis_pb_healthbar_item.progressDrawable as LayerDrawable
-        //val progressDrawable: Drawable = progressbarDrawable.getDrawable(1)
-
-        //R.color.dynamic.progressDrawable.setColorFilter(ContextCompat.getColor(requireContext(), R.color.dynamic), PorterDuff.Mode.SRC_IN)
-
-////////////////////////
 
         rt_charvis_tv_name.text = character.name
         rt_charvis_tv_race.text = character.race
@@ -117,11 +102,6 @@ class RT_CharacterVisualizationfragment(selectedCharacterFBid: String, dm: Boole
         rt_charvis_tv_description.text = character.description
 
 
-
-
-        //rt_charvis_btn_back.setOnClickListener{
-        //    backListener?.onBackButtonSelected()
-        //}
 
         rt_charvis_fab_more.setOnClickListener{
             if(rt_charvis_fab_delete.visibility == View.GONE){
@@ -158,12 +138,12 @@ class RT_CharacterVisualizationfragment(selectedCharacterFBid: String, dm: Boole
     }
 
     fun setTurnLayout(){
-        rt_charvis_main_background.setBackgroundColor(Color.parseColor("#BB86FC"))
+        rt_charvis_iv_charImage.background = resources.getDrawable(R.drawable.imageview_border_turn)
 
     }
 
     fun endTurnLayout(){
-        rt_charvis_main_background.setBackgroundColor(Color.WHITE)
+        rt_charvis_iv_charImage.background = resources.getDrawable(R.drawable.imageview_border)
     }
 
     fun damageAnimation(){
@@ -175,7 +155,6 @@ class RT_CharacterVisualizationfragment(selectedCharacterFBid: String, dm: Boole
     }
 
     fun endFightForPlayer(){
-        rt_charvis_main_background.setBackgroundColor(Color.WHITE)
         rt_charvis_iv_charImage.background = null
         rt_charvis_fab_more.visibility = View.VISIBLE
         //rt_charvis_fab_delete.visibility = View.GONE

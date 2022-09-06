@@ -2,24 +2,18 @@ package com.example.ddrealtimemanager.dm.real_time
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.Toast
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import com.example.ddrealtimemanager.R
 import com.example.ddrealtimemanager.shared.FireBaseHelper
 import com.example.ddrealtimemanager.shared.real_time.RT_Character
 import com.example.ddrealtimemanager.shared.real_time.Dice
-import kotlinx.android.synthetic.main.activity_dmreal_time_game.*
-import kotlinx.android.synthetic.main.layout_rt_player_card_item.view.*
-import kotlinx.android.synthetic.main.rt_active_characters_list_fragment.*
 import kotlinx.android.synthetic.main.rt_fight_fragment.*
-import kotlinx.android.synthetic.main.rt_fight_fragment.view.*
 
 class RT_FightFragment(fightersFBlist: ArrayList<String>? = null, turn: Int = 1, currentPosition: Int = 0, fightingCharactersList: ArrayList<RT_Character>? = null): Fragment() {
 
@@ -55,7 +49,9 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>? = null, turn: Int = 1,
 
 
 
-    //This functions works by setting the first element in the middle of the list
+    /*
+     * Based on the situation, the fighters list is created and ordered, or just taken from the arguments.
+     */
 
     init{
 
@@ -103,7 +99,8 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>? = null, turn: Int = 1,
     }
 
 
-    //This functions shifts the characters list by 1 "to the right"
+    //This function shifts the characters list by 1 "against the fight order"
+
     fun previousFighterList(){
 
         if(turn == 1 && currentPosition == 0){
@@ -152,6 +149,9 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>? = null, turn: Int = 1,
 
     }
 
+
+    //This functions shifts the characters list by 1 "progressing the fight order"
+
     fun nextFighterList(){
 
         val charPrevTurn = fightingCharacters!![0]
@@ -197,7 +197,7 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>? = null, turn: Int = 1,
         }else {
             throw ClassCastException(context.toString()
                     + "must implement "
-                    + "RT_FightGragment.OnFightingCharacterSelectedListener")
+                    + "RT_FightFragment.OnFightingCharacterSelectedListener")
         }
     }
 
@@ -213,13 +213,13 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>? = null, turn: Int = 1,
         val lv: ListView = view.findViewById(R.id.rt_fight_listview_characters)
 
 
-        //fightingCharacters = orderFightersByInitiativeAndThrow(fightersFBlist)
-
         currentAdapter = RT_CharactersCardListAdapter(activity as DMRealTimeGameActivity, fightingCharacters!!)
 
 
 
 
+        // The itemclicklistener must behave in the preferred way, which can be for heal/damage
+        // functionality, or just for visualizing a character.
 
         lv.setOnItemClickListener { parent, view, position, id ->
 
@@ -252,6 +252,8 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>? = null, turn: Int = 1,
                 }
 
 
+                // Whenever a heal/damage operation has begun, a button to confirm changes is shown.
+                // If pressed, these actions are performed.
 
                 rt_fight_btn_damageheal.setOnClickListener{
                     val value = rt_fight_et_damageheal.text.toString().trim()
@@ -280,6 +282,14 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>? = null, turn: Int = 1,
 
 
     }
+
+
+    /*
+     * This function works as a kind of event listener from the DM Activity, whenever a
+     * heal/damage operation is requested.
+     *
+     * Its basic function is to set the layout based on the requested action.
+     */
 
     fun healDmgPressed(next: String, previous: String){
 
@@ -350,6 +360,12 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>? = null, turn: Int = 1,
 
     }
 
+
+    /*
+     * This function is called whenever there's a change in the firebase database data.
+     * The fighting characters are updated.
+     */
+
     fun refreshCharacters(){
         val updatedCharacters = DMRealTimeGameActivity.charactersList
 
@@ -363,10 +379,12 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>? = null, turn: Int = 1,
 
         }
 
-        //refreshList()
     }
 
 
+    /*
+     * This important function resets the adapter, and it's normally called whenever some data has changed.
+     */
 
     fun refreshList(){
 
@@ -377,12 +395,10 @@ class RT_FightFragment(fightersFBlist: ArrayList<String>? = null, turn: Int = 1,
 
         rt_fight_listview_characters.adapter = newAdapter
 
-        //val first = lv.firstVisiblePosition
         val firstChar = rt_fight_listview_characters.adapter.getView(0, null, rt_fight_listview_characters)
 
         firstChar.setBackgroundColor(resources.getColor(R.color.purple_200))
 
-        //rt_fight_listview_characters.post(Runnable { rt_fight_listview_characters.setSelection(0) })
 
         currentAdapter = newAdapter
     }

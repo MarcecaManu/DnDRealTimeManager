@@ -30,16 +30,8 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
 
 
-
     lateinit var gameRef: DatabaseReference
     lateinit var playersRef: DatabaseReference
-
-
-
-
-
-
-
 
 
 
@@ -65,8 +57,6 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
         lateinit var fbGameId: String
 
-        val CHAR_VIS_FBID_KEY = "charvis"
-
         val ACTIVE_CHARACTERS_LIST = 1
         val CHARACTER_VISUALIZATION = 2
         val STORED_CHARACTERS_LIST = 3
@@ -82,8 +72,13 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         var fightBtnSelected = false
         var fight = false
 
-
+        /*
+        * Probably the most important variable in the activity.
+        * charactersList is updated so that the characters it contains are the same
+        * found in the Firebase database, in real time
+        */
         var charactersList: ArrayList<RT_Character>? = ArrayList<RT_Character>()
+
 
         fun getFbCharacters(): ArrayList<RT_Character>?{
             return charactersList
@@ -97,46 +92,6 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
             }
             return null
         }
-
-
-    }
-
-
-    override fun onFightingCharItemSelected(fbCharId: String) {
-
-            //get selected character
-        val character: RT_Character = getSpecificFbCharacter(fbCharId)!!
-
-            //Change fragment and show selected character
-        putCharVisualizationFragment(character)
-
-    }
-
-    override fun onActiveCharItemSelected(fbCharId: String) {
-        val character: RT_Character = getSpecificFbCharacter(fbCharId)!!
-
-        //Change fragment and show selected character
-        putCharVisualizationFragment(character)
-    }
-
-    override fun onActiveCharItemMultipleSelection(fbCharIdList: ArrayList<String>, change: Int) {
-
-        fbCharIdList.forEach{
-            val character = getSpecificFbCharacter(it)
-            var newCurrentHp = character!!.currentHp + change
-            if(newCurrentHp > character.maxHp){newCurrentHp = character.maxHp}
-            FireBaseHelper.fbUpdateCharacterHealth(newCurrentHp, it, fbGameId)
-        }
-
-        heal = false
-        damage = false
-
-        rt_fight.visibility = View.VISIBLE
-        rt_dice.visibility = View.VISIBLE
-        rt_fab_dm_add_character.visibility = View.VISIBLE
-        rt_heal.setBackgroundColor(resources.getColor(R.color.purple_500))
-        rt_damage.setBackgroundColor(resources.getColor(R.color.purple_500))
-
 
 
     }
@@ -161,8 +116,19 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         }
 
         rt_fight_back.visibility = View.GONE
+
+        /*
+        * This function is called at the start of the activity, so that if the application
+        * is closed while a fight is going on, the database will just remove everything related
+        * to the ongoing fight
+        */
+        FireBaseHelper.fbEndFight(fbGameId)
+
+        //First fragment to be shown in this activity
         putActiveListFragment()
 
+
+        //This function retrieves any data changed related to characters and an eventual fight
 
         playersRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -202,6 +168,12 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         })
 
 
+        /*
+         * Pressing the "i" button in top left, will show the game ID, so that the DM can
+         * send it to the players who want to join
+         */
+
+
         rt_fab_dm_gameid.setOnClickListener{
             val adb = AlertDialog.Builder(this@DMRealTimeGameActivity)
             adb.setTitle("Game ID:")
@@ -218,20 +190,10 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         }
 
 
+        //The dice button generates a "seamless" parallel functionality for dice to be shown and used
 
         rt_dice.setOnClickListener{
             if(currentFragment != DICE){
-
-/*
-                if(currentFragment == CHARACTER_CREATION){
-                    //Store inserted data
-                    charCreationCharacter!!.level = savedInstanceState?.getInt("level")!!
-                    charCreationCharacter!!.ac = savedInstanceState?.getInt("ac")!!
-                    charCreationCharacter!!.maxHp = savedInstanceState?.getInt("maxHp")!!
-                    charCreationCharacter!!.initiative = savedInstanceState?.getInt("initiative")!!
-                    charCreationCharacter!!.image = savedInstanceState?.getString("image")!!
-                }
-                */
 
                 if(fight){
                     recordFightCharacters = fightFragment!!.fightingCharacters
@@ -268,11 +230,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
                 }
 
-               /* rt_fight.visibility = View.VISIBLE
-                rt_heal.visibility = View.VISIBLE
-                rt_damage.visibility = View.VISIBLE
-                rt_fab_dm_add_character.visibility = View.VISIBLE
-                rt_fight_back.visibility = View.GONE */
+
                 rt_dice.text = "Dice"
 
 
@@ -281,8 +239,15 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
         }
 
-        //This button will show only on character selection for fight, and on char visualization
+        /*
+         * This button will show only on character visualization (both fight and normal state),
+         * on character selection for a fight,
+         * and on character selection during a fight.
+         */
+
         rt_fight_back.setOnClickListener {
+
+            //I
 
             if(fightBtnSelected) {
                 //Cancel
@@ -323,13 +288,21 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         }
 
 
+        /*
+         * This button starts or stops a fight
+         */
 
         rt_fight.setOnClickListener{
 
             if(!fight || fightBtnSelected) {
 
+                //If there's no fight going on, OR the fight button has been pressed before
+
                 //Popup prompting to select the characters
                 if (!fightBtnSelected) {
+
+                    //The fight button wasn't pressed before! It's a new fight: start char selection
+
                     Toast.makeText(this, "Select the fighters!", Toast.LENGTH_SHORT).show()
                     if (currentFragment != ACTIVE_CHARACTERS_LIST) {
                         putActiveListFragment()
@@ -352,6 +325,13 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
                 } else if (fightBtnSelected) {
 
+                    /* The fight button was pressed before. This means that:
+                     *  - We're in the middle of character selection, and the user wants to start
+                     *    the fight using the selected characters
+                     *
+                     *  - We're in the middle of a fight, and the user is adding characters
+                     *    to the fighting ones.
+                     */
 
                     if (activeListFragment!!.checkCharactersAreSelected()) {
                         if(!fight) {
@@ -386,6 +366,9 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
                             adb.show()
                             true
                         }else if (fight){
+
+                            //Fight is going on, the user wants to add the characters they selected.
+
                             //Restore everything
                             activeListFragment!!.refreshList()
 
@@ -399,7 +382,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
                             rt_fight.text = "End fight"
 
                             fightBtnSelected = false
-                            //fight = true
+
 
                             val newFighters = activeListFragment!!.selectFighters()
 
@@ -410,16 +393,13 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
                             }
 
 
-
                             putFightFragment(recordFightersFbList, recordFightTurn!!, recordFightPosition!!, recordFightCharacters)
                         }
 
-                        //ALL READY!
-                        //if (!ready) {
-                        //    //TODO
-
-                       // }
                     } else {
+
+                        //No characters selected
+
                         Toast.makeText(
                             this,
                             "You have to select at least a character!",
@@ -430,6 +410,8 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
                 }
 
             }else if(fight){
+
+                //We're in a fight, which means that the user wants to end it.
 
                 val adb = AlertDialog.Builder(this@DMRealTimeGameActivity)
                 adb.setTitle("End the fight?")
@@ -473,7 +455,10 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
 
 
-
+        /*
+         * Here we have the heal and damage button. Their usage has to be exclusive in both
+         * functionality and layout, and that's why I needed so much lines of code.
+         */
 
         rt_heal.setOnClickListener{
 
@@ -584,6 +569,8 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
 
 
+        // Pressing this button shows the local characters from the users, and gives the possibility
+        // to add them to the current game.
 
         rt_fab_dm_add_character.setOnClickListener{
             if(!fight){
@@ -613,30 +600,15 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
 
 
-    override fun onBackPressed() {
-
-        //TODO IF FIGHT IS GOING ON, TERMINATE IT!
-
-        if(fight){
-            Toast.makeText(this, "End the fight before leaving!", Toast.LENGTH_SHORT).show()
-        }else {
-
-
-            //Ask if you want the quit the game
-            val adb = AlertDialog.Builder(this@DMRealTimeGameActivity)
-            adb.setTitle("Quit the game?")
-            adb.setMessage("Are you sure you want to quit the game?")
-            adb.setNegativeButton("Cancel", null)
-            adb.setPositiveButton("I am!") { dialog, which ->
-
-                currentFragment = 0
-                finish()
-            }
-            adb.show()
-            true
-        }
-
-    }
+    /*
+     ****************  FRAGMENT SWITCH FUNCTIONS  ****************
+     *
+     * These functions are an a attempt to modularize the many fragment interchanges in this
+     * activity.
+     *
+     * They basically do what it's written in their name, with some consideration on the possible
+     * fragments which they're substituting.
+     */
 
     fun putActiveListFragment(){
 
@@ -668,6 +640,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
     }
 
+
     fun putStoredListFragment(){
 
         rt_heal.visibility = View.GONE
@@ -685,6 +658,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         currentFragment = STORED_CHARACTERS_LIST
     }
 
+
     fun putCharCreationFragment(character: RT_Character, previousFragment: Int){
 
         rt_heal.visibility = View.GONE
@@ -692,6 +666,12 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         rt_fab_dm_add_character.visibility = View.GONE
         rt_fight.visibility = View.GONE
         rt_fight_back.visibility = View.GONE
+
+        if(fight){
+            recordFightTurn = fightFragment!!.turn
+            recordFightPosition = fightFragment!!.currentPosition
+            recordFightCharacters = fightFragment!!.fightingCharacters
+        }
 
         charCreationFragment = RT_CharacterCreationFragment(character,previousFragment)
         val transaction = supportFragmentManager.beginTransaction()
@@ -703,6 +683,7 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
         currentFragment = CHARACTER_CREATION
     }
+
 
     fun putCharVisualizationFragment(character: RT_Character){
 
@@ -742,6 +723,10 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         currentFragment = DICE
     }
 
+
+    // The many optional arguments of this function are needed to restore the fight state whenever
+    // other fragments substitute it while a fight is still going on.
+
     fun putFightFragment(fightersFBlist: ArrayList<String>?, turn: Int = 1, position: Int = 0, fightingCharacters: ArrayList<RT_Character>? = null){
 
         rt_heal.visibility = View.VISIBLE
@@ -758,6 +743,102 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
     }
 
 
+
+
+    /*
+     ****************  USER INPUT SECTION  ****************
+     *
+     * Here we have functions which control the button selection of the many buttons which cannot
+     * be controlled from the onCreate functions, which means:
+     *
+     *  - Buttons which are part of fragments
+     *
+     *  - The android back button, which was overridden so that the user accessibility to the backstack
+     *    is controlled.
+     */
+
+
+    // Android back button override. If the game is going on, the user will be asked a confirmation
+    // to quit the game.
+    // During a fight, it will simply do nothing and hint the user to end the fight before leaving.
+
+    override fun onBackPressed() {
+
+
+        if(fight){
+            Toast.makeText(this, "End the fight before leaving!", Toast.LENGTH_SHORT).show()
+        }else {
+
+
+            //Ask if you want the quit the game
+            val adb = AlertDialog.Builder(this@DMRealTimeGameActivity)
+            adb.setTitle("Quit the game?")
+            adb.setMessage("Are you sure you want to quit the game?")
+            adb.setNegativeButton("Cancel", null)
+            adb.setPositiveButton("I am!") { dialog, which ->
+
+                currentFragment = 0
+                finish()
+            }
+            adb.show()
+            true
+        }
+
+    }
+
+
+    // Part of the Active fragment, is triggered when a fight is occurring and the user
+    // clicks a character, so that its info can be shown in a char visualization fragment.
+
+    override fun onFightingCharItemSelected(fbCharId: String) {
+
+        //get selected character
+        val character: RT_Character = getSpecificFbCharacter(fbCharId)!!
+
+        //Change fragment and show selected character
+        putCharVisualizationFragment(character)
+
+    }
+
+    // Part of the Active fragment, it's triggered when the user clicks a character,
+    // so that its info can be shown in a char visualization fragment.
+
+    override fun onActiveCharItemSelected(fbCharId: String) {
+        val character: RT_Character = getSpecificFbCharacter(fbCharId)!!
+
+        //Change fragment and show selected character
+        putCharVisualizationFragment(character)
+    }
+
+
+    // Part of the Active fragment, it's triggered when multiple characters are being selected
+    // and the user has confirmed the heal/damage action on them.
+
+    override fun onActiveCharItemMultipleSelection(fbCharIdList: ArrayList<String>, change: Int) {
+
+        fbCharIdList.forEach{
+            val character = getSpecificFbCharacter(it)
+            var newCurrentHp = character!!.currentHp + change
+            if(newCurrentHp > character.maxHp){newCurrentHp = character.maxHp}
+            FireBaseHelper.fbUpdateCharacterHealth(newCurrentHp, it, fbGameId)
+        }
+
+        heal = false
+        damage = false
+
+        rt_fight.visibility = View.VISIBLE
+        rt_dice.visibility = View.VISIBLE
+        rt_fab_dm_add_character.visibility = View.VISIBLE
+        rt_heal.setBackgroundColor(resources.getColor(R.color.purple_500))
+        rt_damage.setBackgroundColor(resources.getColor(R.color.purple_500))
+
+    }
+
+
+
+    // Part of the char visualization fragment, it's clicked when the user wants to
+    // delete a particular character.
+
     override fun onDeleteButtonSelected(fbCharId: String) {
         val adb = AlertDialog.Builder(this@DMRealTimeGameActivity)
         adb.setTitle("Remove character from the game?")
@@ -766,17 +847,41 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
         adb.setPositiveButton("Yes!"){ dialog, which ->
 
             FireBaseHelper.fbRemoveCharacterFromGame(fbCharId, fbGameId)
-            putActiveListFragment()
+
+            if(fight){
+                putFightFragment(recordFightersFbList, recordFightTurn!!, recordFightPosition!!, recordFightCharacters!!)
+            }else {
+                putActiveListFragment()
+            }
         }
         adb.show()
         true
     }
 
+    // Part of the char visualization fragment, it's clicked when the user wants to edit
+    // a particular character.
+    // Char creation fragment is shown.
+
     override fun onEditButtonSelected(character: RT_Character) {
         //Show character creation phase
-        putCharCreationFragment(character, CHARACTER_VISUALIZATION)
+        if(fight){
+            recordFightTurn = fightFragment!!.turn
+            recordFightPosition = fightFragment!!.currentPosition
+            recordFightCharacters = fightFragment!!.fightingCharacters
+            putCharCreationFragment(character, FIGHT)
+        }else{
+
+            putCharCreationFragment(character, CHARACTER_VISUALIZATION)
+        }
 
     }
+
+
+    // Part of the stored list fragment, it's triggered when a character from the list
+    // of local characters is clicked, meaning that the user wants to add them to the
+    // current game.
+    // This character needs more data to be considered an active character, so a char creation
+    // fragment is called.
 
     override fun onStoredCharItemSelected(character: Character) {
 
@@ -785,9 +890,20 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
 
     }
 
+    // Part of the stored list fragment, leads back to the active list fragment.
+
     override fun onStoredListBackButtonSelected() {
         putActiveListFragment()
     }
+
+    /*
+     * Part of the char creation fragment, it's clicked when the user has inserted all the data
+     * needed for an active character. This data is checked for validity, and in case of success,
+     * the character is added to the game and the active list fragment is shown (which now shows the
+     * new character).
+     * This can also happen during a fight (a character is being edited), and in that case the
+     * fight must be taken from where it was.
+     */
 
     override fun onCharacterCreationAddSelected(character: RT_Character) {
         //push the new character, or edit it
@@ -797,19 +913,32 @@ class DMRealTimeGameActivity : AppCompatActivity(), RT_ActiveCharactersCardListF
             FireBaseHelper.fbUpdatecharacter(character, fbGameId)
         }
 
-        //Change fragment to active list
-        putActiveListFragment()
-
-
-
+        //Change fragment to fight or active list
+        if(fight){
+            putFightFragment(recordFightersFbList, recordFightTurn!!, recordFightPosition!!, recordFightCharacters!!)
+        }else {
+            putActiveListFragment()
+        }
 
     }
+
+    // Part of the char creation fragment, leads back to the previous fragment
+    // or just to the fight fragment, is a fight is going on.
 
     override fun onCharacterCreationBackSelected(previousFragment: Int, character: RT_Character?) {
-        if(previousFragment == STORED_CHARACTERS_LIST){putStoredListFragment()}
-        if(previousFragment == CHARACTER_VISUALIZATION){putCharVisualizationFragment(character!!)}
-    }
+        if(fight){
+            putFightFragment(recordFightersFbList, recordFightTurn!!, recordFightPosition!!, recordFightCharacters!!)
+        }else {
 
+            if (previousFragment == STORED_CHARACTERS_LIST) {
+                putStoredListFragment()
+            }
+            if (previousFragment == CHARACTER_VISUALIZATION) {
+                putCharVisualizationFragment(character!!)
+            }
+        }
+
+    }
 
 
 

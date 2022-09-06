@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.ddrealtimemanager.R
 import com.example.ddrealtimemanager.shared.real_time.RT_Character
 import kotlinx.android.synthetic.main.layout_rt_player_card_item.view.*
+
 
 class RT_CharactersCardListAdapter(private val context: Context, private var charactersList: ArrayList<RT_Character>): BaseAdapter() {
 
@@ -59,6 +59,7 @@ class RT_CharactersCardListAdapter(private val context: Context, private var cha
         }
 
 
+        // Here the background color of the card is set, based on the situation.
 
         if(RT_ActiveCharactersCardListFragment?.selectedCharactersFBid.contains(character.firebaseId) ||
                 RT_FightFragment?.selectedCharactersFBid.contains(character.firebaseId)){

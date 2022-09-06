@@ -1,18 +1,13 @@
 package com.example.ddrealtimemanager.player.real_time
 
-import android.app.ProgressDialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+
 import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import com.example.ddrealtimemanager.R
-import com.example.ddrealtimemanager.dm.real_time.DMRealTimeGameActivity
 import com.example.ddrealtimemanager.shared.DBHelper
 import com.example.ddrealtimemanager.shared.FireBaseHelper
 import com.example.ddrealtimemanager.shared.real_time.RT_Character
@@ -22,11 +17,13 @@ import com.example.ddrealtimemanager.shared.real_time.RT_DiceFragment
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.core.Context
-import kotlinx.android.synthetic.main.activity_character_visualization.*
-import kotlinx.android.synthetic.main.activity_dmreal_time_game.*
 import kotlinx.android.synthetic.main.activity_player_real_time_game.*
-import kotlinx.android.synthetic.main.rt_character_visualization_fragment.*
+
+
+/*
+ * This activity works as a more limited version of the DM activity; The functions are
+ * very similar.
+ */
 
 class PlayerRealTimeGameActivity : AppCompatActivity(),
         RT_CharacterVisualizationfragment.OnCharVisualizationListener,
@@ -108,7 +105,7 @@ class PlayerRealTimeGameActivity : AppCompatActivity(),
 
                     //Fight Changes!
                     when(currentFragment){
-                       // DICE -> {diceFragment!!.previousFragment = CHAR_VISUALIZATION}
+
                         CHAR_EDIT -> {
                             putCharVisFragment()
                             Toast.makeText(this@PlayerRealTimeGameActivity,
@@ -145,7 +142,7 @@ class PlayerRealTimeGameActivity : AppCompatActivity(),
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Log.w("firebase", "Failed to read value.", error.toException())
             }
 
         })
@@ -243,16 +240,8 @@ class PlayerRealTimeGameActivity : AppCompatActivity(),
 
         Toast.makeText(this, "It's your turn!", Toast.LENGTH_SHORT).show()
 
-        //if(currentFragment == CHAR_VISUALIZATION){
-        //    putCharVisFragment()
-       // }
     }
 
-    private fun endTurn(){
-        if(currentFragment == CHAR_VISUALIZATION){
-            charVisFragment!!.endTurnLayout()
-        }
-    }
 
     override fun onCharacterCreationAddSelected(character: RT_Character) {
         FireBaseHelper.fbUpdatecharacter(character, fbGameId)

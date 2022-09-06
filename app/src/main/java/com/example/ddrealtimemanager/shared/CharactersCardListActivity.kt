@@ -4,12 +4,9 @@ import CharacterListAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ddrealtimemanager.R
 import kotlinx.android.synthetic.main.activity_characters_card_list.*
-import kotlinx.android.synthetic.main.activity_game_list.*
-import kotlinx.android.synthetic.main.layout_character_item.*
 
 
 class CharactersCardListActivity : AppCompatActivity() {

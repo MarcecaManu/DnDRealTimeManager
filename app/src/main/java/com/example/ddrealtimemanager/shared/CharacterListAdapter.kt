@@ -7,9 +7,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.ddrealtimemanager.R
 import com.example.ddrealtimemanager.shared.Character
-import com.example.ddrealtimemanager.shared.Game
 import kotlinx.android.synthetic.main.layout_character_item.view.*
-import kotlinx.android.synthetic.main.layout_game_card_item.view.*
 
 class CharacterListAdapter(private val context: Context, private var charactersList: List<Character>): BaseAdapter() {
     override fun getCount(): Int {

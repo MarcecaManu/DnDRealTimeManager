@@ -4,9 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.ddrealtimemanager.R
-import com.example.ddrealtimemanager.player.real_time.PlayerRealTimeGameActivity
 import com.example.ddrealtimemanager.shared.CharactersCardListActivity
-import com.example.ddrealtimemanager.shared.CharactersListActivity
 import kotlinx.android.synthetic.main.activity_player.*
 
 class PlayerActivity : AppCompatActivity() {

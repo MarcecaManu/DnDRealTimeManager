@@ -2,7 +2,6 @@ package com.example.ddrealtimemanager.dm.real_time
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +9,8 @@ import android.view.ViewGroup
 import android.widget.ListView
 import androidx.fragment.app.Fragment
 import com.example.ddrealtimemanager.R
-import kotlinx.android.synthetic.main.activity_dmreal_time_game.*
-import kotlinx.android.synthetic.main.layout_rt_player_card_item.*
-import kotlinx.android.synthetic.main.layout_rt_player_card_item.view.*
 import kotlinx.android.synthetic.main.rt_active_characters_list_fragment.*
-import kotlinx.android.synthetic.main.rt_fight_fragment.*
+
 
 class RT_ActiveCharactersCardListFragment: Fragment(){
 
@@ -74,6 +70,14 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
     }
 
 
+    /*
+     * Here the setOnItemClickListener of the active characters list is instanciated.
+     * There are multiple usages for it:
+     *
+     *  - Selecting a character to see its info
+     *  - Selecting one or more characters to heal/damage them
+     *  - Selecting one or more characters to add them to a fight.
+     */
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,8 +89,6 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
         val lv: ListView = view.findViewById(R.id.rt_active_characters_card_listview)
 
         currentAdapter = RT_CharactersCardListAdapter(activity as DMRealTimeGameActivity, DMRealTimeGameActivity.getFbCharacters()!!)
-
-
 
 
 
@@ -139,14 +141,15 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
 
                 }
                 else{
-                    //if(heal){view.container1.setBackgroundColor(Color.GREEN)}
-                    //if(damage){view.container1.setBackgroundColor(Color.RED)}
 
                     selectedCharactersFBid.add(fbCharId!!)
                     currentAdapter.notifyDataSetChanged()
 
                 }
 
+
+                // Whenever a heal/damage operation has begun, a button to confirm changes is shown.
+                // If pressed, these actions are performed.
 
                 rt_active_characters_btn_dmgheal.setOnClickListener{
                     val value = rt_active_characters_et_damage_heal.text.toString().trim()
@@ -171,8 +174,15 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
 
         return view
 
-
     }
+
+
+    /*
+     * This function works as a kind of event listener from the DM Activity, whenever a
+     * heal/damage operation is requested.
+     *
+     * Its basic function is to set the layout based on the requested action.
+     */
 
     fun healDmgPressed(next: String, previous: String){
 
@@ -234,6 +244,9 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
     }
 
 
+/*
+ * This important function resets the adapter, and it's normally called whenever some data has changed.
+ */
 
     fun refreshList(){
 
