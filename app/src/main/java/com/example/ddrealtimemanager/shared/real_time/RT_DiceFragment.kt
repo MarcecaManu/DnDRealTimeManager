@@ -139,7 +139,7 @@ class RT_DiceFragment(prevFragment: Int): Fragment() {
 
                 diceToThrow.forEach{
                     val throwResult = it.throwDice()
-                    var color = "#000000"       //black
+                    var color = "#FFFFFF"       //white
 
                     if(throwResult == it.diceType){
                         color = "#FFA600"        //gold
@@ -184,7 +184,7 @@ class RT_DiceFragment(prevFragment: Int): Fragment() {
         rt_dice_tv_d20.text = ""
         rt_dice_tv_result_allthrows.text = ""
 
-        rt_dice_tv_result.setTextColor(resources.getColor(R.color.purple_500))
+        rt_dice_tv_result.setTextColor(resources.getColor(R.color.white))
 
     }
 

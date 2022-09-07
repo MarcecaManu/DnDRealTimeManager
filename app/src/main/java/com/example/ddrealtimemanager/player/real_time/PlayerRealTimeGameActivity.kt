@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.ddrealtimemanager.R
+import com.example.ddrealtimemanager.dm.real_time.DMRealTimeGameActivity
 import com.example.ddrealtimemanager.shared.DBHelper
 import com.example.ddrealtimemanager.shared.FireBaseHelper
 import com.example.ddrealtimemanager.shared.real_time.RT_Character
@@ -169,6 +170,24 @@ class PlayerRealTimeGameActivity : AppCompatActivity(),
         }
 
 
+
+    }
+
+    override fun onBackPressed() {
+
+
+        //Ask if you want the quit the game
+        val adb = AlertDialog.Builder(this@PlayerRealTimeGameActivity)
+        adb.setTitle("Quit the game?")
+        adb.setMessage("Are you sure you want to quit the game?")
+        adb.setNegativeButton("Cancel", null)
+        adb.setPositiveButton("I am!") { dialog, which ->
+
+            currentFragment = 0
+            finish()
+        }
+        adb.show()
+        true
 
     }
 

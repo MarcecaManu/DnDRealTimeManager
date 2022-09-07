@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    android:background="@drawable/scroll">
+    android:background="@drawable/wood_cut">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -249,7 +249,8 @@
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/dragon" />
+                android:src="@drawable/dragon"
+                />
 
             <TextView
                 android:id="@+id/rt_dice_tv_result"
@@ -259,16 +260,22 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="8dp"
                 android:text=""
-                android:textColor="@color/purple_500"
+                android:textColor="@color/white"
                 android:textSize="30sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+
+                android:shadowColor="#000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="2"/>
 
             <ImageView
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:scaleType="fitXY"
                 android:scaleX="-1"
-                android:src="@drawable/dragon" />
+                android:src="@drawable/dragon"
+                />
 
 
         </LinearLayout>
@@ -280,14 +287,19 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text=""
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
 
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rt_dice_result_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/rt_dice_result_layout"
+
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
