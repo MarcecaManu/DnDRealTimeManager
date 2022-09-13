@@ -13,6 +13,7 @@
         android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.DDRealTimeManager">
+
         <activity
             android:name=".player.PlayerGamesListActivity"
             android:exported="false"

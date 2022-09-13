@@ -39,6 +39,7 @@ class FireBaseHelper {
          })
 
 
+         //Given a game: Game, it is instantiated in the Firebase database, and the univocal key is returned
          fun fbCreateNewGame(game: Game): String {
              val newGameRef = gamesRef.push()
              newGameRef.setValue(game)
@@ -49,6 +50,7 @@ class FireBaseHelper {
 
          }
 
+         //Updates the game data, given a fbGameId
          fun fbUpdateGame(fbGameId: String, game: Game) {
              val gameRef = gamesRef.child(fbGameId)
              gameRef.child("description").setValue(game.description)
@@ -57,12 +59,13 @@ class FireBaseHelper {
          }
 
 
-
+        //Removes the specified game from the Firebase database
          fun fbDeleteGame(fbGameId: String) {
             gamesRef.child(fbGameId).removeValue()
          }
 
 
+         //Given a list of fighters Ids and a game Id, a fight is instantiated
          fun fbCreateNewFight(fightersFBList: ArrayList<String>, fbGameId: String){
 
              val gameRef = gamesRef.child(fbGameId)
@@ -76,6 +79,7 @@ class FireBaseHelper {
          }
 
 
+         //Ends a fight in a game by removing it from the database
          fun fbEndFight(fbGameId: String){
              val gameRef = gamesRef.child(fbGameId)
 
@@ -85,6 +89,7 @@ class FireBaseHelper {
          }
 
 
+         //Add characters to the bottom of the fighters list
          fun fbAddCharactersMidFight(newFighters: ArrayList<String>, fbGameId: String){
              val gameRef = gamesRef.child(fbGameId)
              val fightRef = gameRef.child(FIGHT_DIR)
@@ -96,6 +101,7 @@ class FireBaseHelper {
          }
 
 
+         //Sets the turn of the nextFbCharId to true, and to false the previousFbCharId's turn
          fun fbFightSetTurn(previousFbCharId: String?, nextFbCharId: String, fbGameId: String){
              val gameRef = gamesRef.child(fbGameId)
              val fightRef = gameRef.child(FIGHT_DIR)
@@ -107,6 +113,7 @@ class FireBaseHelper {
          }
 
 
+         //Pushes a character in the game's directory and returns its univocal Id
          fun fbPushCharacter(character: RT_Character, fbGameId: String): String {
 
              val currentGameRef = gamesRef.child(fbGameId)
@@ -123,6 +130,7 @@ class FireBaseHelper {
          }
 
 
+         //Updates a character given the new data and the fbGameId
          fun fbUpdatecharacter(character: RT_Character, fbGameId: String){
              val currentGameRef = gamesRef.child(fbGameId)
              val playersDirRef = currentGameRef.child(PLAYERS_DIR)
@@ -132,6 +140,7 @@ class FireBaseHelper {
          }
 
 
+         //Updates a character's health
          fun fbUpdateCharacterHealth(newCurrentHP: Int, fbCharId: String, fbGameId: String){
              val currentGameRef = gamesRef.child(fbGameId)
              val playersDirRef = currentGameRef.child(PLAYERS_DIR)
@@ -141,12 +150,14 @@ class FireBaseHelper {
          }
 
 
+         //Removes a specified character from a specified game
          fun fbRemoveCharacterFromGame(fbCharId: String, fbGameId: String){
              val playerRef = gamesRef.child(fbGameId).child(PLAYERS_DIR).child(fbCharId)
              playerRef.removeValue()
          }
 
 
+         //Returns true if the fbGameId can be found in the Firebase database
          fun fbCheckGameExists(fbGameId: String): Boolean?{
 
              var exists: Boolean? = null

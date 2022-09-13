@@ -31,9 +31,10 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
     private val GAME_IMAGE = "GameImage"
     private val GAME_FIREBASE_ID = "FirebaseId"
 
-    private val PLAYER_CHAR_ID = "PlayerCharId"
-    private val PLAYER_FB_ID = "PlayerFbId"
     private val GAME_FB_ID = "GameFbId"
+    private val PLAYER_FB_ID = "PlayerFbId"
+    private val PLAYER_CHAR_ID = "PlayerCharId"
+
 
 
     val MAX_LENGTH_CHAR_NAME = 15
@@ -68,6 +69,14 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
     *   -GameName: The game's name
     *   -GameDescription: The game's description
     *   -GamePassword: The game's access password
+    * */
+
+    /*Game Ids - Table description
+    *
+    *This table contains:
+    *   -GameFbId: The univocal Firebase Real-Time Database game identification id
+    *   -PlayerFbId: The player's Firebase id, associated with the GameFbId
+    *   -PlayerCharId: The player's local character associated with the PlayerFbId
     * */
 
 
@@ -119,10 +128,8 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         onCreate(db)
     }
 
-    /* Writes the character's information given as parameters in the database.
-    *
-    * TO DO:
-        - Update attributes as character creation is developed
+    /*
+     * Writes the character's information given as parameters in the database.
      */
     fun writeNewCharacter(character: Character){
         val contentValues = ContentValues()
@@ -381,6 +388,7 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         db.close()
     }
 
+    // Saves the triple made by the three associated fbGameId, fbCharId and local char Id
     fun playerJoinGame(fbGameId: String, fbCharId: String, charId: Int){
         val contentValues = ContentValues()
         val db = this.writableDatabase
@@ -395,6 +403,7 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
         db.close()
     }
 
+    //Removes a row from the Ids table
     fun playerLeaveGame(fbGameId: String){
         val db = this.writableDatabase
         val input: Array<String> = Array<String>(1) { fbGameId }
@@ -437,6 +446,8 @@ class DBHelper(var context: Context): SQLiteOpenHelper(context, "CharactersDB", 
 
         return gamesList
     }
+
+    //Given a fb game id stored in the Ids table, the pair (fbCharId, local charId) is returned
 
     fun getPlayerInfoForGame(fbGameId: String): Pair<String, Int>?{
 
