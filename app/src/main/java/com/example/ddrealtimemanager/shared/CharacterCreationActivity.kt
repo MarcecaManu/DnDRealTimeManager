@@ -2,6 +2,7 @@ package com.example.ddrealtimemanager.shared
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.webkit.URLUtil
 import android.widget.Toast
 import com.example.ddrealtimemanager.R
 import kotlinx.android.synthetic.main.activity_character_creation.*
@@ -24,6 +25,7 @@ class CharacterCreationActivity : AppCompatActivity() {
             etRaceChar.setText(extras.getString("race"))
             etClassChar.setText(extras.getString("class"))
             etDescrChar.setText(extras.getString("description"))
+            etImgChar.setText(extras.getString("image"))
         }
 
         btnSaveChar.setOnClickListener {
@@ -70,6 +72,11 @@ class CharacterCreationActivity : AppCompatActivity() {
         if(descr == false) err = "Description"
 
         val image = Utils().polishString(etImgChar.text.toString(), database.MAX_LENGTH_CHAR_DESCRIPTION)
+        if(image is String && !image.isBlank()) {
+            if (!URLUtil.isValidUrl(image)){
+                err = "ImageUrl"
+            }
+        }
 
         ////
         if(err.isBlank()) {     //err indicates the field where too many characteres were found
@@ -101,8 +108,16 @@ class CharacterCreationActivity : AppCompatActivity() {
                 "Description" -> maxLength = database.MAX_LENGTH_CHAR_DESCRIPTION
             }
 
-            Toast.makeText(this, "${err}'s text is too long! Max $maxLength characters", Toast.LENGTH_SHORT)
-                .show()
+            if(err != "ImageUrl") {
+                Toast.makeText(
+                    this,
+                    "${err}'s text is too long! Max $maxLength characters",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }else{
+                Toast.makeText(this,"The image URL is invalid!", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

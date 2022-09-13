@@ -202,6 +202,11 @@ class CharCreationForGameActivity() : AppCompatActivity() {
                 }
             }
         }else{
+
+            if(type == "image"){
+                return result
+            }
+
             result = "The $type field must be filled!"
         }
 

@@ -182,6 +182,10 @@ class RT_CharacterCreationFragment(character: RT_Character, previousFrag: Int): 
                 }
             }
     }else{
+
+        if(type == "image"){
+            return result
+        }
         result = "The $type field must be filled!"
         }
 
