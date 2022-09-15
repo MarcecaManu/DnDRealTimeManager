@@ -133,7 +133,9 @@ class PlayerRealTimeGameActivity : AppCompatActivity(),
                     val turnCheck = snapshot.child("fight").child(fbCharId).getValue(Boolean::class.java)
 
 
-                    yourTurn = turnCheck!!
+                    if(turnCheck != null) {
+                        yourTurn = turnCheck!!
+                    }
 
                     if(yourTurn){
                         itsYourTurn()

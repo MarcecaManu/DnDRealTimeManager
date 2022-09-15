@@ -37,9 +37,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rt_dice_btn_d4"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+
+                android:shadowColor="#000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="2"/>
 
 
         </RelativeLayout>
@@ -71,9 +76,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rt_dice_btn_d6"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+
+                android:shadowColor="#000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="2"/>
 
 
         </RelativeLayout>
@@ -105,9 +115,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rt_dice_btn_d8"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+
+                android:shadowColor="#000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="2"/>
 
 
         </RelativeLayout>
@@ -141,9 +156,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rt_dice_btn_d10"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+
+                android:shadowColor="#000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="2"/>
 
 
         </RelativeLayout>
@@ -176,9 +196,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rt_dice_btn_d12"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+
+                android:shadowColor="#000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="2"/>
 
 
         </RelativeLayout>
@@ -211,9 +236,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rt_dice_btn_d20"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+
+                android:shadowColor="#000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="2"/>
 
 
         </RelativeLayout>

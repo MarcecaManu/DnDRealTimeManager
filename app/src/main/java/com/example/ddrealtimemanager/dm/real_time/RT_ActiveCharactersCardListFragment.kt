@@ -244,6 +244,19 @@ class RT_ActiveCharactersCardListFragment: Fragment(){
     }
 
 
+    
+    override fun onStart() {
+        super.onStart()
+        refreshList()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        resetSelected()
+    }
+
+
+
 /*
  * This important function resets the adapter, and it's normally called whenever some data has changed.
  */
